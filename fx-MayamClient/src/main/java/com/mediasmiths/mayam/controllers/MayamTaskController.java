@@ -1162,4 +1162,13 @@ public class MayamTaskController extends MayamController
 			throw new MayamClientException(MayamClientErrorCode.TASK_UPDATE_FAILED, e);
 		}
 	}
+
+
+	public boolean taskIsInEndState(AttributeMap task)
+	{
+
+		TaskState ts = task.getAttribute(Attribute.TASK_STATE);
+
+		return END_STATES.contains(ts);
+	}
 }

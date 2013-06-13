@@ -408,13 +408,6 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public void saveTask(AttributeMap task) throws MayamClientException
-	{
-		tasksController.saveTask(task);
-	}
-
-
-	@Override
 	public Programme getProgramme(String packageID) throws MayamClientException
 	{
 
@@ -827,9 +820,17 @@ public class MayamClientImpl implements MayamClient
 			AttributeMap txTask = tasksController.getTask(taskID);
 			if (txTask != null)
 			{
-				txTask.setAttribute(Attribute.TX_DELIVER, Boolean.TRUE);
-				txTask.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-				tasksController.saveTask(txTask);
+				if (tasksController.taskIsInEndState(txTask))
+				{
+					log.warn(String.format("Task status was already %s will not attempt to update",
+					                       txTask.getAttributeAsString(Attribute.TASK_STATE)));
+				}
+				else
+				{
+					txTask.setAttribute(Attribute.TX_DELIVER, Boolean.TRUE);
+					txTask.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+					tasksController.saveTask(txTask);
+				}
 			}
 			else
 			{
@@ -853,10 +854,18 @@ public class MayamClientImpl implements MayamClient
 			AttributeMap txTask = tasksController.getTask(taskID);
 			if (txTask != null)
 			{
-				txTask.setAttribute(Attribute.TX_DELIVER, Boolean.FALSE);
-				txTask.setAttribute(Attribute.ERROR_MSG, String.format("TX Delivery Failed : %s",stage));
-				txTask.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
-				tasksController.saveTask(txTask);
+				if (tasksController.taskIsInEndState(txTask))
+				{
+					log.warn(String.format("Task status was already %s will not attempt to update",
+					                       txTask.getAttributeAsString(Attribute.TASK_STATE)));
+				}
+				else
+				{
+					txTask.setAttribute(Attribute.TX_DELIVER, Boolean.FALSE);
+					txTask.setAttribute(Attribute.ERROR_MSG, String.format("TX Delivery Failed : %s", stage));
+					txTask.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+					tasksController.saveTask(txTask);
+				}
 			}
 			else
 			{
@@ -905,6 +914,7 @@ public class MayamClientImpl implements MayamClient
 		return isAO;
 	}
 
+
 	@Override
 	public void exportCompleted(long taskID) throws MayamClientException
 	{
@@ -915,19 +925,29 @@ public class MayamClientImpl implements MayamClient
 		}
 		catch (RemoteException e)
 		{
-			log.error("error fetching task "+taskID,e);
-			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED,e);
+			log.error("error fetching task " + taskID, e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED, e);
 		}
-		
-		AttributeMap update = tasksController.updateMapForTask(task);
-		update.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-		tasksController.saveTask(update);
+
+		if (tasksController.taskIsInEndState(task))
+		{
+			log.warn(String.format("Task status was already %s will not attempt to update",
+			                       task.getAttributeAsString(Attribute.TASK_STATE)));
+		}
+		else
+		{
+
+			AttributeMap update = tasksController.updateMapForTask(task);
+			update.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+			tasksController.saveTask(update);
+		}
 	}
-	
+
+
 	@Override
 	public void exportFailed(long taskID, String reason) throws MayamClientException
 	{
-		log.info("Export task failed: "+taskID);
+		log.info("Export task failed: " + taskID);
 
 		AttributeMap task;
 		try
@@ -936,15 +956,24 @@ public class MayamClientImpl implements MayamClient
 		}
 		catch (RemoteException e)
 		{
-			log.error("error fetching task "+taskID,e);
-			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED,e);
+			log.error("error fetching task " + taskID, e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED, e);
 		}
-		
-		AttributeMap update = tasksController.updateMapForTask(task);
-		update.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
-		update.setAttribute(Attribute.ERROR_MSG, reason);
-		tasksController.saveTask(update);
+
+		if (tasksController.taskIsInEndState(task))
+		{
+			log.warn(String.format("Task status was already %s will not attempt to update",
+			                       task.getAttributeAsString(Attribute.TASK_STATE)));
+		}
+		else
+		{
+			AttributeMap update = tasksController.updateMapForTask(task);
+			update.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+			update.setAttribute(Attribute.ERROR_MSG, reason);
+			tasksController.saveTask(update);
+		}
 	}
+
 
 	@Override
 	public void addMaterialToPurgeCandidateList(String materialID, int daysUntilPurge) throws MayamClientException

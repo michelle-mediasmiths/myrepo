@@ -222,15 +222,6 @@ public interface MayamClient
 	 */
 	public AttributeMap getOnlyTaskForAsset(MayamTaskListType type, String assetid) throws MayamClientException;
 
-	/**
-	 * Save the given task
-	 *
-	 * @param task
-	 *
-	 * @throws MayamClientException
-	 */
-	public void saveTask(AttributeMap task) throws MayamClientException;
-
 	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException;
 
 	public long createWFEErrorTaskNoAsset(String id,

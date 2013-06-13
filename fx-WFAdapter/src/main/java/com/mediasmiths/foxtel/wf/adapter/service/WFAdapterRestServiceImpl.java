@@ -406,7 +406,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				// auto qc was for qc task
 				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification);
 				mayamClient.autoQcErrorForMaterial(notification.getAssetId(), notification.getTaskID());
-				
+
 				AttributeMap task = mayamClient.getTask(notification.getTaskID());
 				if (task != null)
 				{
@@ -426,24 +426,25 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 	}
 
+
 	@Override
 	public void notifyTCFailedTotal(TCTotalFailure notification) throws MayamClientException
 	{
-		log.info(String.format(
-				"Received notification of transcode Error asset ID %s isTX %b",
-				notification.getAssetID(),
-				notification.isForTXDelivery()));
+		log.info(String.format("Received notification of transcode Error asset ID %s isTX %b",
+		                       notification.getAssetID(),
+		                       notification.isForTXDelivery()));
 
 		TcEvent tcFailure = new TcEvent();
 
-		try
-		{
-            tcFailure.setAssetID(notification.getAssetID());
-			tcFailure.setTaskID(notification.getTaskID()+"");
-			tcFailure.setTitle(notification.getTitle());
+		tcFailure.setAssetID(notification.getAssetID());
+		tcFailure.setTaskID(notification.getTaskID() + "");
+		tcFailure.setTitle(notification.getTitle());
 
-			if (notification.isForTXDelivery())
+		if (notification.isForTXDelivery())
+		{
+			try
 			{
+
 				mayamClient.txDeliveryFailed(notification.getAssetID(), notification.getTaskID(), "TRANSCODE");
 
 				String packageID = notification.getAssetID();
@@ -451,34 +452,72 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				final Set<String> channelGroups = mayamClient.getChannelGroupsForPackage(packageID);
 				tcFailure.withChannelGroup(channelGroups);
 
-				events.saveEvent("http://www.foxtel.com.au/ip/tc", EventNames.TC_FAILED, tcFailure);
+				events.saveEvent(TC_EVENT_NAMESPACE, EventNames.TC_FAILED, tcFailure);
 			}
-			else
+			catch (MayamClientException e)
 			{
+				log.error("Failed to fail task!", e);
+				events.saveEvent(TC_EVENT_NAMESPACE, EventNames.TC_FAILED, tcFailure);
+
+				throw e;
+			}
+		}
+		else
+		{
+
+			try
+			{
+				long taskId = notification.getTaskID();
+				AttributeMap task = mayamClient.getTask(taskId);
+				String taskListID = task.getAttribute(Attribute.OP_TYPE);
+
+				String username = task.getAttributeAsString(Attribute.TASK_CREATED_BY);
+				Emailaddresses emails = null;
+				if (username != null)
+				{
+					String email = String.format("%s@foxtel.com.au", username);
+					emails = new Emailaddresses();
+					emails.getEmailaddress().add(email);
+				}
+
 				mayamClient.exportFailed(notification.getTaskID(), "Transcode failed");
 
 				String materialID = notification.getAssetID();
 				final Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
-				tcFailure.withChannelGroup(channelGroups);
 
-				events.saveEvent("http://www.foxtel.com.au/ip/tc", EventNames.EXPORT_FAILURE, tcFailure);
+				if (taskListID.equals(TranscodeJobType.CAPTION_PROXY.getText()))
+				{
+					saveTCEvent(EventNames.CAPTION_PROXY_FAILURE, notification, false, emails, channelGroups);
+				}
+				else if (taskListID.equals(TranscodeJobType.PUBLICITY_PROXY.getText()))
+				{
+					saveTCEvent(EventNames.PUBLICITY_PROXY_FAILURE, notification, false, emails, channelGroups);
+				}
+				else if (taskListID.equals(TranscodeJobType.COMPLIANCE_PROXY.getText()))
+				{
+					saveTCEvent(EventNames.CLASSIFICATION_PROXY_FAILURE, notification, false, emails, channelGroups);
+				}
+				else
+				{
+					log.warn("Unknown job type for export");
+				}
+			}
+			catch (MayamClientException e)
+			{
+				log.error("Failed to fail task!", e);
+				events.saveEvent(TC_EVENT_NAMESPACE, EventNames.EXPORT_FAILURE, tcFailure);
+
+				throw e;
 			}
 		}
-		catch (MayamClientException e)
-		{
-			log.error("Failed to fail task!", e);
-			events.saveEvent("http://www.foxtel.com.au/ip/tc", EventNames.TC_FAILED, tcFailure);
-
-			throw e;
-		}
-
 	}
+
 
 	@Override
 	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException
 	{
 
-		log.info(String.format("Received notification of TC failure asset id %s", notification.getAssetID()));
+		log.info(String.format("Received notification of TC failure asset id %s task %s", notification.getAssetID(),notification.getTaskID()));
 
 		long taskId = notification.getTaskID();
 		AttributeMap task = mayamClient.getTask(taskId);
@@ -493,43 +532,16 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			emails.getEmailaddress().add(email);
 		}
 
+		log.error("Transcode failure for task "+taskId);
+
 		if (! notification.isForTXDelivery())
 		{
-
-			String materialID = notification.getAssetID();
-			final Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
-
-			if (taskListID.equals(TranscodeJobType.CAPTION_PROXY.getText()))
-			{
-				saveTCEvent(EventNames.CAPTION_PROXY_FAILURE,
-				            notification,
-				            false,
-				            emails,channelGroups);
-			}
-			else if (taskListID.equals(TranscodeJobType.PUBLICITY_PROXY.getText()))
-			{
-				saveTCEvent(EventNames.PUBLICITY_PROXY_FAILURE,
-				            notification,
-				            false,
-				            emails,channelGroups);
-			}
-			else if (taskListID.equals(TranscodeJobType.COMPLIANCE_PROXY.getText()))
-			{
-				saveTCEvent(EventNames.CLASSIFICATION_PROXY_FAILURE,
-				            notification,
-				            false,
-				            emails,channelGroups);
-			}
-			else
-			{
-				log.warn("Unknown job type for export");
-			}
+			log.info("Failed transcode was for proxy export, it will be retried or if this was the last attmempt then TCFailedTotal will be called");
 		}
 		else
 		{
 			String packageID = notification.getAssetID();
 			final Set<String> channelGroups = mayamClient.getChannelGroupsForPackage(packageID);
-
 
 			saveTCEvent(EventNames.TC_FAILED,
 			            notification,
