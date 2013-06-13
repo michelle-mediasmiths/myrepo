@@ -513,7 +513,7 @@
 		<eventname>NonAOPlaceHolderCannotBeIdentified</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
 			<subject>Unmatched Item in MAM:  Placeholder cannot be identified</subject>
-			<body>>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
+			<body>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
 			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>				
 			</emailaddresses>
@@ -524,7 +524,7 @@
 		<eventname>AOPlaceHolderCannotBeIdentified</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
 			<subject>Unmatched Item in MAM:  Placeholder cannot be identified</subject>
-			<body>>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
+			<body>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
 			<emailaddresses>				
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
 			</emailaddresses>
