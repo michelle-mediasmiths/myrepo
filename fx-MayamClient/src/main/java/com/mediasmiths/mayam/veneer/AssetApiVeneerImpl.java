@@ -1,8 +1,5 @@
 package com.mediasmiths.mayam.veneer;
 
-import java.util.List;
-import java.util.Map;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.AttributeMap;
@@ -12,8 +9,12 @@ import com.mayam.wf.attributes.shared.type.MarkerList;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.AssetApi;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.mayam.RaceLoggable;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.retrying.TasksWSRetryable;
+
+import java.util.List;
+import java.util.Map;
 
 public class AssetApiVeneerImpl implements AssetApiVeneer
 {
@@ -92,6 +93,7 @@ public class AssetApiVeneerImpl implements AssetApiVeneer
 	 */
 	@Override
 	@TasksWSRetryable
+	@RaceLoggable
 	public AttributeMap updateAsset(AttributeMap asset) throws RemoteException
 	{
 		return assetApi.updateAsset(asset);

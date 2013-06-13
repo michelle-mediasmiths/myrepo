@@ -3,28 +3,21 @@ package com.mediasmiths.mayam.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.matcher.Matchers;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.server.AttributesModule;
-import com.mayam.wf.ws.client.TaskApi;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientImpl;
+import com.mediasmiths.mayam.RaceLoggable;
+import com.mediasmiths.mayam.RaceLoggingInterceptor;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.PackageController;
 import com.mediasmiths.mayam.retrying.TasksWSRetryModule;
 import com.mediasmiths.mayam.validation.MayamValidator;
 import com.mediasmiths.mayam.validation.MayamValidatorImpl;
 import com.mediasmiths.mayam.veneer.AssetApiVeneer;
-import com.mediasmiths.mayam.veneer.AssetApiVeneerImpl;
-import com.mediasmiths.mayam.veneer.SegmentApiVeneer;
-import com.mediasmiths.mayam.veneer.SegmentApiVeneerImpl;
 import com.mediasmiths.mayam.veneer.TaskApiVeneer;
-import com.mediasmiths.mayam.veneer.TaskApiVeneerImpl;
-import com.mediasmiths.mayam.veneer.TasksClientVeneer;
-import com.mediasmiths.mayam.veneer.TasksClientVeneerImpl;
-import com.mediasmiths.mayam.veneer.UserApiVeneer;
-import com.mediasmiths.mayam.veneer.UserApiVeneerImpl;
-
 import org.apache.log4j.Logger;
 
 import javax.xml.bind.JAXBContext;
@@ -48,8 +41,14 @@ public class MayamClientModule extends AbstractModule
 		install(new SecurityModule());
 		install(new AttributesModule());
 		install(new MayamAudioVisualModule());
+
 		install(new TasksWSRetryModule());
-		
+
+		RaceLoggingInterceptor raceLoggingInterceptor = new RaceLoggingInterceptor();
+		bindInterceptor(Matchers.subclassesOf(TaskApiVeneer.class),  Matchers.annotatedWith(RaceLoggable.class), raceLoggingInterceptor);
+		bindInterceptor(Matchers.subclassesOf(AssetApiVeneer.class),  Matchers.annotatedWith(RaceLoggable.class), raceLoggingInterceptor);
+
+
 		bind(MayamClient.class).to(MayamClientImpl.class);
 		bind(MayamValidator.class).to(MayamValidatorImpl.class);
 		bind(PackageController.class).to(MayamPackageController.class);

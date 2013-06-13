@@ -8,6 +8,7 @@ import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TaskApi;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.mayam.RaceLoggable;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.retrying.TasksWSRetryable;
 
@@ -75,6 +76,7 @@ public class TaskApiVeneerImpl implements TaskApiVeneer
 	 */
 	@Override
 	@TasksWSRetryable
+	@RaceLoggable
 	public AttributeMap updateTask(AttributeMap task) throws RemoteException
 	{
 		return tasksApi.updateTask(task);
