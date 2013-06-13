@@ -99,14 +99,14 @@ public class AcquisitionRpt extends ReportUtils
 			OrderStatus order = queryApi.getOrderStatusById(acq.getMaterialID());
 
 
-			if (order.getTitle() != null)
+			if (order!= null && order.getTitle() != null)
 			{
 				log.debug("title: " + order.getTitle().getTitle());
 				log.debug("channels: " + order.getTitle().getChannels().toString());
 				acq.setChannels(order.getTitle().getChannels().toString());
 			}
 
-			if (order.getFileSize() != null)
+			if (order!= null && order.getFileSize() != null)
 			{
 				long filesize = Long.valueOf(acq.getFilesize()).longValue();
 				log.debug("filesize long: " + filesize);
