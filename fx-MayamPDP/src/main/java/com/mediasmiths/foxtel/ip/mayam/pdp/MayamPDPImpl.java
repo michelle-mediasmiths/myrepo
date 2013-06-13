@@ -67,8 +67,8 @@ public class MayamPDPImpl implements MayamPDP
 	String messageSegmentMismatchRefuseOverride;
 
 	@Inject
-	@Named("message.segment.ovelapping")
-	String messageSegmentOvelapping;
+	@Named("message.segment.overlapping")
+	String messageSegmentOverlapping;
 
 	@Inject
 	@Named("message.segment.no.requested.segments")
@@ -244,7 +244,7 @@ public class MayamPDPImpl implements MayamPDP
 			{
 				int segmentsSize = segmentList.getEntries().size();
 
-				logger.debug("Segmentation ovelap checking");
+				logger.debug("Segmentation overlap checking");
 
 				if (SegmentUtil.noSegmentationOverlap(segmentList) == true)
 				{
@@ -274,7 +274,7 @@ public class MayamPDPImpl implements MayamPDP
 				else
 				{
 					logger.debug("Segmentation overlap found");
-					errors.add(messageSegmentOvelapping);
+					errors.add(messageSegmentOverlapping);
 				}
 			}
 			else

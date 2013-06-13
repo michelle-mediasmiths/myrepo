@@ -4,21 +4,14 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.AssetType;
-import com.mayam.wf.attributes.shared.type.SegmentList;
-import com.mayam.wf.attributes.shared.type.SegmentListList;
-import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
-import com.mediasmiths.foxtel.ip.common.events.ManualQANotification;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.PreviewFailed;
-import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.util.Date;
@@ -67,7 +60,7 @@ public class PreviewTaskEscalationHandler extends TaskStateChangeHandler
 			{
 				if (Integer.parseInt(escalationLevel) == MayamPreviewResults.ESCALATION_LEVEL_1)
 				{
-					sendEscalationEvent(messageAttributes, "PreviewFurtherAnalysis");
+					sendEscalationEvent(messageAttributes, EventNames.PREVIEW_FURTHER_ANALYSIS);
 				}
 			}
 			catch (Exception e)

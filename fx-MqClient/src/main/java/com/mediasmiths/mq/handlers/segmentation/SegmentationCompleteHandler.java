@@ -3,6 +3,7 @@ package com.mediasmiths.mq.handlers.segmentation;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.TcEvent;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
@@ -77,7 +78,7 @@ public class SegmentationCompleteHandler extends TaskStateChangeHandler
 			tx.setTaskID(taskID);
 						
 			// send email regarding failed to send to TX
-			eventsService.saveEvent("http://www.foxtel.com.au/ip/tc", "FailedInSendtoTX", tx);
+			eventsService.saveEvent("http://www.foxtel.com.au/ip/tc", EventNames.FAILED_IN_SENDTO_TX, tx);
 		}
 	}
 

@@ -8,10 +8,9 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
-import com.mediasmiths.foxtel.ip.common.events.AutoQCEvent;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.ip.common.events.ChannelConditionsFound;
-import com.mediasmiths.mayam.DateUtil;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -22,15 +21,12 @@ import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 public class QcTaskUpdateHandler extends TaskUpdateHandler
 {
 
-	private static final String QC_FAILED_RE_ORDER = "QcFailedReOrder";
-	private static final String CHANNEL_CONDITIONS_FOUND_DURING_QC = "ChannelConditionsFoundDuringQC";
 	private static final String MANUAL_QC_PASS = "pass";
 	private final static String MANUAL_QC_FAIL_WITH_REINGEST = "reingest";
 	private final static String MANUAL_QC_FAIL_WITH_REORDER = "reorder";
@@ -198,7 +194,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			}
 
 
-			String eventName = QC_FAILED_RE_ORDER;
+			String eventName = EventNames.QC_FAILED_RE_ORDER;
 			String event = serialiser.serialise(aen);
 			String namespace = qcEventNamespace;
 			
@@ -206,7 +202,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		}
 		catch (Exception e)
 		{
-			log.error("QC : error sending " + QC_FAILED_RE_ORDER + " event", e);
+			log.error("QC : error sending " + EventNames.QC_FAILED_RE_ORDER + " event", e);
 		}
 	}
 
@@ -357,8 +353,8 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 
 				if (!isRuzzConditions) //when channel conditions from ruzz are detected during media pickup and email is already sent
 				{
-					log.debug("saving event " + CHANNEL_CONDITIONS_FOUND_DURING_QC);
-					eventsService.saveEvent(qcEventNamespace, CHANNEL_CONDITIONS_FOUND_DURING_QC, ccf);
+					log.debug("saving event " + EventNames.CHANNEL_CONDITIONS_FOUND_DURING_QC);
+					eventsService.saveEvent(qcEventNamespace, EventNames.CHANNEL_CONDITIONS_FOUND_DURING_QC, ccf);
 				}
 			}
 			else

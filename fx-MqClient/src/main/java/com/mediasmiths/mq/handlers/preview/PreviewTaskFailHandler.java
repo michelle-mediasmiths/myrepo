@@ -6,6 +6,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.PreviewFailed;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
@@ -14,7 +15,6 @@ import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 import org.apache.log4j.Logger;
 
-import java.util.Date;
 import java.util.Set;
 
 public class PreviewTaskFailHandler extends TaskStateChangeHandler
@@ -76,7 +76,7 @@ public class PreviewTaskFailHandler extends TaskStateChangeHandler
 				log.error("error determining channel groups for event", e);
 			}
 			
-			eventsService.saveEvent("http://www.foxtel.com.au/ip/preview", "PreviewFailed", pf);
+			eventsService.saveEvent("http://www.foxtel.com.au/ip/preview", EventNames.PREVIEW_FAILED, pf);
 			
 			previewEvent.sendManualQANotification(messageAttributes,getTaskState(),true,MayamPreviewResults.PREVIEW_FAIL,(String) messageAttributes.getAttribute(Attribute.TASK_UPDATED_BY));
 		}

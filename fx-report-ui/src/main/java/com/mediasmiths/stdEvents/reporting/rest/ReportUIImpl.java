@@ -1,15 +1,8 @@
 package com.mediasmiths.stdEvents.reporting.rest;
 
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
 import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
@@ -28,6 +21,13 @@ import com.mediasmiths.stdEvents.reporting.csv.PurgeContentRpt;
 import com.mediasmiths.stdEvents.reporting.csv.TaskListRpt;
 import com.mediasmiths.stdEvents.reporting.csv.TranscoderLoadRpt;
 import com.mediasmiths.stdEvents.reporting.csv.WatchFolderRpt;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.util.List;
 
 public class ReportUIImpl implements ReportUI
 {
@@ -165,19 +165,13 @@ public class ReportUIImpl implements ReportUI
 		logger.debug(">>>getAcquisitionReportCSV");
 		logger.debug("start: " + start + " end: " + end);
 
-		List<OrderStatus> orders = getOrdersInDateRange(start, end);
-
-		String startDate = start.toString(dateFormatter);
-		String endDate = end.toString(dateFormatter);
-		logger.info("dates readable start: " + startDate + " end: " + endDate);
-		logger.info("List size: " + orders.size());
-		logger.debug(String.format(
-				"Requesting order acquisition report for date range: %s to %s; report name will be: %s ",
-				start.toString(),
-				end.toString(),
-				reportName));
+		List<EventEntity> materials = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", 
+				MAX, start, end);
+										
+		materials.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/content", "MarketingContentAvailable", 
+				MAX, start, end));
 		
-		acquisition.writeAcquisitionDelivery(orders, start, end, reportName);
+		acquisition.writeAcquisitionDelivery(materials, start, end, reportName);
 
 		logger.debug("<<<getAcquisitionReportCSV");
 	}
@@ -186,7 +180,7 @@ public class ReportUIImpl implements ReportUI
 	private void getManualQACSV(final DateTime start, final DateTime end, final String reportName)
 	{
 		logger.debug(">>>getManualQACSV");
-		List<EventEntity> preview = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/preview", "ManualQA", 
+		List<EventEntity> preview = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/preview", EventNames.MANUAL_QA,
 				MAX, start, end);
 		manualQa.writeManualQA(preview, start, end, reportName);
 		logger.debug("<<<getManualQACSV");
@@ -208,11 +202,11 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly = true)
 	private void getPurgeContentCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		List<EventEntity> purged = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", "PurgeTitle",
+		List<EventEntity> purged = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", EventNames.PURGE_TITLE,
 				MAX, start, end);
-		purged.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", "DeleteMaterial", 
+		purged.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", EventNames.DELETE_MATERIAL,
 				MAX, start, end));
-		purged.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", "DeletePackage", 
+		purged.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", EventNames.DELETE_PACKAGE,
 				MAX, start, end));
 		purgeContent.writePurgeTitles(purged, start, end, reportName);
 	}
@@ -220,23 +214,23 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly = true)
 	private void getComplianceEditCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		List<EventEntity> events = queryApi.getByEventNameWindowDateRange("ComplianceLoggingMarker", MAX, start, end);
+		List<EventEntity> events = queryApi.getByEventNameWindowDateRange(EventNames.COMPLIANCE_LOGGING_MARKER, MAX, start, end);
 		compliance.writeCompliance(events, start, end, reportName);
 	}
 
 	@Transactional(readOnly = true)
 	private void getExportCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		List<EventEntity> events = queryApi.getByEventNameWindowDateRange("CaptionProxySuccess", MAX, start, end);
+		List<EventEntity> events = queryApi.getByEventNameWindowDateRange(EventNames.CAPTION_PROXY_SUCCESS, MAX, start, end);
 		events.addAll(queryApi.getByEventNameWindowDateRange("ComplianceProxySuccess", MAX, start, end));
-		events.addAll(queryApi.getByEventNameWindowDateRange("ClassificationProxySuccess", MAX, start, end));
+		events.addAll(queryApi.getByEventNameWindowDateRange(EventNames.CLASSIFICATION_PROXY_SUCCESS, MAX, start, end));
 		export.writeExport(events, start, end, reportName);
 	}
 
 	@Transactional(readOnly = true)
 	private void getWatchFolderStorageCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		List<EventEntity> events = queryApi.getByEventNameWindowDateRange("FilePickUpNotification", MAX, start, end);
+		List<EventEntity> events = queryApi.getByEventNameWindowDateRange(EventNames.FILE_PICK_UP_NOTIFICATION, MAX, start, end);
 		watchFolder.writeWatchFolder(events, start, end, reportName);
 	}
 

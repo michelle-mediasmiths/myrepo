@@ -341,8 +341,32 @@ public class MayamTaskController extends MayamController
 		
 		 createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.PENDING_TX_PACKAGE, initialAttributes);
 	}
-	
-	public long createWFEErrorTask(MayamAssetType type, String siteId, String message)throws MayamClientException
+
+
+	public long createWFEErrorTaskByAssetID(MayamAssetType type, String assetId, String message) throws MayamClientException
+	{
+		AttributeMap asset = null;
+		try
+		{
+			asset = client.assetApi().getAsset(type.getAssetType(), assetId);
+		}
+		catch (RemoteException e1)
+		{
+			log.error("error fetching asset", e1);
+			throw new MayamClientException(MayamClientErrorCode.ASSET_FIND_FAILED, e1);
+		}
+
+		if (asset == null)
+		{
+			log.error("error fetching asset " + assetId);
+			throw new MayamClientException(MayamClientErrorCode.ASSET_FIND_FAILED);
+		}
+
+		return createWFEErrorTaskForAsset(asset, message);
+	}
+
+
+	public long createWFEErrorTaskBySiteID(MayamAssetType type, String siteId, String message) throws MayamClientException
 	{
 		AttributeMap asset = null;
 		try
@@ -351,20 +375,27 @@ public class MayamTaskController extends MayamController
 		}
 		catch (RemoteException e1)
 		{
-			log.error("error fetching asset",e1);
-			throw new MayamClientException(MayamClientErrorCode.ASSET_FIND_FAILED,e1);
+			log.error("error fetching asset", e1);
+			throw new MayamClientException(MayamClientErrorCode.ASSET_FIND_FAILED, e1);
 		}
-		
+
 		if (asset == null)
 		{
 			log.error("error fetching asset " + siteId);
 			throw new MayamClientException(MayamClientErrorCode.ASSET_FIND_FAILED);
 		}
-		
+
+		return createWFEErrorTaskForAsset(asset, message);
+	}
+
+
+	private long createWFEErrorTaskForAsset(AttributeMap asset, String message) throws MayamClientException
+	{
 		String assetID = asset.getAttribute(Attribute.ASSET_ID);
-		
+		String siteID = asset.getAttribute(Attribute.ASSET_SITE_ID);
+
 		AttributeMap initialAttributes = client.createAttributeMap();
-		initialAttributes.setAttribute(Attribute.ASSET_SITE_ID, siteId);
+		initialAttributes.setAttribute(Attribute.ASSET_SITE_ID, siteID);
 		initialAttributes.setAttribute(Attribute.ASSET_ID, assetID);
 		initialAttributes.setAttribute(Attribute.ERROR_MSG, message);
 		initialAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
@@ -376,12 +407,13 @@ public class MayamTaskController extends MayamController
 		}
 		catch (RemoteException e)
 		{
-			log.error(String.format("failed to create wfe error task ID {%s} message {%s}", siteId, message),e);
-			throw new MayamClientException(MayamClientErrorCode.TASK_CREATE_FAILED,e);
+			log.error(String.format("failed to create wfe error task ID {%s} message {%s}", siteID, message), e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_CREATE_FAILED, e);
 		}
 		return createTask.getAttribute(Attribute.TASK_ID);
 	}
-	
+
+
 	// creates an error task for some situation where there is no underly asset to create the task for
 	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException{
 		
@@ -658,7 +690,7 @@ public class MayamTaskController extends MayamController
 		}
 		catch (RemoteException e)
 		{
-			log.error("remote expcetion searching for task", e);
+			log.error("remote exception searching for task", e);
 			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
 		}
 

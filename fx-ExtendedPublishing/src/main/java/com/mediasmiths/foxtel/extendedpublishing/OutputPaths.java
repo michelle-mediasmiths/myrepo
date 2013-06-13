@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.extendedpublishing;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
+import com.mediasmiths.foxtel.pathresolver.PathResolver;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -18,6 +19,9 @@ public class OutputPaths
 
 	@Inject
 	protected ChannelProperties channelProperties;
+
+	@Inject
+	protected PathResolver pathResolver;
 
 	@Inject
 	@Named("export.caption.filename.formatstring")
@@ -195,25 +199,11 @@ public class OutputPaths
 	}
 
 
-	public String getUserDeliveryLocation(TranscodeJobType jobType, String folder, String filename)
+	public String getUserDeliveryLocation(String channelTag, TranscodeJobType jobType, String filename, boolean isDVD)
 	{
-
-		final String relativePath = String.format("%s/%s", folder, filename);
-
-		final String uncRelativePath = relativePath.replace('/', '\\'); //reverse slashes
-
-		switch (jobType)
-		{
-			case COMPLIANCE_PROXY:
-				return String.format("%s%s", outputPathsConfig.getCompliancePathUncPrefix(), uncRelativePath);
-			case PUBLICITY_PROXY:
-				return String.format("%s%s", outputPathsConfig.getPublicityPathUncPrefix(), uncRelativePath);
-			case CAPTION_PROXY:
-				return String.format("%s%s", outputPathsConfig.getCaptionPathUncPrefix(), uncRelativePath);
-			default:
-				log.warn("Unexpected job type" + jobType);
-				return relativePath;
-		}
+		String nixPath = getLocalPathToExportDestination(channelTag,jobType,filename,isDVD);
+		String uncPath = pathResolver.uncPath(PathResolver.PathType.NIX, nixPath);
+		return uncPath;
 	}
 
 	public String getFileNameForCaptionExport(

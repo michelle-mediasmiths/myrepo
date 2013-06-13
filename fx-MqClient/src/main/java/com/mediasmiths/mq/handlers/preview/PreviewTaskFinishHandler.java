@@ -7,21 +7,16 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
-import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
-import com.mediasmiths.foxtel.ip.common.events.ManualQANotification;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.PreviewFailed;
-import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import java.util.Date;
 import java.util.Set;
 
 public class PreviewTaskFinishHandler extends TaskStateChangeHandler
@@ -122,11 +117,11 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 			{
 				if (passed)
 				{
-					sendReorderEvent(messageAttributes, "PreviewPassedReorder");
+					sendReorderEvent(messageAttributes, EventNames.PREVIEW_PASSED_REORDER);
 				}
 				else if (fixeditrequired || stitcheditrequired)
 				{
-					sendReorderEvent(messageAttributes, "PreviewFixReorder");
+					sendReorderEvent(messageAttributes, EventNames.PREVIEW_FIX_REORDER);
 				}
 			}
 			previewEvent.sendManualQANotification(messageAttributes,getTaskState(),reorder,previewResult,(String) messageAttributes.getAttribute(Attribute.TASK_UPDATED_BY));

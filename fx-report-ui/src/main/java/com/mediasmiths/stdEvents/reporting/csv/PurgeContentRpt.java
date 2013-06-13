@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
@@ -61,21 +62,21 @@ public class PurgeContentRpt extends ReportUtils
 			
 			String titleID = null;
 			
-			if (event.getEventName().equals("PurgeTitle"))
+			if (event.getEventName().equals(EventNames.PURGE_TITLE))
 			{
 				PurgeTitle title = (PurgeTitle) unmarshallEvent(event);
 				purge.setMaterialID(title.getTitleID());
 				purge.setEntityType("Item");
 				titleID = title.getTitleID();
 			}
-			else if (event.getEventName().equals("DeleteMaterial"))
+			else if (event.getEventName().equals(EventNames.DELETE_MATERIAL))
 			{
 				PurgeMaterial material = (PurgeMaterial) unmarshallEvent(event);
 				purge.setMaterialID(material.getMaterialID());
 				purge.setEntityType("Sub-programme");
 				titleID = material.getTitleID();
 			}
-			else if (event.getEventName().equals("DeletePackage"))
+			else if (event.getEventName().equals(EventNames.DELETE_PACKAGE))
 			{
 				PurgePackage pack = (PurgePackage) unmarshallEvent(event);
 				purge.setMaterialID(pack.getPackageID());

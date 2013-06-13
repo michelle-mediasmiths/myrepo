@@ -284,9 +284,9 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 
 			try
 			{
-				taskController.createWFEErrorTask(MayamAssetType.MATERIAL,
-				                                  peerID,
-				                                  "Error determining content format during unmatched asset workflow");
+				taskController.createWFEErrorTaskBySiteID(MayamAssetType.MATERIAL,
+				                                          peerID,
+				                                          "Error determining content format during unmatched asset workflow");
 			}
 			catch (Exception e1)
 			{

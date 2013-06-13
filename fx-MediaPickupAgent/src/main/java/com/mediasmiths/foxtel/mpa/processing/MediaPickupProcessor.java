@@ -12,6 +12,7 @@ import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
@@ -140,7 +141,8 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 					{
 						//AO
 						logger.debug("Material ID Missing AO");
-						eventService.saveEvent("http://www.foxtel.com.au/ip/content", "AOContentWithoutMaterialID", pickupNotification);
+						eventService.saveEvent("http://www.foxtel.com.au/ip/content",
+						                       EventNames.AO_CONTENT_WITHOUT_MATERIAL_ID, pickupNotification);
 						logger.debug("Material ID Missing AO");
 						break;
 					}
@@ -148,7 +150,8 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 					{
 						//NonAO
 						logger.debug("Material ID Missing");
-						eventService.saveEvent("http://www.foxtel.com.au/ip/content", "NonAOContentWithoutMaterialID", pickupNotification);
+						eventService.saveEvent("http://www.foxtel.com.au/ip/content",
+						                       EventNames.NON_AO_CONTENT_WITHOUT_MATERIAL_ID, pickupNotification);
 						logger.debug("Material ID Missing");
 						break;
 					}
@@ -205,15 +208,15 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		{
 			//AO
 			logger.debug("AO Placeholder does not exist");
-			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "AOPlaceHolderCannotBeIdentified", pickupNotification);
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content",
+			                       EventNames.AO_PLACE_HOLDER_CANNOT_BE_IDENTIFIED, pickupNotification);
 			logger.debug("AO Placeholder does not exist");
 		}
 		else
 		{
 			//NonAO
 			logger.debug("Non AO Placeholder does not exist");
-			eventService.saveEvent("http://www.foxtel.com.au/ip/content",
-			                       "NonAOPlaceHolderCannotBeIdentified",
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content", EventNames.NON_AO_PLACE_HOLDER_CANNOT_BE_IDENTIFIED,
 			                       pickupNotification);
 			logger.debug("Non AO Placeholder does not exist");
 		}
@@ -238,7 +241,8 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 				logger.error("error determining channel groups for event", e);
 			}
 
-			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceholderAlreadyHasMedia", pickupNotification);
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content",
+			                       EventNames.PLACEHOLDER_ALREADY_HAS_MEDIA, pickupNotification);
 		}
 		catch (Exception e)
 		{
@@ -418,13 +422,15 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		{
 			//AO
 			logger.debug("No XML AO");
-			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "AOContentWithoutCompanionXML", pickupNotification);
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content",
+			                       EventNames.AO_CONTENT_WITHOUT_COMPANION_XML, pickupNotification);
 		}
 		else
 		{
 			//NonAO
 			logger.debug("No XML");
-			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "NonAOContentWithoutCompanionXML", pickupNotification);
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content",
+			                       EventNames.NON_AO_CONTENT_WITHOUT_COMPANION_XML, pickupNotification);
 		}
 	}
 
@@ -512,7 +518,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			MediaPickupNotification pickupNotification = new MediaPickupNotification();
 			pickupNotification.setTime((new Date()).toString());
 			pickupNotification.setFilelocation(aoQuarrentineFolder + IOUtils.DIR_SEPARATOR + f.getName());
-			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "Quarantine", pickupNotification);
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content", EventNames.QUARANTINE, pickupNotification);
 		}
 		catch (IOException e)
 		{

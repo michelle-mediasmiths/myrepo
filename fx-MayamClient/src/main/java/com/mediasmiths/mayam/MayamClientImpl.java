@@ -682,7 +682,7 @@ public class MayamClientImpl implements MayamClient
 	{
 		try
 		{
-			return tasksController.createWFEErrorTask(type, siteId, message);
+			return tasksController.createWFEErrorTaskBySiteID(type, siteId, message);
 		}
 		catch (MayamClientException e)
 		{
@@ -952,6 +952,7 @@ public class MayamClientImpl implements MayamClient
 		tasksController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL, materialID, daysUntilPurge);
 	}
 
+
 	@Override
 	public List<AttributeMap> getSuspectPurgePendingList() throws MayamClientException
 	{
@@ -959,18 +960,32 @@ public class MayamClientImpl implements MayamClient
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.getText());
 		criteria.getFilterAlternatives().addAsExclusion(Attribute.TASK_STATE, TaskState.REMOVED);
 		criteria.getFilterAlternatives().addAsExclusion(Attribute.TASK_STATE, TaskState.FINISHED);
-		criteria.getFilterAlternatives().addAsExclusion(Attribute.ASSET_PARENT_ID, null); //exclude items that dont have a parent
 
 		FilterResult result;
 		try
 		{
 			result = client.taskApi().getTasks(criteria, 10000, 0);
-			return result.getMatches();
+			final List<AttributeMap> matches = result.getMatches();
+			final ArrayList<AttributeMap> ret = new ArrayList<>();
+
+			for (AttributeMap task : matches)
+			{
+				String contentType = task.getAttribute(Attribute.CONT_MAT_TYPE);
+
+				if (MayamMaterialController.ASSOCIATED_MATERIAL_CONTENT_TYPE.equals(contentType) &&
+				    task.getAttribute(Attribute.ASSET_PARENT_ID) != null)
+				{
+					//associated material that has a parent title
+					ret.add(task);
+				}
+			}
+
+			return ret;
 		}
 		catch (RemoteException e1)
 		{
-			log.error("error searching for purge candidates",e1);
-			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED,e1);
+			log.error("error searching for purge candidates", e1);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED, e1);
 		}
 	}
 
@@ -1036,12 +1051,16 @@ public class MayamClientImpl implements MayamClient
 				else
 				if (assetType.equals(MayamAssetType.TITLE.getAssetType()))
 				{
-					log.debug("purge title " + houseID);
+					log.info("purge title " + houseID);
 					titleController.purgeTitle(houseID,0);
 				}
 				else if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()))
 				{
-					log.debug("delete item " + houseID);
+					log.info(String.format("Deleting purge candidate item id %s (%s) - %s ",
+					                        houseID,
+					                        task.getAttributeAsString(Attribute.ASSET_ID),
+					                        task.getAttributeAsString(Attribute.ASSET_TITLE)));
+
 					MayamClientErrorCode deleteMaterial = materialController.deleteMaterial(houseID,0);
 					if (deleteMaterial == MayamClientErrorCode.MATERIAL_FIND_FAILED)
 					{
@@ -1053,7 +1072,7 @@ public class MayamClientImpl implements MayamClient
 				}
 				else if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
 				{
-					log.debug("delete package " + houseID);
+					log.info("delete package " + houseID);
 					packageController.deletePackage(houseID,0);
 				}
 				else

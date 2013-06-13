@@ -5,19 +5,20 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mediasmiths.foxtel.extendedpublishing.ExtendedPublishingProperties;
 import com.mediasmiths.foxtel.extendedpublishing.OutputPaths;
 import com.mediasmiths.foxtel.generated.materialexport.MaterialExport;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
 import com.mediasmiths.foxtel.ip.common.events.EventAttachment;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.QcServerFail;
 import com.mediasmiths.foxtel.ip.common.events.TcEvent;
 import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.foxtel.tc.priorities.TranscodePriorities;
-import com.mediasmiths.foxtel.tc.rest.api.TCFTPUpload;
 import com.mediasmiths.foxtel.tx.ftp.TransferStatus;
 import com.mediasmiths.foxtel.tx.ftp.TxFtpDelivery;
 import com.mediasmiths.foxtel.wf.adapter.model.AbortFxpTransferRequest;
@@ -231,8 +232,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (notification.isForTXDelivery())
 			{
 				// id is a package id
-				saveAutoQCEvent("QCProblemWithTCMedia", notification);
-				saveAutoQCEvent("CerifyQCError", notification);
+				saveAutoQCEvent(EventNames.QC_PROBLEM_WITH_TC_MEDIA, notification);
+				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification);
 				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC FAILED");
 				// attach qc report if qc is failed
 				attachQcReports(notification.getAssetId(), notification.getJobName());
@@ -286,7 +287,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		qcPass.setForTXDelivery(notification.isForTXDelivery());
 		qcPass.setMaterialID(String.valueOf(notification.getTaskID()));
 		qcPass.setTitle(notification.getTitle());
-		events.saveEvent(QC_EVENT_NAMESPACE, "AutoQCPassed", qcPass);
+		events.saveEvent(QC_EVENT_NAMESPACE, EventNames.AUTO_QC_PASSED, qcPass);
 
 		if (notification.isForTXDelivery())
 		{
@@ -387,7 +388,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (notification.isForTXDelivery())
 			{
 				// auto qc was for tx delivery
-				saveAutoQCEvent("CerifyQCError", notification);
+				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification);
 				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC ERROR");
 
 				TcEvent tce = new TcEvent();
@@ -397,13 +398,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 					tce.setAssetID(notification.getAssetId());
 					tce.setPackageID(task.getAttributeAsString(Attribute.HOUSE_ID));
 					tce.setTitle(notification.getTitle());
-					events.saveEvent(TC_EVENT_NAMESPACE, "QcServerFailureDuringTranscode", tce);
+					events.saveEvent(TC_EVENT_NAMESPACE, EventNames.QC_SERVER_FAILURE_DURING_TRANSCODE, tce);
 				}
 			}
 			else
 			{
 				// auto qc was for qc task
-				saveAutoQCEvent("CerifyQCError", notification);
+				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification);
 				mayamClient.autoQcErrorForMaterial(notification.getAssetId(), notification.getTaskID());
 				
 				AttributeMap task = mayamClient.getTask(notification.getTaskID());
@@ -414,7 +415,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 					qcsf.setAssetID(assetID);
 					qcsf.setMaterialID(task.getAttributeAsString(Attribute.HOUSE_ID));
 					qcsf.setTitle(notification.getTitle());
-					events.saveEvent(QC_EVENT_NAMESPACE, "QcServerFail", qcsf);
+					events.saveEvent(QC_EVENT_NAMESPACE, EventNames.QC_SERVER_FAIL, qcsf);
 				}
 			}
 		}
@@ -450,7 +451,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				final Set<String> channelGroups = mayamClient.getChannelGroupsForPackage(packageID);
 				tcFailure.withChannelGroup(channelGroups);
 
-				events.saveEvent("http://www.foxtel.com.au/ip/tc", "TCFailed", tcFailure);
+				events.saveEvent("http://www.foxtel.com.au/ip/tc", EventNames.TC_FAILED, tcFailure);
 			}
 			else
 			{
@@ -460,13 +461,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				final Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
 				tcFailure.withChannelGroup(channelGroups);
 
-				events.saveEvent("http://www.foxtel.com.au/ip/tc", "ExportFailure", tcFailure);
+				events.saveEvent("http://www.foxtel.com.au/ip/tc", EventNames.EXPORT_FAILURE, tcFailure);
 			}
 		}
 		catch (MayamClientException e)
 		{
 			log.error("Failed to fail task!", e);
-			events.saveEvent("http://www.foxtel.com.au/ip/tc", "TCFailed", tcFailure);
+			events.saveEvent("http://www.foxtel.com.au/ip/tc", EventNames.TC_FAILED, tcFailure);
 
 			throw e;
 		}
@@ -500,21 +501,21 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 			if (taskListID.equals(TranscodeJobType.CAPTION_PROXY.getText()))
 			{
-				saveTCEvent("CaptionProxyFailure",
+				saveTCEvent(EventNames.CAPTION_PROXY_FAILURE,
 				            notification,
 				            false,
 				            emails,channelGroups);
 			}
 			else if (taskListID.equals(TranscodeJobType.PUBLICITY_PROXY.getText()))
 			{
-				saveTCEvent("PublicityProxyFailure",
+				saveTCEvent(EventNames.PUBLICITY_PROXY_FAILURE,
 				            notification,
 				            false,
 				            emails,channelGroups);
 			}
 			else if (taskListID.equals(TranscodeJobType.COMPLIANCE_PROXY.getText()))
 			{
-				saveTCEvent("ClassificationProxyFailure",
+				saveTCEvent(EventNames.CLASSIFICATION_PROXY_FAILURE,
 				            notification,
 				            false,
 				            emails,channelGroups);
@@ -530,7 +531,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			final Set<String> channelGroups = mayamClient.getChannelGroupsForPackage(packageID);
 
 
-			saveTCEvent("TCFailed",
+			saveTCEvent(EventNames.TC_FAILED,
 			            notification,
 			            false,
 			            emails,
@@ -545,24 +546,17 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		log.info(String.format("Received notification of TC passed asset id %s", notification.getAssetID()));
 
 		if (!notification.isForTXDelivery())
-		{ // extended publishing
-			String deliveryLocation = "";
-
-			if (notification.getFtpupload() != null)
-			{
-				log.debug("destination received from TCPassedNotification");
-				TCFTPUpload ftpupload = notification.getFtpupload();
-				deliveryLocation = String.format("%s/%s", ftpupload.folder, ftpupload.filename);
-				log.debug("delivery location :" + deliveryLocation);
-			}
-			else
-			{
-				log.debug("no destination received");
-			}
-
+		{
+			// extended publishing
 			long taskId = notification.getTaskID();
-			AttributeMap task = mayamClient.getTask(taskId);
-			String jobType = task.getAttribute(Attribute.OP_TYPE);
+			final AttributeMap task = mayamClient.getTask(taskId);
+
+			boolean isDVD = ExtendedPublishingProperties.isDVD(task);
+			final TranscodeJobType jobType = ExtendedPublishingProperties.jobType(task);
+			final String filename = ExtendedPublishingProperties.requestedFileName(task);
+			final String channel =ExtendedPublishingProperties.channel(task);
+			String deliveryLocation = outputPaths.getUserDeliveryLocation(channel,jobType,filename,isDVD);
+
 			log.debug("Export Job Type: " + jobType);
 
 			String username = task.getAttributeAsString(Attribute.TASK_CREATED_BY);
@@ -579,10 +573,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			String materialID = notification.getAssetID();
 			final Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
 
-			if (jobType.equals(TranscodeJobType.CAPTION_PROXY.getText()))
+			if (jobType.equals(TranscodeJobType.CAPTION_PROXY))
 			{
 				String packageId = task.getAttributeAsString(Attribute.HOUSE_ID);
-				final String filename = (String) task.getAttribute(Attribute.OP_FILENAME);
 				String metadata = "";
 				try
 				{
@@ -604,10 +597,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				                       "xml",
 				                       "application/xml",
 				                       channelGroups,
-				                       metadata,
-				                       "CaptionProxySuccess");
+				                       metadata, EventNames.CAPTION_PROXY_SUCCESS);
 			}
-			else if (jobType.equals(TranscodeJobType.COMPLIANCE_PROXY.getText()))
+			else if (jobType.equals(TranscodeJobType.COMPLIANCE_PROXY))
 			{
 
 				String materialid = task.getAttributeAsString(Attribute.HOUSE_ID);
@@ -619,10 +611,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				                       "txt",
 				                       "text/plain",
 				                       channelGroups,
-				                       metadata,
-				                       "ClassificationProxySuccess");
+				                       metadata, EventNames.CLASSIFICATION_PROXY_SUCCESS);
 			}
-			else if (jobType.equals(TranscodeJobType.PUBLICITY_PROXY.getText()))
+			else if (jobType.equals(TranscodeJobType.PUBLICITY_PROXY))
 			{
 				String materialid = task.getAttributeAsString(Attribute.HOUSE_ID);
 				String metadata = mayamClient.getTextualMetatadaForMaterialExport(materialid);
@@ -633,8 +624,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				                       "txt",
 				                       "text/plain",
 				                       channelGroups,
-				                       metadata,
-				                       "PublicityProxySuccess");
+				                       metadata, EventNames.PUBLICITY_PROXY_SUCCESS);
 			}
 			mayamClient.exportCompleted(notification.getTaskID());
 		}
@@ -691,7 +681,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		AttributeMap packageAttributes = mayamClient.getPackageAttributes(packageID);
 		String title = packageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
 		tce.setTitle(title);
-		events.saveEvent(TC_EVENT_NAMESPACE, "TranscodeDeliveryFailed", tce);
+		events.saveEvent(TC_EVENT_NAMESPACE, EventNames.TRANSCODE_DELIVERY_FAILED, tce);
 	}
 
 	@Override
@@ -752,7 +742,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			String title = packageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
 			tce.setTitle(title);
 			tce.withChannelGroup(channelGroups);
-			events.saveEvent(TC_EVENT_NAMESPACE, "FailedToGenerateXML", tce);
+			events.saveEvent(TC_EVENT_NAMESPACE, EventNames.FAILED_TO_GENERATE_XML, tce);
 			
 			log.error(String.format("Error writing companion xml for package %s", packageID), e);
 			throw e;
@@ -859,7 +849,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	private String getPurgeCandidateTasksAsString(final List<AttributeMap> purgeTasks)
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("TASK_ID\tASSET_ID\tASSET_TYPE\tCONTENT_TYPE\tASSET_TITLE\tDATE\tSTATE\n");
+		sb.append("TASK_ID\tASSET_ID\tASSET_TYPE\tCONTENT_TYPE\tASSET_TITLE\tSTATE\tDATE\n");
 
 		for (AttributeMap attributeMap : purgeTasks)
 		{
@@ -1216,8 +1206,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		// just for testing, use the task id of an existing export task to see the metadata that would be produced for it
 		AttributeMap task = mayamClient.getTask(taskID);
 
-		final TranscodeJobType jobType = TranscodeJobType.fromText((String) task.getAttribute(Attribute.OP_TYPE));
-		final String filename = (String) task.getAttribute(Attribute.OP_FILENAME);
+		final TranscodeJobType jobType = ExtendedPublishingProperties.jobType(task);
+		final String filename = ExtendedPublishingProperties.requestedFileName(task);
 
 		if (jobType.equals(TranscodeJobType.CAPTION_PROXY))
 		{

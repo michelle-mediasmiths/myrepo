@@ -1,9 +1,8 @@
 package com.mediasmiths.stdEvents.persistence.rest.impl;
 
-import javax.ws.rs.PathParam;
-
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.db.entity.EventingEntity;
@@ -16,6 +15,8 @@ import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.TitleDao;
 import com.mediasmiths.stdEvents.persistence.rest.impl.eventmapping.EventTypeMapper;
 import org.apache.log4j.Logger;
+
+import javax.ws.rs.PathParam;
 
 /**
  * An implementation of the EventAPI as a rest service that stored incoming events within a (hibernate fronted) database
@@ -87,19 +88,19 @@ public class EventAPIImpl implements EventAPI
 		
 		logger.info("Saving event information for reporting");
 		
-		if((event.getEventName().equals("CreateorUpdateTitle"))){
+		if((event.getEventName().equals(EventNames.CREATEOR_UPDATE_TITLE))){
 			createOrUpdateTitle(event);
 		}
 		
-		if( (event.getEventName().equals("AddOrUpdateMaterial"))){
+		if( (event.getEventName().equals(EventNames.ADD_OR_UPDATE_MATERIAL))){
 			addOrUpdateMaterial(event);
 		}
 		
-		if( (event.getEventName().equals("AutoQCReport"))){
+		if( (event.getEventName().equals(EventNames.AUTO_QC_REPORT))){
 			autoQcReport(event);
 		}
 		
-		if ((event.getEventName().equals("CreateorUpdateTitle")) || (event.getEventName().equals("AddOrUpdateMaterial")) ||(event.getEventName().equals("AddOrUpdatePackage"))) {
+		if ((event.getEventName().equals(EventNames.CREATEOR_UPDATE_TITLE)) || (event.getEventName().equals(EventNames.ADD_OR_UPDATE_MATERIAL)) ||(event.getEventName().equals(EventNames.ADD_OR_UPDATE_PACKAGE))) {
 			logger.info("BMS message detected");
 			bmsDao.updateBMS(event);
 		}

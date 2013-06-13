@@ -1,126 +1,92 @@
 package com.mediasmiths.mq.handlers.asset;
 
-import java.util.Calendar;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
-import com.mayam.wf.attributes.shared.type.FilterCriteria;
-import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mayam.wf.ws.client.FilterResult;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamContentTypes;
-import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.UpdateAttributeHandler;
+import org.apache.log4j.Logger;
 
 public class TemporaryContentHandler extends UpdateAttributeHandler
 {
 	private final static Logger log = Logger.getLogger(TemporaryContentHandler.class);
-	
+
+
 	public void process(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
-	{	
+	{
 		// Title ID of temporary material updated - add to source ids of title, remove material from any purge lists
 		AssetType assetType = currentAttributes.getAttribute(Attribute.ASSET_TYPE);
 		String assetID = currentAttributes.getAttribute(Attribute.HOUSE_ID);
-		
-		
-		try {			
-			if (attributeChanged(Attribute.CONT_MAT_TYPE, before, after,currentAttributes))
+
+		try
+		{
+			if (attributeChanged(Attribute.CONT_MAT_TYPE, before, after, currentAttributes))
 			{
 				log.debug("CONT_MAT_TYPE changed");
-				
-				// - Content Type changed to “Associated” - Item added to Purge candidate if not already, expiry date set as 90 days
-				// - Content Type set to "Edit Clips" - Item added to purge list if not already there and expiry set for 7 days
+
+				// - Content Type has changed, create or update purge candidate task for item
 				String contentType = currentAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
-				if (contentType.equals(MayamContentTypes.EPK) || contentType.equals(MayamContentTypes.EDIT_CLIPS) || contentType.equals(MayamContentTypes.PUBLICITY)) 
+				if (contentType.equals(MayamContentTypes.EPK) ||
+				    contentType.equals(MayamContentTypes.EDIT_CLIPS) ||
+				    contentType.equals(MayamContentTypes.PUBLICITY))
 				{
-					AttributeMap filterEqualities = tasksClient.createAttributeMap();
-					filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
-					filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
-					FilterCriteria criteria = new FilterCriteria();
-					criteria.setFilterEqualities(filterEqualities);
-					FilterResult existingTasks = tasksClient.taskApi().getTasks(criteria, 10, 0);
-				
-					if (existingTasks.getTotalMatches() > 0) 
+
+					Integer numberOfDays = null;
+
+					if (contentType.equals(MayamContentTypes.EPK))
 					{
-						List<AttributeMap> tasks = existingTasks.getMatches();
-						for (int i = 0; i < existingTasks.getTotalMatches(); i++) 
-						{
-							AttributeMap task = tasks.get(i);
-							Calendar date = Calendar.getInstance();
-							if (contentType.equals(MayamContentTypes.EPK)) 
-							{
-								date.add(Calendar.DAY_OF_MONTH, associatedPurgeTime);
-								task.setAttribute(Attribute.OP_DATE, date.getTime());
-								task.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
-							}
-							else if (contentType.equals(MayamContentTypes.EDIT_CLIPS)) 
-							{
-								date.add(Calendar.DAY_OF_MONTH, editClipsPurgeTime);
-								task.setAttribute(Attribute.OP_DATE, date.getTime());
-								task.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-							}
-							else if (contentType.equals(MayamContentTypes.PUBLICITY)) 
-							{
-								date.add(Calendar.DAY_OF_MONTH, publicityPurgeTime);
-								task.setAttribute(Attribute.OP_DATE, date.getTime());
-								task.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-							}
-							taskController.saveTask(task);
-						}
+						numberOfDays = associatedPurgeTime;
 					}
-					else {
-						long taskID = taskController.createTask(assetID, MayamAssetType.fromAssetType(assetType), MayamTaskListType.PURGE_CANDIDATE_LIST);
-						
-						AttributeMap newTask = taskController.getTask(taskID);
-						newTask.putAll(currentAttributes);
-						Calendar date = Calendar.getInstance();
-						if (contentType.equals(MayamContentTypes.EPK)) 
-						{
-							date.add(Calendar.DAY_OF_MONTH, associatedPurgeTime);
-							newTask.setAttribute(Attribute.OP_DATE, date.getTime());
-							newTask.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
-						}
-						else if (contentType.equals(MayamContentTypes.EDIT_CLIPS)) 
-						{
-							date.add(Calendar.DAY_OF_MONTH,editClipsPurgeTime);
-							newTask.setAttribute(Attribute.OP_DATE, date.getTime());
-							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-						}
-						else if (contentType.equals(MayamContentTypes.PUBLICITY)) 
-						{
-							date.add(Calendar.DAY_OF_MONTH,publicityPurgeTime);
-							newTask.setAttribute(Attribute.OP_DATE, date.getTime());
-							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-						}
-						taskController.saveTask(newTask);
+					else if (contentType.equals(MayamContentTypes.EDIT_CLIPS))
+					{
+						numberOfDays = editClipsPurgeTime;
+					}
+					else if (contentType.equals(MayamContentTypes.PUBLICITY))
+					{
+						numberOfDays = publicityPurgeTime;
+					}
+					else if (contentType.equals(MayamContentTypes.UNMATCHED))
+					{
+						numberOfDays = unmatchedPurgeTime;
+					}
+
+					if (numberOfDays != null)
+					{
+						taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.fromAssetType(assetType),
+						                                                        currentAttributes.getAttributeAsString(Attribute.HOUSE_ID),
+						                                                        numberOfDays);
 					}
 				}
 			}
 		}
-		catch (Exception e) {
-			log.error("Exception in the Mayam client while handling Temporary Content Message : "+e.getMessage(), e);
-			e.printStackTrace();	
+		catch (Exception e)
+		{
+			log.error("Exception in the Mayam client while handling Temporary Content Message : " + e.getMessage(), e);
+			e.printStackTrace();
 		}
 	}
+
 
 	@Inject
 	@Named("purge.content.type.change.days.editclips")
 	private int editClipsPurgeTime;
-	
+
 	@Inject
 	@Named("purge.content.type.change.days.associated")
 	private int associatedPurgeTime;
-	
+
 	@Inject
 	@Named("purge.content.type.change.days.associated")
 	private int publicityPurgeTime;
-	
+
+	@Inject
+	@Named("purge.unmatch.material.days")
+	private int unmatchedPurgeTime;
+
+
 	@Override
 	public String getName()
 	{

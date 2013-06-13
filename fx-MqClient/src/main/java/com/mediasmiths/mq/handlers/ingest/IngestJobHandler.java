@@ -1,17 +1,5 @@
 package com.mediasmiths.mq.handlers.ingest;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import com.mayam.wf.exception.RemoteException;
-import com.mediasmiths.mayam.MayamContentTypes;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
@@ -21,15 +9,26 @@ import com.mayam.wf.attributes.shared.type.Job.JobStatus;
 import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.ip.common.events.ArdomeImportFailure;
 import com.mediasmiths.foxtel.ip.common.events.CreationComplete;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.JobHandler;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.std.util.jaxb.exception.JAXBRuntimeException;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class IngestJobHandler extends JobHandler
 {
@@ -127,9 +126,9 @@ public class IngestJobHandler extends JobHandler
 			log.error("error moving ingest task for asset " + assetId + " to open state", e);
 			try
 			{
-				taskController.createWFEErrorTask(MayamAssetType.MATERIAL,
-				                                  task.getAttributeAsString(Attribute.ASSET_SITE_ID),
-				                                  "error moving ingest task for asset " + assetId + " to open state");
+				taskController.createWFEErrorTaskBySiteID(MayamAssetType.MATERIAL,
+				                                          task.getAttributeAsString(Attribute.ASSET_SITE_ID),
+				                                          "error moving ingest task for asset " + assetId + " to open state");
 			}
 			catch (MayamClientException e1)
 			{
@@ -306,9 +305,19 @@ public class IngestJobHandler extends JobHandler
 		ajf.getChannelGroup().addAll(channelProperties.groupsForEmail(channels,isAo));	
 		
 		String event = fxcommonSerialiser.serialise(ajf);
-		String eventName = "ArdomeImportFailure";
+		String eventName;
+
+		if (isAo)
+		{
+			eventName = EventNames.ARDOME_IMPORT_FAILURE_AO;
+		}
+		else
+		{
+			eventName = EventNames.ARDOME_IMPORT_FAILURE_NON_AO;
+		}
+
 		String namespace = contentEventNamespace;
-		
+
 		eventsService.saveEvent(eventName, event, namespace);
 	}
 	
@@ -319,7 +328,7 @@ public class IngestJobHandler extends JobHandler
 		cce.setCompletionDate(completionDate);
 		
 		String event = fxcommonSerialiser.serialise(cce);
-		String eventName = "CreationComplete";
+		String eventName = EventNames.CREATION_COMPLETE;
 		String namespace = bmsEventsNamespace;
 		
 		eventsService.saveEvent(eventName, event, namespace);

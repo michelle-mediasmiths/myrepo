@@ -1,26 +1,15 @@
 package com.mediasmiths.mq.handlers.export;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Date;
-
-import javax.xml.bind.JAXBException;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-import org.mule.api.MuleException;
-
 import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
-import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.foxtel.extendedpublishing.ExtendedPublishingProperties;
 import com.mediasmiths.foxtel.extendedpublishing.OutputPaths;
 import com.mediasmiths.foxtel.extendedpublishing.TCJobParamsGenerator;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.ExportStart;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
@@ -33,6 +22,15 @@ import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.mule.api.MuleException;
+
+import javax.xml.bind.JAXBException;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 public class InitiateExportHandler extends TaskStateChangeHandler
 {
@@ -162,16 +160,7 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 			return;
 		}
 
-		boolean isDVD = false;
-		if ("dvd".equals(requestedFormat))
-		{
-			isDVD = true;
-			log.debug("Export requested in dvd format");
-		}
-		else
-		{
-			log.debug("Export not requested in dvd format");
-		}
+		boolean isDVD = ExtendedPublishingProperties.isDVD(messageAttributes);
 
 		try
 		{
@@ -196,7 +185,7 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 			ExportStart export = new ExportStart();
 			export.setMaterialID(materialID);
 			export.setChannels(channel);
-			eventService.saveEvent("http://www.foxtel.com.au/ip/tc", "ExportStart", export);
+			eventService.saveEvent("http://www.foxtel.com.au/ip/tc", EventNames.EXPORT_START, export);
 		}
 		catch (UnsupportedEncodingException e)
 		{

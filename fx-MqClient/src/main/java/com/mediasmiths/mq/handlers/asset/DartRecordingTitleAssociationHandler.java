@@ -101,9 +101,9 @@ public class DartRecordingTitleAssociationHandler extends AttributeHandler
 	{
 		try
 		{
-			taskController.createWFEErrorTask(MayamAssetType.MATERIAL,
-			                                  messageAttributes.getAttributeAsString(Attribute.HOUSE_ID),
-			                                  error);
+			taskController.createWFEErrorTaskBySiteID(MayamAssetType.MATERIAL,
+			                                          messageAttributes.getAttributeAsString(Attribute.HOUSE_ID),
+			                                          error);
 		}
 		catch (Exception e1)
 		{

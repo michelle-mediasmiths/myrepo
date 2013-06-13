@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
@@ -80,7 +81,7 @@ public class ExportRpt extends ReportUtils
 			
 			export.setDateRange(new StringBuilder().append(startF).append(" - ").append(endF).toString());
 			
-			if (event.getEventName().equals("CaptionProxySuccess"))
+			if (event.getEventName().equals(EventNames.CAPTION_PROXY_SUCCESS))
 			{
 				export.setMaterialID(tc.getPackageID());
 				export.setExportType("caption");
@@ -90,7 +91,7 @@ public class ExportRpt extends ReportUtils
 				export.setMaterialID(tc.getAssetID());
 				export.setExportType("compliance");
 			}
-			else if (event.getEventName().equals("ClassificationProxySuccess"))
+			else if (event.getEventName().equals(EventNames.CLASSIFICATION_PROXY_SUCCESS))
 			{
 				export.setMaterialID(tc.getAssetID());
 				export.setExportType("classification");
