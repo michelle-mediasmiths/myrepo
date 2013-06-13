@@ -35,7 +35,7 @@ public class AcquisitionRpt extends ReportUtils
 	private QueryAPI queryApi;
 
 	public void writeAcquisitionDelivery(
-			final List<OrderStatus> materials,
+			final List<EventEntity> materials,
 			final DateTime startDate,
 			final DateTime endDate,
 			final String reportName)
@@ -80,7 +80,7 @@ public class AcquisitionRpt extends ReportUtils
 	}
 
 	private List<Acquisition> getReportList(
-			final List<OrderStatus> events,
+			final List<EventEntity> events,
 			final DateTime startDate,
 			final DateTime endDate)
 	{
@@ -91,27 +91,28 @@ public class AcquisitionRpt extends ReportUtils
 		String startF = startDate.toString(dateFormatter);
 		String endF = endDate.toString(dateFormatter);
 
-		for (OrderStatus event : events) 
+		for (EventEntity event : events) 
 		{
-			Acquisition acq = newAcquisition(event);
+			Acquisition acq = (Acquisition) unmarshallReport(event);
 
 			acq.setDateRange(startF + " - " + endF);
-
 			OrderStatus order = queryApi.getOrderStatusById(acq.getMaterialID());
-			if (order.getTitle() != null)
+
+
+			if (order!= null && order.getTitle() != null)
 			{
 				log.debug("title: " + order.getTitle().getTitle());
 				log.debug("channels: " + order.getTitle().getChannels().toString());
 				acq.setChannels(order.getTitle().getChannels().toString());
 			}
 
-			if (acq.getFilesize() != null)
+			if (order!= null && order.getFileSize() != null)
 			{
 				long filesize = Long.valueOf(acq.getFilesize()).longValue();
 				log.debug("filesize long: " + filesize);
 				acq.setFilesize(FileUtils.byteCountToDisplaySize(filesize));
 			}
-			
+
 			log.debug("file: " + acq.isFileDelivery() + " tape: " + acq.isTapeDelivery());
 			if (acq.isFileDelivery())
 			{
