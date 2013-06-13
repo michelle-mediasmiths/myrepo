@@ -113,14 +113,28 @@ public class AcquisitionRpt extends ReportUtils
 				acq.setFilesize(FileUtils.byteCountToDisplaySize(filesize));
 			}
 
+			String aggregator = acq.getAggregatorID();
+			boolean isFromTape = false;
+			if (aggregator != null)
+			{
+				if (aggregator.toLowerCase().equals("ruzz")
+						|| aggregator.toLowerCase().equals("vizcapture")
+						|| aggregator.toLowerCase().equals("dart"))
+				{
+					isFromTape = true;
+				}
+			}
+			
 			log.debug("file: " + acq.isFileDelivery() + " tape: " + acq.isTapeDelivery());
 			if (acq.isFileDelivery())
 			{
 				acq.setFileDel("1");
+				acq.setTapeDel("0");
 			}
-			else if (acq.isTapeDelivery())
+			else if (acq.isTapeDelivery() || isFromTape)
 			{
 				acq.setTapeDel("1");
+				acq.setFileDel("0");
 			}
 
 			log.info(acq.getMaterialID() + " " + acq.getTitle() + " " + acq.getChannels());
