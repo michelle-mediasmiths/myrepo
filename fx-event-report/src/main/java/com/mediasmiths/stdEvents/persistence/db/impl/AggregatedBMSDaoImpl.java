@@ -2,6 +2,7 @@ package com.mediasmiths.stdEvents.persistence.db.impl;
 
 import java.util.List;
 
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -78,7 +79,7 @@ public class AggregatedBMSDaoImpl extends HibernateDao<AggregatedBMS, Long> impl
 	{
 		logger.info("updateBMS() eventName: " + event.getEventName());
 
-		if (event.getEventName().equals("CreateorUpdateTitle")) {
+		if (event.getEventName().equals(EventNames.CREATEOR_UPDATE_TITLE)) {
 			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event.getPayload());
 			AggregatedBMS bms = new AggregatedBMS();
 			bms.setTime(event.getTime());
@@ -89,7 +90,7 @@ public class AggregatedBMSDaoImpl extends HibernateDao<AggregatedBMS, Long> impl
 			logger.info("SAVED" + bms.getTitleID() + " " + bms.getTitle());
 		}
 
-		if (event.getEventName().equals("AddOrUpdatePackage")) {
+		if (event.getEventName().equals(EventNames.ADD_OR_UPDATE_PACKAGE)) {
 			AddOrUpdatePackage pack = (AddOrUpdatePackage) unmarshall(event.getPayload());
 			List<AggregatedBMS> titles = findByAnId("titleID", pack.getTitleID());
 			for (AggregatedBMS title : titles)
@@ -116,7 +117,7 @@ public class AggregatedBMSDaoImpl extends HibernateDao<AggregatedBMS, Long> impl
 			}
 		}
 
-		if (event.getEventName().equals("AddOrUpdateMaterial")) {
+		if (event.getEventName().equals(EventNames.ADD_OR_UPDATE_MATERIAL)) {
 			AddOrUpdateMaterial material = (AddOrUpdateMaterial) unmarshall(event.getPayload());
 			List<AggregatedBMS> packages = findByAnId("materialID", material.getMaterialID());
 			for (AggregatedBMS pack : packages) {

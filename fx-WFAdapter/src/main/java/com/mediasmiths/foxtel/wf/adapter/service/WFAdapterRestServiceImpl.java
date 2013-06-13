@@ -388,7 +388,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (notification.isForTXDelivery())
 			{
 				// auto qc was for tx delivery
-				saveAutoQCEvent("CerifyQCError", notification);
+				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification);
 				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC ERROR");
 
 				TcEvent tce = new TcEvent();
@@ -404,7 +404,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			else
 			{
 				// auto qc was for qc task
-				saveAutoQCEvent("CerifyQCError", notification);
+				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification);
 				mayamClient.autoQcErrorForMaterial(notification.getAssetId(), notification.getTaskID());
 				
 				AttributeMap task = mayamClient.getTask(notification.getTaskID());
