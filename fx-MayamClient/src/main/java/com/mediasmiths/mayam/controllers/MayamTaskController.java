@@ -446,45 +446,37 @@ public class MayamTaskController extends MayamController
 		initialAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
 		initialAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.WFE_ERROR.getText());
 
-		try
+		AssetAccess accessRights = initialAttributes.getAttribute(Attribute.ASSET_ACCESS);
+
+		if (accessRights == null)
 		{
-			AssetAccess accessRights = initialAttributes.getAttribute(Attribute.ASSET_ACCESS);
-			
-			if(accessRights==null)
-			{
-				accessRights = new AssetAccess();				
-			}
-
-			final String[] groups;
-
-			if (isAOItem)
-			{
-				groups = StringUtils.split(aoGroup, ',');
-
-			}
-			else
-			{
-				groups = StringUtils.split(nonAOGroup, ',');
-
-			}
-
-			for(String group : groups)
-			{
-				AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
-				entry.setEntityType(AssetAccess.EntityType.GROUP);
-
-				entry.setEntity(group);
-				entry.setRead(true);
-				entry.setWrite(true);
-
-				accessRights.getStandard().add(entry);
-			}
-			initialAttributes.setAttribute(Attribute.ASSET_ACCESS, accessRights);
+			accessRights = new AssetAccess();
 		}
-		catch (Exception e)
+
+		final String[] groups;
+
+		if (isAOItem)
 		{
-			log.error("Setting Rights. AO=" + isAOItem, e);
+			groups = StringUtils.split(aoGroup, ',');
 		}
+		else
+		{
+			groups = StringUtils.split(nonAOGroup, ',');
+		}
+
+		for (String group : groups)
+		{
+			AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
+			entry.setEntityType(AssetAccess.EntityType.GROUP);
+
+			entry.setEntity(group);
+			entry.setRead(true);
+			entry.setWrite(true);
+
+			accessRights.getStandard().add(entry);
+		}
+
+		initialAttributes.setAttribute(Attribute.ASSET_ACCESS, accessRights);
 
 		AttributeMap createTask;
 		try
