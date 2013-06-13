@@ -305,9 +305,19 @@ public class IngestJobHandler extends JobHandler
 		ajf.getChannelGroup().addAll(channelProperties.groupsForEmail(channels,isAo));	
 		
 		String event = fxcommonSerialiser.serialise(ajf);
-		String eventName = EventNames.ARDOME_IMPORT_FAILURE;
+		String eventName;
+
+		if (isAo)
+		{
+			eventName = EventNames.ARDOME_IMPORT_FAILURE_AO;
+		}
+		else
+		{
+			eventName = EventNames.ARDOME_IMPORT_FAILURE_NON_AO;
+		}
+
 		String namespace = contentEventNamespace;
-		
+
 		eventsService.saveEvent(eventName, event, namespace);
 	}
 	

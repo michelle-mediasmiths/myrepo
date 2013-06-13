@@ -550,9 +550,19 @@
 			<subject>Ardome import has failed.</subject>
 			<body>Item with Filename(%s) and JobId(%s) has failed to successfully auto-import into Ardome.</body>
 			<emailaddresses> 
-				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/content</namespace>
+		<eventname>ArdomeImportFailureAO</eventname>
+		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.ArdomeImportFailureEmailTemplate">
+			<subject>Ardome import has failed.</subject>
+			<body>Item with Filename(%s) and JobId(%s) has failed to successfully auto-import into Ardome.</body>
+			<emailaddresses>
+				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
 				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
