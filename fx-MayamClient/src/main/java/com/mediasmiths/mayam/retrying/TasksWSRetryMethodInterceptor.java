@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.mq.MqException;
 import com.mediasmiths.foxtel.ip.common.events.CommFailure;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.std.threading.Timeout;
 import com.mediasmiths.std.threading.retry.backoff.ExponentialBackoff;
@@ -88,7 +89,7 @@ final class TasksWSRetryMethodInterceptor implements MethodInterceptor
 		cf.setFailureLongDescription(e.getCause().getLocalizedMessage());
 		cf.setSource("WFE");
 		cf.setTarget("tasks-ws");
-		eventsService.saveEvent(systemEventsNamespace, "CommError", cf);
+		eventsService.saveEvent(systemEventsNamespace, EventNames.COMM_ERROR, cf);
 	}
 
 

@@ -1,5 +1,6 @@
 package com.mediasmiths.mq.handlers.preview;
 
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -64,7 +65,7 @@ public class PreviewEventUtil
 			
 			qa.setOperator(operator);
 			
-			eventsService.saveEvent(qaEventNamespace, "ManualQA", qa);
+			eventsService.saveEvent(qaEventNamespace, EventNames.MANUAL_QA, qa);
 
 		}
 		catch (Exception e)

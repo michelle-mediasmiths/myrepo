@@ -1,8 +1,5 @@
 package com.mediasmiths.mq.handlers.button;
 
-import java.util.Date;
-import java.util.Set;
-
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.Material;
@@ -13,7 +10,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.StringList;
-import com.mediasmiths.foxtel.channels.config.ChannelProperties;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.ManualPurge;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamButtonType;
@@ -21,10 +18,10 @@ import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import org.apache.log4j.Logger;
 
+import java.util.Date;
+
 public class DeleteButton extends ButtonClickHandler
 {
-
-	private static final String MANUAL_PURGE = "ManualPurge";
 
 	private final static Logger log = Logger.getLogger(DeleteButton.class);
 	
@@ -114,7 +111,7 @@ public class DeleteButton extends ButtonClickHandler
 		manualPurge.setTitle(title);
 		manualPurge.getChannelGroup().addAll(channelProperties.groupsForEmail(channels,isAo));		
 		
-		String eventName = MANUAL_PURGE;
+		String eventName = EventNames.MANUAL_PURGE;
 		String namespace = bmsEventsNamespace;
 
 		eventsService.saveEvent(namespace, eventName,  manualPurge);

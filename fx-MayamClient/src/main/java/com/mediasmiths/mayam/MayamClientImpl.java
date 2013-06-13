@@ -1051,12 +1051,12 @@ public class MayamClientImpl implements MayamClient
 				else
 				if (assetType.equals(MayamAssetType.TITLE.getAssetType()))
 				{
-					log.debug("purge title " + houseID);
+					log.info("purge title " + houseID);
 					titleController.purgeTitle(houseID,0);
 				}
 				else if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()))
 				{
-					log.debug(String.format("Deleting purge candidate item id %s (%s) - %s ",
+					log.info(String.format("Deleting purge candidate item id %s (%s) - %s ",
 					                        houseID,
 					                        task.getAttributeAsString(Attribute.ASSET_ID),
 					                        task.getAttributeAsString(Attribute.ASSET_TITLE)));
@@ -1072,7 +1072,7 @@ public class MayamClientImpl implements MayamClient
 				}
 				else if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
 				{
-					log.debug("delete package " + houseID);
+					log.info("delete package " + houseID);
 					packageController.deletePackage(houseID,0);
 				}
 				else

@@ -7,6 +7,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCEvent;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.mayam.DateUtil;
 import org.apache.log4j.Logger;
@@ -122,7 +123,7 @@ public class QcEvent
 				}
 			}
 
-			eventsService.saveEvent(qcEventNamespace, "AutoQCReport", qce);
+			eventsService.saveEvent(qcEventNamespace, EventNames.AUTO_QC_REPORT, qce);
 		}
 		catch (Exception e)
 		{

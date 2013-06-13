@@ -9,6 +9,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.FilePickupDetails;
 import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
 import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
@@ -103,7 +104,7 @@ public class Importer
 			FilePickupDetails fpd = new FilePickupDetails();
 			fpd.setFilename(src.getName());
 			fpd.setTimeProcessed((new Date().getTime()));
-			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "FilePickUpNotification", fpd);
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content", EventNames.FILE_PICK_UP_NOTIFICATION, fpd);
 
 			// allows a configurable number of retries
 			if (attempt == deliveryAttemptsToMake)
@@ -155,7 +156,7 @@ public class Importer
 			MediaPickupNotification mpn = new MediaPickupNotification();
 			mpn.setFilelocation(src.getAbsolutePath());
 			mpn.setTime((new Date()).toString());
-			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "ContentWithoutCompanionXML", mpn);
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content", EventNames.CONTENT_WITHOUT_COMPANION_XML, mpn);
 
 			return;
 		}
@@ -292,7 +293,7 @@ public class Importer
 					//AO
 					logger.debug("1  AO auto import fail");
 
-					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "AOMediaImportToArdomeFailure", n);
+					eventService.saveEvent("http://www.foxtel.com.au/ip/content", EventNames.AO_MEDIA_IMPORT_TO_ARDOME_FAILURE, n);
 
 					logger.debug("2  AO auto import fail");
 				}
@@ -301,7 +302,8 @@ public class Importer
 					//NonAO
 					logger.debug("1 Non AO auto import fail");
 
-					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "NonAOMediaImportToArdomeFailure", n);
+					eventService.saveEvent("http://www.foxtel.com.au/ip/content",
+					                       EventNames.NON_AO_MEDIA_IMPORT_TO_ARDOME_FAILURE, n);
 
 					logger.debug("2 Non AO auto import fail");
 				}

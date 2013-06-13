@@ -12,6 +12,7 @@ import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
 import com.mediasmiths.foxtel.ip.common.events.EventAttachment;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.QcServerFail;
 import com.mediasmiths.foxtel.ip.common.events.TcEvent;
 import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
@@ -231,8 +232,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (notification.isForTXDelivery())
 			{
 				// id is a package id
-				saveAutoQCEvent("QCProblemWithTCMedia", notification);
-				saveAutoQCEvent("CerifyQCError", notification);
+				saveAutoQCEvent(EventNames.QC_PROBLEM_WITH_TC_MEDIA, notification);
+				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification);
 				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC FAILED");
 				// attach qc report if qc is failed
 				attachQcReports(notification.getAssetId(), notification.getJobName());
@@ -286,7 +287,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		qcPass.setForTXDelivery(notification.isForTXDelivery());
 		qcPass.setMaterialID(String.valueOf(notification.getTaskID()));
 		qcPass.setTitle(notification.getTitle());
-		events.saveEvent(QC_EVENT_NAMESPACE, "AutoQCPassed", qcPass);
+		events.saveEvent(QC_EVENT_NAMESPACE, EventNames.AUTO_QC_PASSED, qcPass);
 
 		if (notification.isForTXDelivery())
 		{
@@ -397,7 +398,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 					tce.setAssetID(notification.getAssetId());
 					tce.setPackageID(task.getAttributeAsString(Attribute.HOUSE_ID));
 					tce.setTitle(notification.getTitle());
-					events.saveEvent(TC_EVENT_NAMESPACE, "QcServerFailureDuringTranscode", tce);
+					events.saveEvent(TC_EVENT_NAMESPACE, EventNames.QC_SERVER_FAILURE_DURING_TRANSCODE, tce);
 				}
 			}
 			else
@@ -414,7 +415,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 					qcsf.setAssetID(assetID);
 					qcsf.setMaterialID(task.getAttributeAsString(Attribute.HOUSE_ID));
 					qcsf.setTitle(notification.getTitle());
-					events.saveEvent(QC_EVENT_NAMESPACE, "QcServerFail", qcsf);
+					events.saveEvent(QC_EVENT_NAMESPACE, EventNames.QC_SERVER_FAIL, qcsf);
 				}
 			}
 		}
@@ -450,7 +451,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				final Set<String> channelGroups = mayamClient.getChannelGroupsForPackage(packageID);
 				tcFailure.withChannelGroup(channelGroups);
 
-				events.saveEvent("http://www.foxtel.com.au/ip/tc", "TCFailed", tcFailure);
+				events.saveEvent("http://www.foxtel.com.au/ip/tc", EventNames.TC_FAILED, tcFailure);
 			}
 			else
 			{
@@ -460,13 +461,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				final Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
 				tcFailure.withChannelGroup(channelGroups);
 
-				events.saveEvent("http://www.foxtel.com.au/ip/tc", "ExportFailure", tcFailure);
+				events.saveEvent("http://www.foxtel.com.au/ip/tc", EventNames.EXPORT_FAILURE, tcFailure);
 			}
 		}
 		catch (MayamClientException e)
 		{
 			log.error("Failed to fail task!", e);
-			events.saveEvent("http://www.foxtel.com.au/ip/tc", "TCFailed", tcFailure);
+			events.saveEvent("http://www.foxtel.com.au/ip/tc", EventNames.TC_FAILED, tcFailure);
 
 			throw e;
 		}
@@ -500,21 +501,21 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 			if (taskListID.equals(TranscodeJobType.CAPTION_PROXY.getText()))
 			{
-				saveTCEvent("CaptionProxyFailure",
+				saveTCEvent(EventNames.CAPTION_PROXY_FAILURE,
 				            notification,
 				            false,
 				            emails,channelGroups);
 			}
 			else if (taskListID.equals(TranscodeJobType.PUBLICITY_PROXY.getText()))
 			{
-				saveTCEvent("PublicityProxyFailure",
+				saveTCEvent(EventNames.PUBLICITY_PROXY_FAILURE,
 				            notification,
 				            false,
 				            emails,channelGroups);
 			}
 			else if (taskListID.equals(TranscodeJobType.COMPLIANCE_PROXY.getText()))
 			{
-				saveTCEvent("ClassificationProxyFailure",
+				saveTCEvent(EventNames.CLASSIFICATION_PROXY_FAILURE,
 				            notification,
 				            false,
 				            emails,channelGroups);
@@ -530,7 +531,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			final Set<String> channelGroups = mayamClient.getChannelGroupsForPackage(packageID);
 
 
-			saveTCEvent("TCFailed",
+			saveTCEvent(EventNames.TC_FAILED,
 			            notification,
 			            false,
 			            emails,
@@ -596,8 +597,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				                       "xml",
 				                       "application/xml",
 				                       channelGroups,
-				                       metadata,
-				                       "CaptionProxySuccess");
+				                       metadata, EventNames.CAPTION_PROXY_SUCCESS);
 			}
 			else if (jobType.equals(TranscodeJobType.COMPLIANCE_PROXY))
 			{
@@ -611,8 +611,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				                       "txt",
 				                       "text/plain",
 				                       channelGroups,
-				                       metadata,
-				                       "ClassificationProxySuccess");
+				                       metadata, EventNames.CLASSIFICATION_PROXY_SUCCESS);
 			}
 			else if (jobType.equals(TranscodeJobType.PUBLICITY_PROXY))
 			{
@@ -625,8 +624,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				                       "txt",
 				                       "text/plain",
 				                       channelGroups,
-				                       metadata,
-				                       "PublicityProxySuccess");
+				                       metadata, EventNames.PUBLICITY_PROXY_SUCCESS);
 			}
 			mayamClient.exportCompleted(notification.getTaskID());
 		}
@@ -683,7 +681,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		AttributeMap packageAttributes = mayamClient.getPackageAttributes(packageID);
 		String title = packageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
 		tce.setTitle(title);
-		events.saveEvent(TC_EVENT_NAMESPACE, "TranscodeDeliveryFailed", tce);
+		events.saveEvent(TC_EVENT_NAMESPACE, EventNames.TRANSCODE_DELIVERY_FAILED, tce);
 	}
 
 	@Override
@@ -744,7 +742,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			String title = packageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
 			tce.setTitle(title);
 			tce.withChannelGroup(channelGroups);
-			events.saveEvent(TC_EVENT_NAMESPACE, "FailedToGenerateXML", tce);
+			events.saveEvent(TC_EVENT_NAMESPACE, EventNames.FAILED_TO_GENERATE_XML, tce);
 			
 			log.error(String.format("Error writing companion xml for package %s", packageID), e);
 			throw e;

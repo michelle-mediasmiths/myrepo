@@ -9,6 +9,7 @@ import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.extendedpublishing.ExtendedPublishingProperties;
 import com.mediasmiths.foxtel.extendedpublishing.OutputPaths;
 import com.mediasmiths.foxtel.extendedpublishing.TCJobParamsGenerator;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.ExportStart;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
@@ -184,7 +185,7 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 			ExportStart export = new ExportStart();
 			export.setMaterialID(materialID);
 			export.setChannels(channel);
-			eventService.saveEvent("http://www.foxtel.com.au/ip/tc", "ExportStart", export);
+			eventService.saveEvent("http://www.foxtel.com.au/ip/tc", EventNames.EXPORT_START, export);
 		}
 		catch (UnsupportedEncodingException e)
 		{

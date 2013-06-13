@@ -1,25 +1,24 @@
 package com.mediasmiths.mq.handlers.button;
 
 
-import javax.xml.bind.JAXBException;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker;
 import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.JAXBException;
 
 
 public class ExportMarkersButton extends ButtonClickHandler
 {
 
-	private static final String COMPLIANCE_LOGGING_MARKER = "ComplianceLoggingMarker";
 	private final static Logger log = Logger.getLogger(ExportMarkersButton.class);
 
 	@Inject(optional=false)
@@ -50,7 +49,7 @@ public class ExportMarkersButton extends ButtonClickHandler
 			emails.getEmailaddress().add(email);
 			clm.setEmailaddresses(emails);
 			
-			String eventName = COMPLIANCE_LOGGING_MARKER;
+			String eventName = EventNames.COMPLIANCE_LOGGING_MARKER;
 			String event = compLoggingMarkerInfoToString(clm);
 			String namespace = systemEventNamespace;
 

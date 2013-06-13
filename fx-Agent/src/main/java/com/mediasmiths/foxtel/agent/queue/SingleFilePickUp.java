@@ -2,13 +2,12 @@ package com.mediasmiths.foxtel.agent.queue;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
 import com.mediasmiths.foxtel.ip.common.events.FilePickupDetails;
 import com.mediasmiths.foxtel.ip.common.events.PickupNotification;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.std.io.filter.FilenameExtensionFilter;
-
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -465,7 +464,7 @@ public class SingleFilePickUp implements IFilePickup
 			 pickUpStats.getDetails().add(pd);
 		}
 
-		pickUpEventTimer.saveEvent("http://www.foxtel.com.au/ip/infrastructure","FilePickUp",pickUpStats);
+		pickUpEventTimer.saveEvent("http://www.foxtel.com.au/ip/infrastructure", EventNames.FILE_PICK_UP,pickUpStats);
 	}
 
 	public File[] getWatchedDirectories()

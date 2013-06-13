@@ -27,6 +27,7 @@ import com.mediasmiths.foxtel.agent.validation.MessageValidationException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.ip.common.events.ErrorReport;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.IBMSDeleteItemFailure;
 import com.mediasmiths.foxtel.ip.common.events.ProtectedPurgeFail;
 import com.mediasmiths.foxtel.ip.common.events.PurgeMaterial;
@@ -42,7 +43,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.HEAD;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
@@ -63,7 +63,7 @@ import java.util.Set;
 public class MultiPlaceholderMessageProcessor extends MessageProcessor<PlaceholderMessage>
 {
 
-    private static Logger logger = Logger.getLogger(MultiPlaceholderMessageProcessor.class);
+	private static Logger logger = Logger.getLogger(MultiPlaceholderMessageProcessor.class);
 
     private final MayamClient mayamClient;
 
@@ -198,7 +198,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 		            errorReport.setTitle(title);
 
 		        }
-		        eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "BMSFailure", errorReport);
+		        eventService.saveEvent("http://www.foxtel.com.au/ip/bms", EventNames.BMS_FAILURE, errorReport);
 
 		        logger.error(String.format("Failed to process action, result was %s", result));
 	        }
@@ -275,7 +275,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 			addOrUpdateMaterial.setMaterialID(action.getMaterial().getMaterialID());
 
 			// send event
-			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "AddOrUpdateMaterial", addOrUpdateMaterial);
+			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", EventNames.ADD_OR_UPDATE_MATERIAL, addOrUpdateMaterial);
 		}
 		catch (Throwable e)
 		{
@@ -298,7 +298,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 		    createOrUpdateTitle.setTitleID(action.getTitleID());
 
 		    //send event
-		    eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "CreateorUpdateTitle", createOrUpdateTitle);
+		    eventService.saveEvent("http://www.foxtel.com.au/ip/bms", EventNames.CREATEOR_UPDATE_TITLE, createOrUpdateTitle);
 	    }
 	    catch (Throwable e)
 	    {
@@ -317,7 +317,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 
 		    pt.setTitleID(action.getTitleID());
 
-		    eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "PurgeTitle", pt);
+		    eventService.saveEvent("http://www.foxtel.com.au/ip/bms", EventNames.PURGE_TITLE, pt);
 	    }
 	    catch (Throwable e)
 	    {
@@ -365,7 +365,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 		    addOrUpdatePackage.setRequiredBy(action.getPackage().getTargetDate());
 
 		    //send event
-		    eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "AddOrUpdatePackage", addOrUpdatePackage);
+		    eventService.saveEvent("http://www.foxtel.com.au/ip/bms", EventNames.ADD_OR_UPDATE_PACKAGE, addOrUpdatePackage);
 	    }
 	    catch (Throwable e)
 	    {
@@ -385,7 +385,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 		        pc.setPackageID(action.getPackage().getPresentationID());
 		        pc.setTitleID(action.getTitleID());
 
-		        eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "DeletePackage", pc);
+		        eventService.saveEvent("http://www.foxtel.com.au/ip/bms", EventNames.DELETE_PACKAGE, pc);
 
 		    }
 	    }
@@ -407,7 +407,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 		        pc.setMaterialID(action.getMaterial().getMaterialID());
 		        pc.setTitleID(action.getTitleID());
 
-		        eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "DeleteMaterial", pc);
+		        eventService.saveEvent("http://www.foxtel.com.au/ip/bms", EventNames.DELETE_MATERIAL, pc);
 		    }
 	    }
 	    catch (Throwable e)
@@ -629,7 +629,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 				logger.error("Exception thrown while populating ProtectedPurgeFail message", e1);
 			}
 
-			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "ProtectedPurgeFail", ppf);
+			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", EventNames.PROTECTED_PURGE_FAIL, ppf);
 		}
 		else
 		{
@@ -921,7 +921,8 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
                     logger.error("Failure in IBMS RollBack for materialID: " + mm.getMaterialID(), dmE);
                     IBMSDeleteItemFailure dFails = new IBMSDeleteItemFailure();
                     dFails.setMediaID(mm.getMaterialID());
-                    eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "IBMSRollBackDeleteMaterialFails", dFails);
+                    eventService.saveEvent("http://www.foxtel.com.au/ip/bms",
+                                           EventNames.IBMS_ROLL_BACK_DELETE_MATERIAL_FAILS, dFails);
                 }
             }
 
@@ -937,7 +938,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
                 logger.error("Failure in IBMS RollBack for titleID: " + title.getTitleID(), tdE);
                 IBMSDeleteItemFailure dFails = new IBMSDeleteItemFailure();
                 dFails.setMediaID(title.getTitleID());
-                eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "IBMSRollBackDeleteTitleFails", dFails);
+                eventService.saveEvent("http://www.foxtel.com.au/ip/bms", EventNames.IBMS_ROLL_BACK_DELETE_TITLE_FAILS, dFails);
             }
         }
         else

@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.agent.queue;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
 import com.mediasmiths.foxtel.ip.common.events.FilePickupDetails;
 import com.mediasmiths.foxtel.ip.common.events.PickupNotification;
@@ -562,7 +563,8 @@ public class MultiFilePickUp implements IFilePickup
 
 		}
 
-		if (eventsEnabled) pickUpEventTimer.saveEvent("http://www.foxtel.com.au/ip/infrastructure", "FilePickUp", pickUpStats);
+		if (eventsEnabled) pickUpEventTimer.saveEvent("http://www.foxtel.com.au/ip/infrastructure",
+		                                              EventNames.FILE_PICK_UP, pickUpStats);
 	}
 
 
