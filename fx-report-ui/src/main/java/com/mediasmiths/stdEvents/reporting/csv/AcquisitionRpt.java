@@ -91,13 +91,12 @@ public class AcquisitionRpt extends ReportUtils
 		String startF = startDate.toString(dateFormatter);
 		String endF = endDate.toString(dateFormatter);
 
-		for (OrderStatus event : events) 
+		for (OrderStatus order : events) 
 		{
-			Acquisition acq = newAcquisition(event);
+			Acquisition acq = newAcquisition(order);
 
 			acq.setDateRange(startF + " - " + endF);
 
-			OrderStatus order = queryApi.getOrderStatusById(acq.getMaterialID());
 			if (order.getTitle() != null)
 			{
 				log.debug("title: " + order.getTitle().getTitle());
@@ -105,13 +104,13 @@ public class AcquisitionRpt extends ReportUtils
 				acq.setChannels(order.getTitle().getChannels().toString());
 			}
 
-			if (acq.getFilesize() != null)
+			if (order.getFileSize() != null)
 			{
 				long filesize = Long.valueOf(acq.getFilesize()).longValue();
 				log.debug("filesize long: " + filesize);
 				acq.setFilesize(FileUtils.byteCountToDisplaySize(filesize));
 			}
-			
+
 			log.debug("file: " + acq.isFileDelivery() + " tape: " + acq.isTapeDelivery());
 			if (acq.isFileDelivery())
 			{
