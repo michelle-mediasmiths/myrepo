@@ -8,6 +8,7 @@ import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
 import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
@@ -182,8 +183,10 @@ public class ReportUIImpl implements ReportUI
 	private void getManualQACSV(final DateTime start, final DateTime end, final String reportName)
 	{
 		logger.debug(">>>getManualQACSV");
-		List<EventEntity> preview = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/preview", EventNames.MANUAL_QA,
-				MAX, start, end);
+//		List<EventEntity> preview = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/preview", EventNames.MANUAL_QA,
+//				MAX, start, end);
+
+		List<ManualQAEntity> preview = queryApi.getManualQAInDateRange(start,end);
 		manualQa.writeManualQA(preview, start, end, reportName);
 		logger.debug("<<<getManualQACSV");
 	}

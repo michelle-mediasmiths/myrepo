@@ -1,28 +1,28 @@
 package com.mediasmiths.stdEvents.persistence.rest.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-
-import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
-
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.persistence.db.dao.AggregatedBMSDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.AutoQCDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.ManualQAEntityDAO;
 import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.TitleDao;
+import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QueryAPIImpl implements QueryAPI
 {
@@ -43,6 +43,9 @@ public class QueryAPIImpl implements QueryAPI
 	
 	@Inject
 	protected AutoQCDao autoQcDao;
+
+	@Inject
+	protected ManualQAEntityDAO manualQADao;
 	
 	private static final transient Logger logger = Logger.getLogger(QueryAPIImpl.class);
 
@@ -159,6 +162,14 @@ public class QueryAPIImpl implements QueryAPI
 	{
 		return orderDao.getById(id);
 	}
+
+
+	@Override
+	public List<ManualQAEntity> getManualQAInDateRange(final DateTime start, final DateTime end)
+	{
+		return manualQADao.getManualQAInDateRange(start, end);
+	}
+
 
 	@Override
 	@GET

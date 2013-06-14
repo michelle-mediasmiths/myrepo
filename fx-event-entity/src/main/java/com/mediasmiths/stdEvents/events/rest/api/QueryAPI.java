@@ -1,20 +1,19 @@
 package com.mediasmiths.stdEvents.events.rest.api;
 
-import java.util.List;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
+import org.joda.time.DateTime;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-
-import org.joda.time.DateTime;
-
-import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
+import java.util.List;
 
 /**
  * Used to query the database with criteria to create specific lists of events
@@ -79,5 +78,8 @@ public interface QueryAPI
 	public Title getTitleById(String id);
 	
 	public OrderStatus getOrderStatusById (String id);
-	
+
+	@GET
+	@Path("ManualQAByDate")
+	List<ManualQAEntity> getManualQAInDateRange(DateTime start, DateTime end);
 }
