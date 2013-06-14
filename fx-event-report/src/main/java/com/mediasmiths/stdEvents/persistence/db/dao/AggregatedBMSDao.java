@@ -1,13 +1,14 @@
 package com.mediasmiths.stdEvents.persistence.db.dao;
 
-import java.util.List;
-
-import org.joda.time.DateTime;
-
+import com.google.inject.ImplementedBy;
 import com.mediasmiths.std.guice.database.dao.Dao;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import org.joda.time.DateTime;
 
+import java.util.List;
+
+@ImplementedBy(com.mediasmiths.stdEvents.persistence.db.impl.AggregatedBMSDaoImpl.class)
 public interface AggregatedBMSDao extends Dao<AggregatedBMS, Long>
 {
 	public List<AggregatedBMS> findByAnId(String column, String id);

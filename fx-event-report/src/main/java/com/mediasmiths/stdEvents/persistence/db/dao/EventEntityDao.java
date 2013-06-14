@@ -1,12 +1,13 @@
 package com.mediasmiths.stdEvents.persistence.db.dao;
 
-import java.util.List;
-
-import org.joda.time.DateTime;
-
+import com.google.inject.ImplementedBy;
 import com.mediasmiths.std.guice.database.dao.Dao;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import org.joda.time.DateTime;
 
+import java.util.List;
+
+@ImplementedBy( com.mediasmiths.stdEvents.persistence.db.impl.EventEntityDaoImpl.class)
 public interface EventEntityDao extends Dao<EventEntity, Long>
 {
 	public List<EventEntity> findByNamespace(String namespace);
