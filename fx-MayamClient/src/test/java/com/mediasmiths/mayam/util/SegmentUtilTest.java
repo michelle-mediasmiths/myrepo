@@ -254,6 +254,48 @@ public class SegmentUtilTest
 	}
 
 	@Test
+	public void testSegmentOverlappingCheckForNonOverlappingSegmentsProvidedOutOfOrder() throws InvalidTimecodeException
+	{
+		//if the tasks api doesnt return segments ordered by their segment number then there will appear to be overlaps
+
+		Segment one = new Segment();
+		one.setIn(new Timecode("00:00:00:00"));
+		one.setDuration(new Timecode("00:07:41:18"));
+		one.setNumber(1);
+
+		Segment two = new Segment();
+		two.setIn(new Timecode("00:07:41:18"));
+		two.setDuration(new Timecode("00:06:59:06"));
+		two.setNumber(2);
+
+		Segment three = new Segment();
+		three.setIn(new Timecode("00:14:40:24"));
+		three.setDuration(new Timecode("00:08:01:13"));
+		three.setNumber(3);
+
+
+		Segment four = new Segment();
+		four.setIn(new Timecode("00:22:42:12"));
+		four.setDuration(new Timecode("00:07:04:19"));
+		four.setNumber(4);
+
+
+		Segment five = new Segment();
+		five.setIn(new Timecode("00:29:47:06"));
+		five.setDuration(new Timecode("00:12:23:01"));
+		five.setNumber(5);
+
+		SegmentList segmentList = new SegmentList();
+		segmentList.getEntries().add(two);
+		segmentList.getEntries().add(three);
+		segmentList.getEntries().add(four);
+		segmentList.getEntries().add(five);
+		segmentList.getEntries().add(one);
+		Boolean actual = SegmentUtil.noSegmentationOverlap(segmentList);
+		assertTrue(actual);
+	}
+
+	@Test
 	public void testSegmentOverlappingCheckForTwoOverlappingSegments() throws InvalidTimecodeException
 	{
 		Segment one = new Segment();

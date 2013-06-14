@@ -188,6 +188,9 @@ public class SegmentUtil
 				}
 				else
 				{
+					//sort the segment list as incase the segments are not provided in the same order they are numberd
+					sortMayamSegmentList(segmentList);
+
 					loop:
 					for(int i = 0; i<=segmentList.getEntries().size() - 2; i++)
 					{
@@ -196,6 +199,9 @@ public class SegmentUtil
 						final List<Segment> s = segmentList.getEntries();
 						Segment a = s.get(i);
 						Segment b = s.get(j);
+
+						Integer aNum= a.getNumber();
+						Integer bNum = b.getNumber();
 
 						String aSom = a.getIn().toSmpte();
 						String bSom = b.getIn().toSmpte();
@@ -212,9 +218,8 @@ public class SegmentUtil
 						Timecode aEnd = Timecode.getInstance(aEom, Framerate.HZ_25);
 						Timecode bEnd = Timecode.getInstance(bEom, Framerate.HZ_25);
 
-
-						log.debug(String.format("Segment A  Start: %s End :%s", aSom, aEom));
-						log.debug(String.format("Segment B  Start: %s End :%s", bSom, bEom));
+						log.debug(String.format("Segment A (%s) Start: %s End :%s",aNum, aSom, aEom));
+						log.debug(String.format("Segment B (%s) Start: %s End :%s",bNum, bSom, bEom));
 
 						if (aEnd.lt(bStart))
 						{
@@ -244,6 +249,19 @@ public class SegmentUtil
 			log.error("Error performing segment overlap check", e);
 		}
 		return result;
+	}
+
+
+	public static void sortMayamSegmentList(final SegmentList segmentList)
+	{
+		Collections.sort(segmentList.getEntries(), new Comparator<Segment>()
+		{
+			@Override
+			public int compare(Segment o1, Segment o2)
+			{
+				return Integer.compare(o1.getNumber(), o2.getNumber());
+			}
+		});
 	}
 
 
