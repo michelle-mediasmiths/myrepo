@@ -1,36 +1,27 @@
 package com.mediasmiths.stdEvents.reporting.csv;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
+import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
-import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.CsvMapWriter;
-import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.io.ICsvMapWriter;
 import org.supercsv.prefs.CsvPreference;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.ip.common.events.AutoQCResultNotification;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
-import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AutoQCRpt extends ReportUtils
 {
@@ -191,7 +182,7 @@ public class AutoQCRpt extends ReportUtils
 				}
 				catch (IOException e)
 				{
-					e.printStackTrace();
+					logger.error("IOException closing csv writer",e);
 				}
 			}
 		}

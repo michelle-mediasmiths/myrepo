@@ -191,7 +191,7 @@ public class Importer
 					payload.setFilesize(fileSize + "");
 					payload.setTitleLength(p.getDuration());
 
-					eventService.saveEvent("ProgrammeContentAvailable", JAXB_SERIALISER.serialise(payload));
+					eventService.saveEvent(EventNames.PROGRAMME_CONTENT_AVAILABLE, JAXB_SERIALISER.serialise(payload));
 				}
 				else
 				{
@@ -207,7 +207,7 @@ public class Importer
 					payload.setTitleLength(marketingMaterial.getDuration());
 
 
-					eventService.saveEvent("MarketingContentAvailable", JAXB_SERIALISER.serialise(payload));
+					eventService.saveEvent(EventNames.MARKETING_CONTENT_AVAILABLE, JAXB_SERIALISER.serialise(payload));
 				}
 			}
 			else if (message instanceof RuzzIngestRecord)
@@ -223,7 +223,7 @@ public class Importer
 				payload.setFilesize(fileSize + "");
 				payload.setTitleLength(r.getMaterial().getDetails().getDuration());
 
-				eventService.saveEvent("ProgrammeContentAvailable", JAXB_SERIALISER.serialise(payload));
+				eventService.saveEvent(EventNames.PROGRAMME_CONTENT_AVAILABLE, JAXB_SERIALISER.serialise(payload));
 			}
 			else
 			{

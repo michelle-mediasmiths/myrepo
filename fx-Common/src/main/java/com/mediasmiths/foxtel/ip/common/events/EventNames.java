@@ -57,4 +57,6 @@ public class EventNames
 	public static final String CAPTION_PROXY_FAILURE = "CaptionProxyFailure";
 	public static final String QC_PROBLEM_WITH_TC_MEDIA = "QCProblemWithTCMedia";
 	public static final String CERIFY_QC_ERROR = "CerifyQCError";
+	public static final String MARKETING_CONTENT_AVAILABLE = "MarketingContentAvailable";
+	public static final String PROGRAMME_CONTENT_AVAILABLE = "ProgrammeContentAvailable";
 }

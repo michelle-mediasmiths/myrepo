@@ -11,6 +11,7 @@ import com.mediasmiths.stdEvents.persistence.db.dao.AggregatedBMSDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.AutoQCDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventingDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.ManualQAEntityDAO;
 import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.TitleDao;
 import com.mediasmiths.stdEvents.persistence.rest.impl.eventmapping.EventTypeMapper;
@@ -43,6 +44,9 @@ public class EventAPIImpl implements EventAPI
 	
 	@Inject
 	protected AutoQCDao autoQcDao;
+
+	@Inject
+	protected ManualQAEntityDAO manualQaDao;
 	
 	private final EventingDao eventingDao;
 
@@ -87,19 +91,27 @@ public class EventAPIImpl implements EventAPI
 		eventingDao.save(eventingEntity);
 		
 		logger.info("Saving event information for reporting");
-		
-		if((event.getEventName().equals(EventNames.CREATEOR_UPDATE_TITLE))){
+
+		if ((event.getEventName().equals(EventNames.CREATEOR_UPDATE_TITLE)))
+		{
 			createOrUpdateTitle(event);
 		}
-		
-		if( (event.getEventName().equals(EventNames.ADD_OR_UPDATE_MATERIAL))){
+
+		if ((event.getEventName().equals(EventNames.ADD_OR_UPDATE_MATERIAL)))
+		{
 			addOrUpdateMaterial(event);
 		}
-		
-		if( (event.getEventName().equals(EventNames.AUTO_QC_REPORT))){
+
+		if ((event.getEventName().equals(EventNames.AUTO_QC_REPORT)))
+		{
 			autoQcReport(event);
 		}
-		
+
+		if ((event.getEventName().equals(EventNames.MANUAL_QA)))
+		{
+			manualQaEvent(event);
+		}
+
 		if ((event.getEventName().equals(EventNames.CREATEOR_UPDATE_TITLE)) || (event.getEventName().equals(EventNames.ADD_OR_UPDATE_MATERIAL)) ||(event.getEventName().equals(EventNames.ADD_OR_UPDATE_PACKAGE))) {
 			logger.info("BMS message detected");
 			bmsDao.updateBMS(event);
@@ -108,7 +120,12 @@ public class EventAPIImpl implements EventAPI
 
 		logger.info("Event saved");
 	}
-	
+
+	private void manualQaEvent(final EventEntity event)
+	{
+		manualQaDao.manualQCMessage(event);
+	}
+
 	private void autoQcReport(EventEntity event)
 	{
 		autoQcDao.autoQCMessage(event);

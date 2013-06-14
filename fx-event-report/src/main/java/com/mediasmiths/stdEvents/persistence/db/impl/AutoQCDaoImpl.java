@@ -1,15 +1,5 @@
 package com.mediasmiths.stdEvents.persistence.db.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.joda.time.DateTime;
-
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCEvent;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
@@ -20,7 +10,14 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.persistence.db.dao.AutoQCDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
-import com.mediasmiths.stdEvents.persistence.db.dao.TitleDao;
+import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.joda.time.DateTime;
+
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.Date;
+import java.util.List;
 
 public class AutoQCDaoImpl extends HibernateDao<AutoQC, String> implements AutoQCDao
 {
