@@ -1,12 +1,5 @@
 package com.mediasmiths.mayam.util;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.SegmentList;
@@ -14,6 +7,12 @@ import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.Timecode;
 import com.mediasmiths.mayam.FullMaterialInfo;
 import com.mediasmiths.std.types.Framerate;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 
 public class TextualMetadataForItemOutputBuilder
 {
@@ -34,9 +33,20 @@ public class TextualMetadataForItemOutputBuilder
 		final String markers = info.getMarkers();
 
 		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("Title ID : %s\n", titleID));
-		sb.append(String.format("Material ID : %s\n", materialID));
-		sb.append(String.format("Programme Title : %s\n", programmeTitle));
+
+		if (titleID != null)
+		{
+			sb.append(String.format("Title ID : %s\n", titleID));
+		}
+
+		if (materialID != null)
+		{
+			sb.append(String.format("Material ID : %s\n", materialID));
+		}
+		if (programmeTitle != null)
+		{
+			sb.append(String.format("Programme Title : %s\n", programmeTitle));
+		}
 
 		if (seriesNumber != null)
 		{

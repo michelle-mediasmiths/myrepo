@@ -1,21 +1,20 @@
 package com.mediasmiths.mayam;
 
-import java.util.Date;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
-import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.attributes.shared.type.StringList;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.veneer.AssetApiVeneer;
 import com.mediasmiths.mayam.veneer.SegmentApiVeneer;
+import org.apache.log4j.Logger;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * Given a materialid loads the full information for that material, its parent title and its child packages
@@ -48,20 +47,29 @@ public class FullMaterialInfo
 		// get the title
 		titleId = materialAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
 		String titleAssetID = materialAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
-		try
-		{
-			titleAttributes = assetApi.getAsset(AssetType.ITEM, titleAssetID);
-		}
-		catch (RemoteException e)
-		{
-			log.error("Unable to locate asset with ID: " + titleAssetID, e);
 
-			titleAttributes = titleController.getTitle(titleId);
-			titleId = titleAttributes.getAttribute(Attribute.HOUSE_ID);
-			
-			log.error("Using the parent house id title as a fall back: " + titleId);
+		if (titleAssetID == null)
+		{
+			log.info("Item has no parent title, metadata will be incomplete");
 		}
-		
+		else
+		{
+
+			try
+			{
+				titleAttributes = assetApi.getAsset(MayamAssetType.TITLE.getAssetType(), titleAssetID);
+			}
+			catch (RemoteException e)
+			{
+				log.error("Unable to locate asset with ID: " + titleAssetID, e);
+
+				titleAttributes = titleController.getTitle(titleId);
+				titleId = titleAttributes.getAttribute(Attribute.HOUSE_ID);
+
+				log.error("Using the parent house id title as a fall back: " + titleId);
+			}
+		}
+
 		// get markers
 		markers = materialController.getMarkersString(materialAttributes, null);
 
@@ -87,24 +95,36 @@ public class FullMaterialInfo
 		return  materialID;
 	}
 
+	private Object getTitleAttribute(Attribute a)
+	{
+		if (titleAttributes == null)
+		{
+			return null;
+		}
+		else
+		{
+			return titleAttributes.getAttribute(a);
+		}
+	}
+
 	public String getProgrammeTitle()
 	{
-		return (String) titleAttributes.getAttribute(Attribute.SERIES_TITLE);
+		return (String) getTitleAttribute(Attribute.SERIES_TITLE);
 	}
 
 	public Integer getSeriesNumber()
 	{
-		return (Integer) titleAttributes.getAttribute(Attribute.SEASON_NUMBER);
+		return (Integer) getTitleAttribute(Attribute.SEASON_NUMBER);
 	}
 
 	public String getEpisodetitle()
 	{
-		return (String) titleAttributes.getAttribute(Attribute.EPISODE_TITLE);
+		return (String) getTitleAttribute(Attribute.EPISODE_TITLE);
 	}
 
 	public Integer getEpisodeNumber()
 	{
-		return (Integer) titleAttributes.getAttribute(Attribute.EPISODE_NUMBER);
+		return (Integer) getTitleAttribute(Attribute.EPISODE_NUMBER);
 	}
 
 	public Date getFirstTXDate()
@@ -114,7 +134,7 @@ public class FullMaterialInfo
 
 	public List<String> getChannels()
 	{
-		return (StringList) titleAttributes.getAttribute(Attribute.CHANNELS);
+		return (StringList) getTitleAttribute(Attribute.CHANNELS);
 	}
 
 	public String getAdditionalInfo()
