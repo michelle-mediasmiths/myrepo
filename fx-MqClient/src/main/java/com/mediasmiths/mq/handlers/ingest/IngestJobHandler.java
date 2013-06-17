@@ -267,6 +267,8 @@ public class IngestJobHandler extends JobHandler
 	private void itemHasIngestTaskJobFailed(Job jobMessage, String assetId, AttributeMap task)
 	{
 		log.info(String.format("Import failed for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
+		log.debug(String.format("Value of is CONT_RESTRICTED_MATERIAL (ao flag) is %s", task.getAttributeAsString(Attribute.CONT_RESTRICTED_MATERIAL)));
+
 		AttributeMap updateMap = taskController.updateMapForTask(task);
 		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
 		updateMap.setAttribute(Attribute.APP_FLAG, Boolean.FALSE); //we got an ingest job event but it wasnt a pass
