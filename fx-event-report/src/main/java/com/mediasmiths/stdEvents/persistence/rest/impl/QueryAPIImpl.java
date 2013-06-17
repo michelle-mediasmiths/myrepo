@@ -3,14 +3,12 @@ package com.mediasmiths.stdEvents.persistence.rest.impl;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.persistence.db.dao.AggregatedBMSDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.AutoQCDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.ManualQAEntityDAO;
@@ -31,9 +29,6 @@ public class QueryAPIImpl implements QueryAPI
 
 	@Inject
 	protected EventEntityDao eventDao;
-	
-	@Inject
-	protected AggregatedBMSDao bmsDao;
 
 	@Inject
 	protected OrderDao orderDao;
@@ -139,12 +134,6 @@ public class QueryAPIImpl implements QueryAPI
 		return events;
 	}
 
-	@Override
-	public List<AggregatedBMS> getAllBMSbyDate(DateTime start, DateTime end)
-	{
-		return bmsDao.withinDate(start,end);
-	}
-	
 	@Override
 	public List<OrderStatus> getOrdersInDateRange(DateTime start, DateTime end)
 	{

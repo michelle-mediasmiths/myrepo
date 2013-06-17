@@ -9,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.joda.time.Interval;
 import org.joda.time.Period;
 import org.supercsv.cellprocessor.Optional;
@@ -59,7 +60,7 @@ public class ManualQARpt extends ReportUtils
 			{
 				stats.failed++;
 			}
-			if (qa.getReordered())
+			if (qa.getReordered() != null && qa.getReordered())
 			{
 				stats.reordered++;
 			}
@@ -171,7 +172,13 @@ public class ManualQARpt extends ReportUtils
 					mqaMap.put(header[10], "0");
 				}
 
-				Interval timeEscalated = m.getTimeEscalatedFor();
+				Interval timeEscalated = null;
+
+				if (m.getEverEscalated())
+				{
+					timeEscalated = m.getTimeEscalatedFor();
+				}
+
 				if (timeEscalated != null)
 				{
 
@@ -210,7 +217,7 @@ public class ManualQARpt extends ReportUtils
 			try
 			{
 				statsString.append(String.format("Average time Escalated %s\n",
-				                                 getPeriodString(new Interval(stats.averageTimeEscalated).toPeriod())));
+				                                 getPeriodString(new Duration(stats.averageTimeEscalated).toPeriod())));
 			}
 			catch (Exception e)
 			{

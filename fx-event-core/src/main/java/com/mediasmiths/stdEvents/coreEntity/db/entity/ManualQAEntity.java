@@ -43,7 +43,7 @@ public class ManualQAEntity
 	@Basic
 	private Boolean everEscalated = false;
 	@Basic
-	private Boolean reordered;
+	private Boolean reordered=false;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date taskCreated; //date qc task created
 	@Temporal(TemporalType.TIMESTAMP)
@@ -268,6 +268,12 @@ public class ManualQAEntity
 	@Transient
 	public Interval getTimeEscalatedFor()
 	{
+
+		if (getTimeEscalatedSet() == null)
+		{
+			return null;
+		}
+
 		try
 		{
 			Date timeEscalatedSet1 = getTimeEscalatedSet();

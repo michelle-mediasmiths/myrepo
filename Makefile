@@ -58,8 +58,8 @@ wfadapterlocal : wfadapter
 	cp fx-WFAdapter/target/fx-WFAdapter.war /opt/tomcat/webapps
 
 bmreports : reports
-	rsync -v fx-report-ui/target/fx-report-ui.war root@192.168.2.22:/opt/tomcat/webapps
-	rsync -v fx-event-ui/target/fx-event-ui.war root@192.168.2.22:/opt/tomcat/webapps
+	rsync -v fx-report-ui/target/fx-report-ui.war root@192.168.2.32:/opt/tomcat/webapps
+	rsync -v fx-event-ui/target/fx-event-ui.war root@192.168.2.32:/opt/tomcat/webapps
 	
 bmevents : events	
 	rsync -v fx-event-ui/target/fx-event-ui.war root@192.168.2.22:/opt/tomcat/webapps

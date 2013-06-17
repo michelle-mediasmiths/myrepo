@@ -7,7 +7,6 @@ import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.db.entity.EventingEntity;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
-import com.mediasmiths.stdEvents.persistence.db.dao.AggregatedBMSDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.AutoQCDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventingDao;
@@ -32,9 +31,6 @@ public class EventAPIImpl implements EventAPI
 
 	@Inject
 	protected EventEntityDao eventDao;
-	
-	@Inject
-	protected AggregatedBMSDao bmsDao;
 	
 	@Inject
 	protected TitleDao titleDao;
@@ -112,11 +108,11 @@ public class EventAPIImpl implements EventAPI
 			manualQaEvent(event);
 		}
 
-		if ((event.getEventName().equals(EventNames.CREATEOR_UPDATE_TITLE)) || (event.getEventName().equals(EventNames.ADD_OR_UPDATE_MATERIAL)) ||(event.getEventName().equals(EventNames.ADD_OR_UPDATE_PACKAGE))) {
-			logger.info("BMS message detected");
-			bmsDao.updateBMS(event);
-		}
-		
+//		if ((event.getEventName().equals(EventNames.CREATEOR_UPDATE_TITLE)) || (event.getEventName().equals(EventNames.ADD_OR_UPDATE_MATERIAL)) ||(event.getEventName().equals(EventNames.ADD_OR_UPDATE_PACKAGE))) {
+//			logger.info("BMS message detected");
+//			bmsDao.updateBMS(event);
+//		}
+//
 
 		logger.info("Event saved");
 	}

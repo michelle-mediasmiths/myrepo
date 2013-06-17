@@ -71,6 +71,7 @@
 		<module>fx-ExtendedPublishing</module>
 		<module>fx-TxFtpDelivery</module>
 		<module>fx-MaterialExport</module>
+		<module>fx-report-tools</module>
 	</modules>
 
 	<properties>

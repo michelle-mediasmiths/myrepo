@@ -167,7 +167,7 @@ public class ManualQCEntityDAOImpl extends HibernateDao<ManualQAEntity, String> 
 			{
 				m.setReordered(Boolean.TRUE);
 			}
-			else
+			else if (!"0".equals(reordered))
 			{
 				log.error("Unexpected value for reordered in ManualQA notification");
 			}

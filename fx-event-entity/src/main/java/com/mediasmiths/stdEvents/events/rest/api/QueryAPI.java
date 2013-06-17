@@ -1,6 +1,5 @@
 package com.mediasmiths.stdEvents.events.rest.api;
 
-import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
@@ -32,11 +31,7 @@ public interface QueryAPI
 	@GET
 	@Path("/allEvents")
 	public List<EventEntity> getAllEvents();
-	
-	@GET
-	@Path("/BMSbydate")
-	public List<AggregatedBMS> getAllBMSbyDate(final DateTime start, final DateTime end);
-	
+
 	@GET
 	@Path("getbynamespace/{namespace}")
 	@Produces("text/plain")

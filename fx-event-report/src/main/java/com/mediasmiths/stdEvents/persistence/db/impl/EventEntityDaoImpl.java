@@ -1,19 +1,19 @@
 package com.mediasmiths.stdEvents.persistence.db.impl;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.joda.time.DateTime;
-
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.hibernate.dao.HibernateDao;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
+import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Restrictions;
+import org.joda.time.DateTime;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 
 
 public class EventEntityDaoImpl extends HibernateDao<EventEntity, Long> implements EventEntityDao
@@ -121,5 +121,19 @@ public class EventEntityDaoImpl extends HibernateDao<EventEntity, Long> implemen
 		criteria.setMaxResults(max);
 		logger.debug("<<<eventnamePaginated");
 		return getList(criteria);
+	}
+
+
+	@Override
+	@Transactional
+	public List<EventEntity> getByNamePaged(final String eventName, final int start, final int max)
+	{
+		Criteria criteria = createCriteria().setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+		criteria.add(Restrictions.eq("eventName", eventName));
+		criteria.setFirstResult(start);
+		criteria.setMaxResults(max);
+		criteria.setFetchSize(max);
+
+		return criteria.list();
 	}
 }

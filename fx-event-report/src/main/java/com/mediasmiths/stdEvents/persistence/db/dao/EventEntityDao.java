@@ -28,4 +28,6 @@ public interface EventEntityDao extends Dao<EventEntity, Long>
 
 	public List<EventEntity> eventnamePaginatedDate(String eventname, int start, int max, DateTime startDate, DateTime endDate);
 
+	public List<EventEntity> getByNamePaged(String eventName, int start, int max);
+
 }

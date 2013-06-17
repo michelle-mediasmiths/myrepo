@@ -55,12 +55,12 @@
 		<dependency>
 			<groupId>com.mediasmiths.std.guice</groupId>
 			<artifactId>stdlib-guice-hibernate</artifactId>
-			<version>3.2.6</version>
+			<version>${stdlib.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mediasmiths.std.guice</groupId>
 			<artifactId>stdlib-guice-webapp</artifactId>
-			<version>3.2.6</version>
+			<version>${stdlib.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>

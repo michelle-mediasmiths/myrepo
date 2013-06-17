@@ -14,6 +14,7 @@ import com.mayam.wf.mq.MqMessage.AttributeMapPair;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
+import com.mediasmiths.mq.handlers.FTPTransferJobHandler;
 import com.mediasmiths.mq.handlers.asset.AccessUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.DartRecordingTitleAssociationHandler;
 import com.mediasmiths.mq.handlers.asset.MaterialProtectHandler;
@@ -127,6 +128,8 @@ public class IncomingListener extends MqClientListener
 	IngestJobHandler ingestJobHandler;
 	@Inject
 	TransferJobHandler transferJobHandler;
+	@Inject
+	FTPTransferJobHandler ftpTransferJobHandler;
 	@Inject
 	QcTaskUpdateHandler qcTaskUpdateHandler;
 	@Inject
@@ -356,6 +359,9 @@ public class IncomingListener extends MqClientListener
 					if (subType.equals(JobSubType.TSM))
 					{
 						passEventToHandler(transferJobHandler, jobMessage);
+					}
+					else if(subType.equals(JobSubType.FTP)){
+						passEventToHandler(ftpTransferJobHandler, jobMessage);
 					}
 				}
 			}

@@ -82,7 +82,8 @@ public class AutoQCRpt extends ReportUtils
 			logger.info("Saving to: " + REPORT_LOC);
 			final String[] header = { "dateRange", "title", "materialID", "channels", "contentType", "operator", "taskStatus",
 					"qcStatus", "taskStart", "taskFinish", "warningTime", "manualOverride", "failureParameter", "titleLength" };
-			final CellProcessor[] processors = getProcessor();
+
+
 			csvwriter.writeHeader(header);
 
 			final String startDate = start.toString(dateFormatter);
@@ -156,7 +157,7 @@ public class AutoQCRpt extends ReportUtils
 				{
 					aqcMap.put(header[13], null);
 				}
-				csvwriter.write(aqcMap, header, processors);
+				csvwriter.write(aqcMap, header, getProcessor());
 			}
 			
 			StringBuilder statsString = new StringBuilder();

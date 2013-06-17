@@ -1,15 +1,5 @@
 package com.mediasmiths.stdEvents.persistence.db.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Restrictions;
-import org.joda.time.DateTime;
-
-
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
@@ -20,6 +10,13 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus.TaskType;
 import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.TitleDao;
+import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.joda.time.DateTime;
+
+import java.util.Date;
+import java.util.List;
 
 public class OrderDaoImpl extends HibernateDao<OrderStatus, String> implements OrderDao
 {
@@ -75,7 +72,10 @@ public class OrderDaoImpl extends HibernateDao<OrderStatus, String> implements O
 			log.debug(String.format("New order entry material %s title %s",materialID,titleID));
 			order = new OrderStatus();
 			order.setMaterialid(materialID);
-			order.setTitle(titleDao.getById(titleID));
+			if (titleID != null)
+			{
+				order.setTitle(titleDao.getById(titleID));
+			}
 			order.setCreated(new Date());
 		}
 		else
@@ -83,7 +83,10 @@ public class OrderDaoImpl extends HibernateDao<OrderStatus, String> implements O
 			if (order.getTitle() == null || (order.getTitle().getTitleId() != titleID))
 			{
 				log.debug("setting title");
-				order.setTitle(titleDao.getById(titleID));
+				if (titleID != null)
+				{
+					order.setTitle(titleDao.getById(titleID));
+				}
 			}			
 		}
 

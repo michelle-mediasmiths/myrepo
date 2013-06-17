@@ -28,9 +28,21 @@ public class PreviewEventUtil
 	{
 		sendManualQANotification(messageAttributes, taskState, reorder, previewResult,null);
 	}
-	
-	public void sendManualQANotification(AttributeMap messageAttributes, TaskState taskState, boolean reorder, String previewResult, String operator)
+
+
+	public void sendManualQANotification(AttributeMap task, Boolean hrTransfer, String hrTransferRequestedBy)
 	{
+		sendManualQANotification(task,
+		                         (TaskState) task.getAttribute(Attribute.TASK_STATE),
+		                         false,
+		                         (String) task.getAttribute(Attribute.QC_PREVIEW_RESULT),
+		                         (String) task.getAttribute(Attribute.TASK_UPDATED_BY),
+		                         hrTransfer,
+		                         hrTransferRequestedBy);
+	}
+
+
+	private void sendManualQANotification(AttributeMap messageAttributes, TaskState taskState, boolean reorder, String previewResult, String operator, Boolean hrTransfer, String hrTransferRequestedBy){
 		try
 		{
 			ManualQANotification qa = new ManualQANotification();
@@ -44,11 +56,11 @@ public class PreviewEventUtil
 			}
 
 			String escalationLevel = messageAttributes.getAttributeAsString(Attribute.ESCALATION_LEVEL);
-					
+
 			if(escalationLevel==null){
 				escalationLevel="0";
 			}
-			
+
 			qa.setEscalated(escalationLevel);
 			qa.setMaterialID(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID));
 			qa.setPreviewStatus(previewResult);
@@ -62,9 +74,22 @@ public class PreviewEventUtil
 			qa.setTaskStatus(taskState.toString());
 			qa.setTitle(messageAttributes.getAttributeAsString(Attribute.ASSET_TITLE));
 			qa.setTitleLength(messageAttributes.getAttributeAsString(Attribute.MEDIA_DURATION));
-			
+
 			qa.setOperator(operator);
-			
+
+			if (hrTransfer != null)
+			{
+				if (hrTransfer)
+				{
+					qa.setHrPreview("1");
+				}
+			}
+
+			if(hrTransferRequestedBy != null){
+				qa.setHrPreviewRequested(hrTransferRequestedBy);
+			}
+
+			log.debug("Sending ManualQA Event for reporting");
 			eventsService.saveEvent(qaEventNamespace, EventNames.MANUAL_QA, qa);
 
 		}
@@ -72,5 +97,10 @@ public class PreviewEventUtil
 		{
 			log.error("error constructing ManualQANotification!", e);
 		}
+	}
+
+	public void sendManualQANotification(AttributeMap messageAttributes, TaskState taskState, boolean reorder, String previewResult, String operator)
+	{
+		sendManualQANotification(messageAttributes,taskState,reorder,previewResult,operator,null,null);
 	}
 }
