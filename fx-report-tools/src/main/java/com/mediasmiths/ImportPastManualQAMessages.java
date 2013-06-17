@@ -10,6 +10,7 @@ import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.io.PropertyFile;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.ManualQAEntityDAO;
 import com.mediasmiths.stdEvents.persistence.guice.PersistenceDatabaseModule;
 import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
@@ -27,7 +28,7 @@ public class ImportPastManualQAMessages
 	private ManualQAEntityDAO manualQADao;
 
 	@Inject
-	private QueryAPI queryAPI;
+	private EventEntityDao events;
 
 	private final static Logger logger = Logger.getLogger(ImportPastManualQAMessages.class);
 
@@ -82,22 +83,28 @@ public class ImportPastManualQAMessages
 		injector.getInstance(ImportPastManualQAMessages.class).process();
 	}
 
+
 	private void process()
 	{
-		List<EventEntity> preview = queryAPI.getEvents("http://www.foxtel.com.au/ip/preview", EventNames.MANUAL_QA);
-
-		logger.info("Found " + preview.size() + " events");
-
-		for (EventEntity e : preview)
+		int offset = 0;
+		int limit = 1000;
+		while (true)
 		{
-			try
+			List<EventEntity> preview = events.getByNamePaged(EventNames.MANUAL_QA, offset, limit);
+
+			logger.info("Found " + preview.size() + " events");
+
+			for (EventEntity e : preview)
 			{
-				logger.info(new Date(e.getTime()).toGMTString() + " " + e.getPayload());
-				manualQADao.manualQCMessage(e);
-			}
-			catch (Exception ex)
-			{
-				logger.error("error processing event " + e.getId(), ex);
+				try
+				{
+					logger.info(new Date(e.getTime()).toGMTString() + " " + e.getPayload());
+					manualQADao.manualQCMessage(e);
+				}
+				catch (Exception ex)
+				{
+					logger.error("error processing event " + e.getId(), ex);
+				}
 			}
 		}
 	}
