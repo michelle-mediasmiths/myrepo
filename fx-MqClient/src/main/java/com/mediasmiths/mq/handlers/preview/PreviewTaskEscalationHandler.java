@@ -67,6 +67,8 @@ public class PreviewTaskEscalationHandler extends TaskStateChangeHandler
 			{
 				log.fatal("exception in retrieving escalatiuon level.", e);
 			}
+
+			previewEvent.sendManualQANotification(messageAttributes,null,null);
 		}
 		else
 		{

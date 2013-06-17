@@ -287,6 +287,7 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(qcStateChangeHandler, currentAttributes);
 				passEventToHandler(compEditHandler, currentAttributes);
 				passEventToHandler(comLoggingHandler, currentAttributes);
+				passEventToHandler(previewTaskCreateHandler, currentAttributes);
 				passEventToHandler(previewTaskFinishHandler, currentAttributes);
 				passEventToHandler(previewTaskFailHandler, currentAttributes);
 				passEventToHandler(previewTaskEscalationHandler, currentAttributes);
