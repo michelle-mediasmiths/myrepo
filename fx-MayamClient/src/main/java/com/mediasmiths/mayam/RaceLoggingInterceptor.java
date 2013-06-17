@@ -34,7 +34,7 @@ public final class RaceLoggingInterceptor implements MethodInterceptor
 
 				if (!ObjectUtils.equals(requested, returned))
 				{
-					log.warn(String.format("Requested attribute %s of asset (or task for) %s (%s) update to %s but got back %s . Someone else may have updated this asset at the same time",
+					log.warn(String.format("Requested attribute %s of asset (or task for) %s (%s) update to %s but got back %s . Someone else may have updated this asset at the same time or the call made to this function did not have a sparse enough map",
 					                       a,
 					                       updated.getAttributeAsString(Attribute.HOUSE_ID),
 					                       updated.getAttributeAsString(Attribute.ASSET_ID),

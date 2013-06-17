@@ -47,9 +47,9 @@ public class FTPTransferJobHandler extends JobHandler
 
 		final String destSvcId = jobMessage.getDestSvcId();
 
-		if (!destSvcId.equals(qaService))
+		if (destSvcId == null || !destSvcId.equals(qaService))
 		{
-			log.info("Transfer was not to Manual QA, doing nothing");
+			log.info("dest service was null or transfer was not to Manual QA service, doing nothing");
 			return;
 		}
 		log.info("Transfer to Manual QA destination finished");

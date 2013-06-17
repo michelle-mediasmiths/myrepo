@@ -131,7 +131,7 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 
 
 					log.info("Match found for Associated asset, attempting to attach new associated item to subprogram");
-					log.info("Match Peer: " + currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID) + " to " + matchId);
+					log.info("Match Peer: " + currentAttributes.getAttributeAsString(Attribute.ASSET_ID) + " to " + matchId);
 
 					AttributeMap associatedMaterial = materialController.getMaterialAttributes(houseID);
 
@@ -183,6 +183,7 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					{
 						if (!MayamMaterialController.associatedMaterialsAttributesNotInheritedFromTitle.contains(a))
 						{
+							log.debug("copying attribute from target material "+a);
 							associatedMaterial.setAttribute(a, materialMatch.getAttribute(a));
 						}
 					}
