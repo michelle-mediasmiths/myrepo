@@ -106,7 +106,10 @@ public class ImportPastManualQAMessages
 					logger.error("error processing event " + e.getId(), ex);
 				}
 			}
+			offset+=limit;
 		}
+
+
 	}
 
 }

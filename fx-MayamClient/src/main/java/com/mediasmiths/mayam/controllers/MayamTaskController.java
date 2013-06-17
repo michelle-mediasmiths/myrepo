@@ -674,7 +674,12 @@ public class MayamTaskController extends MayamController
 			}
 
 			if(result.getTotalMatches() > 0){
-				return result.getMatches().get(0);
+				AttributeMap task =  result.getMatches().get(0);
+				//refetch task so we have all its attributes
+				log.debug("Refetching task to get all its attributes");
+				Long taskid= task.getAttribute(Attribute.TASK_ID);
+				task = getTask(taskid);
+				return task;
 			}
 			else{
 				return null;
