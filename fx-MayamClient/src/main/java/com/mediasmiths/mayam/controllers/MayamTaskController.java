@@ -723,7 +723,8 @@ public class MayamTaskController extends MayamController
 	{
 		setAutoQcStatus(QcStatus.PASS, materialId, taskID, "Pass");		
 	}
-	
+
+
 	private void setAutoQcStatus(QcStatus newStatus, String materialId, long taskID, String notes) throws MayamClientException
 	{
 		AttributeMap qcTask;
@@ -733,15 +734,24 @@ public class MayamTaskController extends MayamController
 		}
 		catch (RemoteException e)
 		{
-			log.error(String.format("Error fetching qc task %d for material %s ",taskID,materialId,e));
+			log.error(String.format("Error fetching qc task %d for material %s ", taskID, materialId, e));
 			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
 		}
 
-		AttributeMap updateMap = updateMapForTask(qcTask);
-		updateMap.setAttribute(Attribute.QC_SUBSTATUS2, newStatus);
-		updateMap.setAttribute(Attribute.QC_SUBSTATUS2_NOTES, notes);
-		saveTask(updateMap);
-				
+
+		if (!taskIsInEndState(qcTask))
+		{
+			AttributeMap updateMap = updateMapForTask(qcTask);
+			updateMap.setAttribute(Attribute.QC_SUBSTATUS2, newStatus);
+			updateMap.setAttribute(Attribute.QC_SUBSTATUS2_NOTES, notes);
+			saveTask(updateMap);
+		}
+		else
+		{
+			log.info(String.format("Task %s is in end state (%s) making no changes",
+			                       taskID,
+			                       qcTask.getAttributeAsString(Attribute.TASK_STATE)));
+		}
 	}
 
 	/**
@@ -1053,7 +1063,7 @@ public class MayamTaskController extends MayamController
 	public void autoQcErrorForMaterial(String materialID, long taskID) throws MayamClientException
 	{
 		log.debug(String.format("Auto QC error for materialId %s", materialID));
-		
+
 		AttributeMap task;
 		try
 		{
@@ -1061,14 +1071,23 @@ public class MayamTaskController extends MayamController
 		}
 		catch (RemoteException e)
 		{
-			log.error("error fetching task",e);
-			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED,e);
+			log.error("error fetching task " + taskID, e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED, e);
 		}
-		AttributeMap updateMapForTask = updateMapForTask(task);
-		updateMapForTask.setAttribute(Attribute.ERROR_MSG, "Autoqc Error");
-		updateMapForTask.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);		
-		saveTask(updateMapForTask);
-		
+
+		if (! taskIsInEndState(task))
+		{
+			AttributeMap updateMapForTask = updateMapForTask(task);
+			updateMapForTask.setAttribute(Attribute.ERROR_MSG, "Autoqc Error");
+			updateMapForTask.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+			saveTask(updateMapForTask);
+		}
+		else
+		{
+			log.info(String.format("Task %s is in end state (%s) making no changes",
+			                       taskID,
+			                       task.getAttributeAsString(Attribute.TASK_STATE)));
+		}
 	}
 
 	public void removePurgeCandidateTasksForTilesAssociatedMaterial(String titleAssetID)
