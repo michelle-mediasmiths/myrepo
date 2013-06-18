@@ -20,6 +20,7 @@ import com.mediasmiths.mq.handlers.asset.DartRecordingTitleAssociationHandler;
 import com.mediasmiths.mq.handlers.asset.MaterialProtectHandler;
 import com.mediasmiths.mq.handlers.asset.MaterialUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.MediaMoveHandler;
+import com.mediasmiths.mq.handlers.asset.PresentationFlagClearedHandler;
 import com.mediasmiths.mq.handlers.asset.TaskCreateHandler;
 import com.mediasmiths.mq.handlers.asset.TemporaryContentHandler;
 import com.mediasmiths.mq.handlers.asset.TitleUpdateHandler;
@@ -61,6 +62,7 @@ import com.mediasmiths.mq.handlers.unmatched.UnmatchedAssetCreateHandler;
 import com.mediasmiths.mq.handlers.unmatched.UnmatchedTaskCreateHandler;
 import com.mediasmiths.mq.handlers.unmatched.UnmatchedTaskUpdateHandler;
 import org.apache.log4j.Logger;
+
 
 @Singleton
 public class IncomingListener extends MqClientListener
@@ -174,7 +176,13 @@ public class IncomingListener extends MqClientListener
 	PurgeCandidateUpdateHandler purgeCandidateUpdateHandler;
 	@Inject
 	InitiateExportHandler initiateExportHandler;
+<<<<<<< HEAD
 
+=======
+	@Inject
+	PresentationFlagClearedHandler presentationFlagClearedHandler;
+	
+>>>>>>> MAM-515--CR27
 	public void onMessage(MqMessage msg) throws Throwable
 	{
 		try
@@ -406,6 +414,7 @@ public class IncomingListener extends MqClientListener
 			passEventToUpdateHandler(materialUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);	
 			passEventToUpdateHandler(accessUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
+			passEventToUpdateHandler(presentationFlagClearedHandler,currentAttributes,beforeAttributes,afterAttributes);
 		}
 		catch (Exception e)
 		{
@@ -413,7 +422,7 @@ public class IncomingListener extends MqClientListener
 		}
 	
 	}
-	
+
 	private void onMediaMove(MqMessage msg)
 	{
 		logger.trace("onMediaMove");

@@ -1,9 +1,13 @@
 package com.mediasmiths.mq.handlers.asset;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mq.handlers.UpdateAttributeHandler;
 import org.apache.log4j.Logger;
 
@@ -12,6 +16,21 @@ public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 {
 	private Logger log = Logger.getLogger(PresentationFlagClearedHandler.class);
 
+	@Inject
+	@Named("purge.presentation.flag.removed.days.default")
+	private int defaultPurgeTime;
+
+	@Inject
+	@Named("purge.presentation.flag.removed.days.editclips")
+	private int editClipsPurgeTime;
+
+	@Inject
+	@Named("purge.presentation.flag.removed.days.associated")
+	private int associatedPurgeTime;
+
+	@Inject
+	@Named("purge.presentation.flag.removed.days.publicity")
+	private int publicityPurgeTime;
 
 	@Override
 	public void process(final AttributeMap currentAttributes, final AttributeMap before, final AttributeMap after)
@@ -46,7 +65,38 @@ public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 			{
 				log.info("Presentation flag set to false");
 
-				//TODO: created / update purge canddiate task for asset
+				int numberOfDays = defaultPurgeTime;
+				String contentType = currentAttributes.getAttribute(Attribute.CONT_CATEGORY);
+
+				if (contentType != null)
+				{
+					if (contentType.equals(MayamContentTypes.EPK))
+					{
+						numberOfDays = associatedPurgeTime;
+					}
+					else if (contentType.equals(MayamContentTypes.EDIT_CLIPS))
+					{
+						numberOfDays = editClipsPurgeTime;
+					}
+					else if (contentType.equals(MayamContentTypes.PUBLICITY))
+					{
+						numberOfDays = publicityPurgeTime;
+					}
+					else
+					{
+						numberOfDays = defaultPurgeTime;
+					}
+
+					try
+					{
+						taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL, houseID,numberOfDays);
+
+					}
+					catch (MayamClientException e)
+					{
+						log.error("Exception thrown handling change in presentation flag for material : " + houseID, e);
+					}
+				}
 			}
 		}
 	}
