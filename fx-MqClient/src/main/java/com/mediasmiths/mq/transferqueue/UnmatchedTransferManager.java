@@ -193,11 +193,13 @@ public class UnmatchedTransferManager extends MoveMediaEssenceTransferManager
 	public void closeTask(AttributeMap messageAttributes)
 	{
 		log.debug("Closing task");
+		AttributeMap updateMap = taskController.updateMapForTask(messageAttributes);
+
 		try
 		{
 
-			messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-			taskController.saveTask(messageAttributes);
+			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+			taskController.saveTask(updateMap);
 		}
 		catch (Exception e)
 		{
