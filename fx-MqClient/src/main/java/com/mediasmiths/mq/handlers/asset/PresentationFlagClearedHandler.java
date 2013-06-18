@@ -53,7 +53,7 @@ public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 
 			Boolean presentationFlag = currentAttributes.getAttribute(Attribute.PRESENTATION_FLAG);
 
-			if (presentationFlag != null)
+			if (presentationFlag == null)
 			{
 				log.warn("Presentation flag is null");
 			}
