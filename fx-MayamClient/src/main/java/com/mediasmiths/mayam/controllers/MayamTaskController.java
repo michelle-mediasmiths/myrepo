@@ -1020,8 +1020,14 @@ public class MayamTaskController extends MayamController
 				MayamTaskListType.FIX_STITCH_EDIT, AssetType.ITEM,
 				Attribute.ASSET_ID, itemAssetID);
 
-		if (tasksForAsset.size() > 0) {
-			return true;
+		for(AttributeMap task : tasksForAsset)
+		{
+			TaskState state = task.getAttribute(Attribute.TASK_STATE);
+
+			if (TaskState.FINISHED.equals(state))
+			{
+				return true;
+			}
 		}
 		return false;
 	}
