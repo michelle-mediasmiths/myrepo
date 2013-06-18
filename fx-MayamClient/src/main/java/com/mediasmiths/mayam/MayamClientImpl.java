@@ -1146,6 +1146,11 @@ public class MayamClientImpl implements MayamClient
 			criteria.getFilterAlternatives().addAsInclusion(Attribute.TASK_LIST_ID, MayamTaskListType.COMPLIANCE_LOGGING);
 			criteria.getFilterAlternatives().addAsInclusion(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW);
 			criteria.getFilterAlternatives().addAsInclusion(Attribute.TASK_LIST_ID, MayamTaskListType.SEGMENTATION);
+			
+			FilterResult result = client.taskApi().getTasks(criteria, 100, 0);
+			log.info("Total matches: " + result.getTotalMatches());
+
+			tasks = result.getMatches();
 		}
 		catch(RemoteException e)
 		{
