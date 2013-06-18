@@ -2,10 +2,9 @@ package com.mediasmiths.stdEvents.reporting.rest;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.mayam.MayamClientImpl;
-import com.mediasmiths.mayam.guice.MayamClientModule;
-import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
 import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
@@ -280,7 +279,7 @@ public class ReportUIImpl implements ReportUI
 				start.toString(),
 				end.toString(),
 				reportName));
-		taskList.writeTaskList(tasks, startDate, endDate, reportName);
+		taskList.writeTaskList(tasks, start, end, reportName);
 
 		logger.debug("<<<getTaskListCSV");
 	}
