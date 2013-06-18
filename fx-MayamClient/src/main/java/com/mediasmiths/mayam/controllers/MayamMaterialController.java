@@ -405,36 +405,42 @@ public class MayamMaterialController extends MayamController
 
 		for (AttributeMap material : materials)
 		{
-
-			String type = (String) material.getAttribute(Attribute.CONT_MAT_TYPE);
-			boolean associated = false;
-
-			if (ASSOCIATED_MATERIAL_CONTENT_TYPE.equals(type))
-			{
-				associated = true;
-			}
-
-			AttributeMap update = taskController.updateMapForAsset(material);
-
-			for (Attribute a : materialsAttributesInheritedFromTitle)
-			{
-				if ((!associated) || (!associatedMaterialsAttributesNotInheritedFromTitle.contains(a)))
-				{
-					update.setAttribute(a, title.getAttribute(a));
-				}
-			}
-
-			try
-			{
-				client.assetApi().updateAsset(update);
-			}
-			catch (RemoteException e)
-			{
-				log.error("error updating material" + material.getAttributeAsString(Attribute.HOUSE_ID), e);
-			}
+			updateMaterialWithAttributesInheritedFromTitle(title, material);
 		}
 
 	}
+
+
+	public void updateMaterialWithAttributesInheritedFromTitle(final AttributeMap title, final AttributeMap material)
+	{
+		String type = (String) material.getAttribute(Attribute.CONT_MAT_TYPE);
+		boolean associated = false;
+
+		if (ASSOCIATED_MATERIAL_CONTENT_TYPE.equals(type))
+		{
+			associated = true;
+		}
+
+		AttributeMap update = taskController.updateMapForAsset(material);
+
+		for (Attribute a : materialsAttributesInheritedFromTitle)
+		{
+			if ((!associated) || (!associatedMaterialsAttributesNotInheritedFromTitle.contains(a)))
+			{
+				update.setAttribute(a, title.getAttribute(a));
+			}
+		}
+
+		try
+		{
+			client.assetApi().updateAsset(update);
+		}
+		catch (RemoteException e)
+		{
+			log.error("error updating material" + material.getAttributeAsString(Attribute.HOUSE_ID), e);
+		}
+	}
+
 
 	/**
 	 * Creates a material, returns the id of the created material

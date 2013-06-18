@@ -12,7 +12,6 @@ import com.mayam.wf.ws.client.FilterResult;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskUpdateHandler;
@@ -177,17 +176,6 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					                                materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
 					associatedMaterial.setAttribute(Attribute.AUX_VAL,
 					                                materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
-
-					//copy other metadata that the associated material should have as a result of moving to a new title
-					for (Attribute a : MayamMaterialController.materialsAttributesInheritedFromTitle)
-					{
-						if (!MayamMaterialController.associatedMaterialsAttributesNotInheritedFromTitle.contains(a))
-						{
-							log.debug("copying attribute from target material "+a);
-							associatedMaterial.setAttribute(a, materialMatch.getAttribute(a));
-						}
-					}
-
 					log.debug("Closing purge candidate task for item");
 					transferManager.closePurgeCandidateTaskForAsset((String) currentAttributes.getAttribute(Attribute.ASSET_ID));
 					log.debug("Updating item to associate with target title");

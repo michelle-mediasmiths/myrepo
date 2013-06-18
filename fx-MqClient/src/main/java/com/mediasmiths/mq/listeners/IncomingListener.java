@@ -17,6 +17,7 @@ import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 import com.mediasmiths.mq.handlers.FTPTransferJobHandler;
 import com.mediasmiths.mq.handlers.asset.AccessUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.DartRecordingTitleAssociationHandler;
+import com.mediasmiths.mq.handlers.asset.MaterialAssociatedWithTitleHandler;
 import com.mediasmiths.mq.handlers.asset.MaterialProtectHandler;
 import com.mediasmiths.mq.handlers.asset.MaterialUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.MediaMoveHandler;
@@ -174,7 +175,9 @@ public class IncomingListener extends MqClientListener
 	PurgeCandidateUpdateHandler purgeCandidateUpdateHandler;
 	@Inject
 	InitiateExportHandler initiateExportHandler;
-	
+	@Inject
+	MaterialAssociatedWithTitleHandler materialAssociatedWithTitleHandler;
+
 	public void onMessage(MqMessage msg) throws Throwable
 	{
 		try
@@ -401,12 +404,12 @@ public class IncomingListener extends MqClientListener
 		
 		try
 		{
-//			passEventToUpdateHandler(ingestCompleteHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(titleUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(materialProtected, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(materialUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);	
-			passEventToUpdateHandler(accessUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);	
+			passEventToUpdateHandler(accessUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
+			passEventToUpdateHandler(materialAssociatedWithTitleHandler, currentAttributes, beforeAttributes, afterAttributes);
 		}
 		catch (Exception e)
 		{
