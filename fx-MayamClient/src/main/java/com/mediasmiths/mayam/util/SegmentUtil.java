@@ -488,7 +488,7 @@ public class SegmentUtil
 		
 		return sb.toString();
 	}
-	public static String removeSegmentationInfoAfterFixStitchCompleted(String presentation)
+	public static String removePackageIDFromSegmentationNotesString(String presentation)
 	{
 		String pattern = "((\\n*\\w+\\n)(N____SOM_______DURATION_____EOM_______TITLE\\n(?:\\d*(_+\\d{2}:+\\d{2}:+\\d{2}:+\\d{2}){3}_+\\w+\\n*)*))";
 
@@ -499,11 +499,6 @@ public class SegmentUtil
 		{
 			log.debug("Null presentation information is found");
 			result = null;
-		}
-		else if (presentation == "")
-		{
-			log.debug("No presentation information found");
-			return null;
 		}
 		else
 		{

@@ -35,7 +35,7 @@ public class FixAndStitchFinishHandler  extends TaskStateChangeHandler
 			updateMap.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_PASSED);
 
 			String presentation = (String) messageAttributes.getAttribute(Attribute.SEGMENTATION_NOTES);
-			String newNotes = SegmentUtil.removeSegmentationInfoAfterFixStitchCompleted(presentation);
+			String newNotes = SegmentUtil.removePackageIDFromSegmentationNotesString(presentation);
 			updateMap.setAttribute(Attribute.SEGMENTATION_NOTES,newNotes);
 
 			tasksClient.assetApi().updateAsset(updateMap);
