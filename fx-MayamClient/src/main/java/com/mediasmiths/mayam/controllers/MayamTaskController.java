@@ -756,7 +756,7 @@ public class MayamTaskController extends MayamController
 
 	/**
 	 * returns a minimal attribute map for making updates based on the supplied asses attributes, does NOT perform a save,
-	 * simply returns the smalled map that can be used to update a given asset (contains asset_type, asset_id)
+	 * simply returns the smallest map that can be used to update a given asset (contains asset_type, asset_id)
 	 * 
 	 * @param assetAttributes
 	 * @return

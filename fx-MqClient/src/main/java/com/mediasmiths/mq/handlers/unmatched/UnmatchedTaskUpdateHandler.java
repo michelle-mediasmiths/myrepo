@@ -12,6 +12,7 @@ import com.mayam.wf.ws.client.FilterResult;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskUpdateHandler;
@@ -169,16 +170,33 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 						          materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
 					}
 
-					// Update the attribute with the correct parent
-					associatedMaterial.setAttribute(Attribute.ASSET_PARENT_ID,
-					                                materialMatch.getAttributeAsString(Attribute.ASSET_PARENT_ID));
-					associatedMaterial.setAttribute(Attribute.PARENT_HOUSE_ID,
-					                                materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
-					associatedMaterial.setAttribute(Attribute.AUX_VAL,
-					                                materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
 					log.debug("Closing purge candidate task for item");
 					transferManager.closePurgeCandidateTaskForAsset((String) currentAttributes.getAttribute(Attribute.ASSET_ID));
+
+					AttributeMap updateMap = taskController.updateMapForAsset(associatedMaterial);
+					// Update the attribute with the correct parent
+					updateMap.setAttribute(Attribute.ASSET_PARENT_ID,
+					                       materialMatch.getAttributeAsString(Attribute.ASSET_PARENT_ID));
+					updateMap.setAttribute(Attribute.PARENT_HOUSE_ID,
+					                                materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
+
 					log.debug("Updating item to associate with target title");
+					tasksClient.assetApi().updateAsset(updateMap);
+
+					//refetch item to update metadata (updating parent and metadata at the same time doesnt seem to work)
+					log.debug("Refetching item after associating with new parent");
+					associatedMaterial = materialController.getMaterialAttributes(houseID);
+					updateMap = taskController.updateMapForAsset(associatedMaterial);
+					updateMap.setAttribute(Attribute.AUX_VAL, materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
+
+					for (Attribute a : MayamMaterialController.materialsAttributesInheritedFromTitle)
+					{
+						if (!MayamMaterialController.associatedMaterialsAttributesNotInheritedFromTitle.contains(a))
+						{
+							updateMap.setAttribute(a, materialMatch.getAttribute(a));
+						}
+					}
+					log.debug("Updating item with attributes normally inherited from title (copying from peer)");
 					tasksClient.assetApi().updateAsset(associatedMaterial);
 
 					// close unmatched task
