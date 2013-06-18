@@ -199,7 +199,7 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 						}
 					}
 					log.debug("Updating item with attributes normally inherited from title (copying from peer)");
-					tasksClient.assetApi().updateAsset(associatedMaterial);
+					tasksClient.assetApi().updateAsset(updateMap);
 
 					// close unmatched task
 					transferManager.closeTask(currentAttributes);
