@@ -58,6 +58,20 @@
 		<version>${stdlib.version}</version>
 	</dependency>
 	
+
+	<dependency>
+		<groupId>com.mayam.wf</groupId>
+		<artifactId>tasks-ws-client-with-dependencies</artifactId>
+		<version>${worklists.version}</version>
+		<classifier>dependencies</classifier>
+	</dependency>
+		
+	<dependency>
+		<groupId>com.mediasmiths.foxtel</groupId>
+		<artifactId>fx-MayamClient</artifactId>
+		<version>${project.version}</version>
+	</dependency>
+	
 	<!--JasperReports dependencies -->
 	<dependency>
             <groupId>net.sf.jasperreports</groupId>
