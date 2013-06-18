@@ -66,7 +66,7 @@ public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 				log.info("Presentation flag set to false");
 
 				int numberOfDays = defaultPurgeTime;
-				String contentType = currentAttributes.getAttribute(Attribute.CONT_CATEGORY);
+				String contentType = currentAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
 
 				if (contentType != null)
 				{
@@ -96,6 +96,10 @@ public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 					{
 						log.error("Exception thrown handling change in presentation flag for material : " + houseID, e);
 					}
+				}
+				else
+				{
+					log.info("Content type was null, no action performed");
 				}
 			}
 		}
