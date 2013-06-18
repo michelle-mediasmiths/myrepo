@@ -20,6 +20,7 @@ import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -778,5 +779,11 @@ public class MayamClientStub implements MayamClient
 	public void cancelSuspectPurgeCandidates() throws MayamClientException
 	{
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public List<AttributeMap> getTasksInDateRange(Date start, Date end) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

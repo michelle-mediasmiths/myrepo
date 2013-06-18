@@ -19,6 +19,7 @@ import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -365,4 +366,6 @@ public interface MayamClient
 	 * Cancels purge candidate tasks that perhaps should not exist (see getSuspectPurgePendingList)
 	 */
 	void cancelSuspectPurgeCandidates() throws MayamClientException;
+
+	List<AttributeMap> getTasksInDateRange(Date start, Date end);
 }

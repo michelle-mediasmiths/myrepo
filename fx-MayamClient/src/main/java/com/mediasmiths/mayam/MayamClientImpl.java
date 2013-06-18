@@ -1134,6 +1134,27 @@ public class MayamClientImpl implements MayamClient
 	}
 	
 	@Override
+	public List<AttributeMap> getTasksInDateRange(Date start, Date end)
+	{
+		List <AttributeMap> tasks = new ArrayList<AttributeMap>();
+		try{
+			FilterCriteria criteria = client.taskApi().createFilterCriteria();
+			criteria.getFilterRanges().setAttributeRange(Attribute.TASK_CREATED, start, end);
+			criteria.getFilterRanges().setAttributeRange(Attribute.TASK_UPDATED, start, end);
+			criteria.getFilterRanges().setAttributeRange(Attribute.CLOSED, start, end);
+			criteria.getFilterAlternatives().addAsInclusion(Attribute.TASK_LIST_ID, MayamTaskListType.COMPLIANCE_EDIT);
+			criteria.getFilterAlternatives().addAsInclusion(Attribute.TASK_LIST_ID, MayamTaskListType.COMPLIANCE_LOGGING);
+			criteria.getFilterAlternatives().addAsInclusion(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW);
+			criteria.getFilterAlternatives().addAsInclusion(Attribute.TASK_LIST_ID, MayamTaskListType.SEGMENTATION);
+		}
+		catch(RemoteException e)
+		{
+			log.error("Exception thrown by Mayam while retrieving tasks in date range: " + start.toString() + " to " + end.toString(), e);
+		}
+		return tasks;
+	}
+	
+	@Override
 	public AttributeMap getTitle(String titleId)
 	{
 		AttributeMap returnMap = null;

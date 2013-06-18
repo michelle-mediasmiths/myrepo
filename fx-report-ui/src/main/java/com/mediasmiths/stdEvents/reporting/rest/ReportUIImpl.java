@@ -3,6 +3,9 @@ package com.mediasmiths.stdEvents.reporting.rest;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.EventNames;
+import com.mediasmiths.mayam.MayamClientImpl;
+import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
 import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
@@ -58,6 +61,8 @@ public class ReportUIImpl implements ReportUI
 	private WatchFolderRpt watchFolder;
 	@Inject
 	private TranscoderLoadRpt transcoderLoad;
+	@Inject
+	protected MayamClientImpl mayamClient;
 
 	@Inject
 	@Named("windowMax")
@@ -122,6 +127,11 @@ public class ReportUIImpl implements ReportUI
 		{
 			logger.info("Generating Watchfolder Report");
 			getWatchFolderStorageCSV(startDate, endDate, reportName);
+		}
+		else if (rptType.equals("TaskList"))
+		{
+			logger.info("Generating Task List Report");
+			getTaskListCSV(startDate, endDate, reportName);
 		}
 		logger.debug("<<<chooseReport");
 	}
@@ -252,5 +262,26 @@ public class ReportUIImpl implements ReportUI
 				valid.add(event);
 		}
 		transcoderLoad.writeTranscoderLoad(valid, startDate, endDate, REPORT_NAME);*/
+	}
+	
+	@Transactional(readOnly = true)
+	private void getTaskListCSV(final DateTime start, final DateTime end, final String reportName)
+	{
+		logger.debug(">>>getTaskListCSV");
+
+		List<AttributeMap> tasks = mayamClient.getTasksInDateRange(start.toDate(), end.toDate());
+
+		String startDate = start.toString(dateFormatter);
+		String endDate = end.toString(dateFormatter);
+		logger.info("dates readable start: " + startDate + " end: " + endDate);
+		logger.info("List size: " + orders.size());
+		logger.debug(String.format(
+				"Requesting task list report for date range: %s to %s; report name will be: %s ",
+				start.toString(),
+				end.toString(),
+				reportName));
+		taskList.writeTaskList(tasks, startDate, endDate, reportName);
+
+		logger.debug("<<<getTaskListCSV");
 	}
 }
