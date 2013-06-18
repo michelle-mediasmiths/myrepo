@@ -193,7 +193,9 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					{
 						if (!MayamMaterialController.associatedMaterialsAttributesNotInheritedFromTitle.contains(a))
 						{
-							updateMap.setAttribute(a, materialMatch.getAttribute(a));
+							Object value = materialMatch.getAttribute(a);
+							log.debug(String.format("copying attribute %s with value %s",a,value));
+							updateMap.setAttribute(a,value);
 						}
 					}
 					log.debug("Updating item with attributes normally inherited from title (copying from peer)");
