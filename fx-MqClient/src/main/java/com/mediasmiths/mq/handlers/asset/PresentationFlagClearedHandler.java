@@ -65,9 +65,6 @@ public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 			{
 				log.info("Presentation flag set to false");
 
-				//not sure if this will ever actually happen as a presentation item should have been on the
-				//purge candidate list anyway
-
 				int numberOfDays = defaultPurgeTime;
 				String contentType = currentAttributes.getAttribute(Attribute.CONT_CATEGORY);
 
