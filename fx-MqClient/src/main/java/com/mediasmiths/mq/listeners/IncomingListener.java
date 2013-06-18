@@ -176,13 +176,9 @@ public class IncomingListener extends MqClientListener
 	PurgeCandidateUpdateHandler purgeCandidateUpdateHandler;
 	@Inject
 	InitiateExportHandler initiateExportHandler;
-<<<<<<< HEAD
-
-=======
 	@Inject
 	PresentationFlagClearedHandler presentationFlagClearedHandler;
-	
->>>>>>> MAM-515--CR27
+
 	public void onMessage(MqMessage msg) throws Throwable
 	{
 		try
