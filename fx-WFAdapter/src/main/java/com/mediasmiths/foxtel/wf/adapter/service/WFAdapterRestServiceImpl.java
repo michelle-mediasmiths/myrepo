@@ -232,8 +232,11 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (notification.isForTXDelivery())
 			{
 				// id is a package id
-				saveAutoQCEvent(EventNames.QC_PROBLEM_WITH_TC_MEDIA, notification);
-				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification);
+				String packageID = notification.getAssetId();
+				final Set<String> channelGroups = mayamClient.getChannelGroupsForPackage(packageID);
+
+				saveAutoQCEvent(EventNames.QC_PROBLEM_WITH_TC_MEDIA, notification,channelGroups);
+				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification,channelGroups);
 				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC FAILED");
 				// attach qc report if qc is failed
 				attachQcReports(notification.getAssetId(), notification.getJobName());
@@ -387,8 +390,12 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		{
 			if (notification.isForTXDelivery())
 			{
+
+				// id is a package id
+				String packageID = notification.getAssetId();
+				final Set<String> channelGroups = mayamClient.getChannelGroupsForPackage(packageID);
 				// auto qc was for tx delivery
-				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification);
+				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification,channelGroups);
 				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC ERROR");
 
 				TcEvent tce = new TcEvent();
@@ -403,8 +410,12 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			}
 			else
 			{
+				// id is a package id
+				String materialID = notification.getAssetId();
+				final Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
+
 				// auto qc was for qc task
-				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification);
+				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification,channelGroups);
 				mayamClient.autoQcErrorForMaterial(notification.getAssetId(), notification.getTaskID());
 
 				AttributeMap task = mayamClient.getTask(notification.getTaskID());
@@ -935,7 +946,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	// Auto QC Event
 
-	protected void saveAutoQCEvent(String name, AutoQCResultNotification payload)
+	protected void saveAutoQCEvent(String name, AutoQCResultNotification payload, Set<String> channelGroups)
 	{
 		try
 		{
@@ -947,6 +958,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			{
                 qcErrorNotification.getQcReportFilePath().add(qcFile.getAbsolutePath());
 			}
+			qcErrorNotification.withChannelGroup(channelGroups);
 			events.saveEvent(QC_EVENT_NAMESPACE, name, qcErrorNotification);
 		}
 		catch (Exception e)
