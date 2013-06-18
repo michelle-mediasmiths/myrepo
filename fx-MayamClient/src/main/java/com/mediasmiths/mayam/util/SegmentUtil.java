@@ -488,6 +488,51 @@ public class SegmentUtil
 		
 		return sb.toString();
 	}
+	public static String removeSegmentationInfoAfterFixStitchCompleted(String presentation)
+	{
+		String pattern = "((\\n*\\w+\\n)(N____SOM_______DURATION_____EOM_______TITLE\\n(?:\\d*(_+\\d{2}:+\\d{2}:+\\d{2}:+\\d{2}){3}_+\\w+\\n*)*))";
+
+		String result = "";
+
+		log.debug("Remove presentation ID if it is presentation conform");
+		if(presentation == null)
+		{
+			log.debug("Null presentation information is found");
+			result = null;
+		}
+		else if (presentation == "")
+		{
+			log.debug("No presentation information found");
+			return null;
+		}
+		else
+		{
+		Pattern r = Pattern.compile(pattern);
+
+		Matcher m = r.matcher(presentation);
+
+
+		Boolean found = false;
+
+		while(m.find())
+			{
+				found =true;
+			}
+		if (found)
+			{
+				pattern =  m.replaceAll("$3");
+				log.debug(pattern);
+				log.debug("********   Pattern found    *********");
+				result = pattern;
+			}
+			else
+			{
+				result = presentation;
+				log.debug(presentation);
+			}
+		}
+		return result;
+	}
 
 	public static String getDuration(String som, String eom)
 	{

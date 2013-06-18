@@ -431,6 +431,40 @@ public class SegmentUtilTest
 			*/
 			assertEquals(expected, actual);
 		}
+	@Test
+	public void testStringIDFromNatualBreaksString(){
+
+		System.out.println("*********  testStringIDFromNatualBreaksString  ***********");
+
+		//when the natural breaks field was populated with presenentation information there will be package ids
+		String input ="PACKAGE1\nN____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:01_00:03:01:17_00:04:01:17_title1\n2_00:04:00:01_00:03:10:17_00:07:10:17_title2\n\nPACKAGE2\nN____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:00_00:03:01:16_00:04:01:15_pack2title1\n2_00:04:01:16_00:01:09:02_00:05:10:17_pack2title2\n\n";
+		String expected = "N____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:01_00:03:01:17_00:04:01:17_title1\n2_00:04:00:01_00:03:10:17_00:07:10:17_title2\n\nN____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:00_00:03:01:16_00:04:01:15_pack2title1\n2_00:04:01:16_00:01:09:02_00:05:10:17_pack2title2\n\n";
+
+
+		String actual = SegmentUtil.removeSegmentationInfoAfterFixStitchCompleted(input);
+
+		assertEquals(expected,actual);
+	}
+
+	@Test
+	public void testStringIDFromNatualBreaksStringWasOriginalConform(){
+
+		//when the natural breaks was populated from original conform information there will be no package id
+		String input ="N____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:01_00:03:01:17_00:04:01:17_title1\n2_00:04:00:01_00:03:10:17_00:07:10:17_title2\n\n";
+		String expected = "N____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:01_00:03:01:17_00:04:01:17_title1\n2_00:04:00:01_00:03:10:17_00:07:10:17_title2\n\n";
+
+
+		String actual = SegmentUtil.removeSegmentationInfoAfterFixStitchCompleted(input);
+
+		assertEquals(expected,actual);
+	}
+	@Test
+	public void testStringIDFromNatualBreaksStringEmptyOrNullInput(){
+		assertEquals(null,SegmentUtil.removeSegmentationInfoAfterFixStitchCompleted(null));
+		assertEquals("",SegmentUtil.removeSegmentationInfoAfterFixStitchCompleted(""));
+
+	}
+
 
 }
 

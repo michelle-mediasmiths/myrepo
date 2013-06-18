@@ -8,6 +8,7 @@ import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.util.SegmentUtil;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 import org.apache.log4j.Logger;
 
@@ -32,6 +33,11 @@ public class FixAndStitchFinishHandler  extends TaskStateChangeHandler
 			
 			AttributeMap updateMap = taskController.updateMapForAsset(messageAttributes);
 			updateMap.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_PASSED);
+
+			String presentation = (String) messageAttributes.getAttribute(Attribute.SEGMENTATION_NOTES);
+			String newNotes = SegmentUtil.removeSegmentationInfoAfterFixStitchCompleted(presentation);
+			updateMap.setAttribute(Attribute.SEGMENTATION_NOTES,newNotes);
+
 			tasksClient.assetApi().updateAsset(updateMap);
 			
 			final SegmentListList lists = tasksClient.segmentApi().getSegmentListsForAsset(assetType, assetID);
