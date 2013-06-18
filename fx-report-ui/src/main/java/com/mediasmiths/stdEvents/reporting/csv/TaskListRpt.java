@@ -7,10 +7,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.log4j.Logger;
+import org.jfree.util.Log;
 import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -40,8 +42,8 @@ public class TaskListRpt
 	
 	public void writeTaskList(List<AttributeMap> tasks, DateTime startDate, DateTime endDate, String reportName)
 	{
-		List<TaskList> tasks = getReportList(tasks, startDate, endDate);
-		createCsv(tasks, reportName);		
+		List<TaskList> taskList = getReportList(tasks, startDate, endDate);
+		createCsv(taskList, reportName);		
 	}
 		
 	public List<TaskList> getReportList(List<AttributeMap> mayamTasks, DateTime startDate, DateTime endDate)
@@ -59,17 +61,23 @@ public class TaskListRpt
 			{
 				task.setOperator(mayamTask.getAttributeAsString(Attribute.TASK_UPDATED_BY));
 			}
-			if (mayamTask.getAttribute(Attribute.OP_DATE) != null)
+			try
 			{
-				GregorianCalendar c = new GregorianCalendar();
-				c.setTime((Date) mayamTask.getAttribute(Attribute.OP_DATE));
-				task.setRequiredBy(DatatypeFactory.newInstance().newXMLGregorianCalendar(c));
-			}
-			if (mayamTask.getAttribute(Attribute.CLOSED) != null)
-			{
-				GregorianCalendar c = new GregorianCalendar();
-				c.setTime((Date) mayamTask.getAttribute(Attribute.CLOSED));
-				task.setTaskEnd(DatatypeFactory.newInstance().newXMLGregorianCalendar(c));
+				if (mayamTask.getAttribute(Attribute.OP_DATE) != null)
+				{
+					GregorianCalendar c = new GregorianCalendar();
+					c.setTime((Date) mayamTask.getAttribute(Attribute.OP_DATE));
+					task.setRequiredBy(DatatypeFactory.newInstance().newXMLGregorianCalendar(c));
+				}
+				if (mayamTask.getAttribute(Attribute.CLOSED) != null)
+				{
+					GregorianCalendar c = new GregorianCalendar();
+					c.setTime((Date) mayamTask.getAttribute(Attribute.CLOSED));
+					task.setTaskFinish(DatatypeFactory.newInstance().newXMLGregorianCalendar(c));
+				}
+			} catch (DatatypeConfigurationException e) {
+				Log.warn("Error while converting task start and end times to XMLGregorianCalendar");
+				e.printStackTrace();
 			}
 			
 			List<String> channels = mayamTask.getAttribute(Attribute.CHANNELS);

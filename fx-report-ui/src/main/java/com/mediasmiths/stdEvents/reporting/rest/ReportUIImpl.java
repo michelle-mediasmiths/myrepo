@@ -274,7 +274,7 @@ public class ReportUIImpl implements ReportUI
 		String startDate = start.toString(dateFormatter);
 		String endDate = end.toString(dateFormatter);
 		logger.info("dates readable start: " + startDate + " end: " + endDate);
-		logger.info("List size: " + orders.size());
+		logger.info("List size: " + tasks.size());
 		logger.debug(String.format(
 				"Requesting task list report for date range: %s to %s; report name will be: %s ",
 				start.toString(),
