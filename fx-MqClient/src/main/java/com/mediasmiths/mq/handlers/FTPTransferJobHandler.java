@@ -24,6 +24,7 @@ public class FTPTransferJobHandler extends JobHandler
 	@Inject
 	private PreviewEventUtil preventEvent;
 
+
 	@Override
 	public void process(final Job jobMessage)
 	{
@@ -74,7 +75,16 @@ public class FTPTransferJobHandler extends JobHandler
 
 				for (AttributeMap task : previewTasks)
 				{
-					preventEvent.sendManualQANotification(task, Boolean.TRUE, user);
+					try
+					{
+						AttributeMap refetch = taskController.getTask((Long) task.getAttribute(Attribute.TASK_ID));
+						preventEvent.sendManualQANotification(refetch, Boolean.TRUE, user);
+					}
+					catch (Exception e)
+					{
+						log.error("error refetching or sending notification for task " +
+						          task.getAttributeAsString(Attribute.TASK_ID));
+					}
 				}
 			}
 		}
