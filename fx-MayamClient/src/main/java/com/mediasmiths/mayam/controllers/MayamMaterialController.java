@@ -461,6 +461,7 @@ public class MayamMaterialController extends MayamController
 		attributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
 		attributes.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_NOT_DONE);
 		attributes.setAttribute(Attribute.QC_PARALLEL_ALLOWED, Boolean.FALSE);
+		attributes.setAttribute(Attribute.AUX_VAL,titleID);
 
 		boolean attributesValid = true;
 

@@ -62,7 +62,18 @@ public class DartRecordingTitleAssociationHandler extends AttributeHandler
 
 				String titleAssetID = title.getAttribute(Attribute.ASSET_ID);
 				AttributeMap updateMap = taskController.updateMapForAsset(messageAttributes);
-				updateMap.setAttribute(Attribute.ASSET_PARENT_ID, titleAssetID);
+
+				if (titleAssetID.equals(messageAttributes.getAttribute(Attribute.ASSET_PARENT_ID)))
+				{
+					log.info("Title ID and the asset parent id are same. So doing nothing");
+					return;
+				}
+				else
+				{
+					log.info("Asset Parent ID is not set same as title asset ID; updating the attibute");
+					updateMap.setAttribute(Attribute.ASSET_PARENT_ID, titleAssetID);
+					log.info("Title ID is set to the asset parent ID");
+				}
 				
 				log.debug(String.format("Setting ASSET_PARENT_ID to %s on asset %s", titleAssetID, assetID));
 				

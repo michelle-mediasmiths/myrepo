@@ -82,7 +82,6 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 						AssetType.ITEM,
 						currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID));
 
-				
 				//check for AO mismatched
 				//dont want to allow an ao item to be matched to non ao placholder item (or other way round)
 				boolean itemIsAO = AssetProperties.isAO(currentAttributes);
