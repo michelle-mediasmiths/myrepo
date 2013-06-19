@@ -1,5 +1,6 @@
 package com.mediasmiths.mq.handlers.purge;
 
+import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
@@ -13,6 +14,9 @@ import org.apache.log4j.Logger;
 public class PurgeCandidateUpdateHandler extends TaskUpdateHandler
 {
 	private final static Logger log = Logger.getLogger(PurgeCandidateUpdateHandler.class);
+
+	@Inject
+	PurgeEvent purgeEvent;
 
 	@Override
 	protected void onTaskUpdate(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
@@ -47,6 +51,12 @@ public class PurgeCandidateUpdateHandler extends TaskUpdateHandler
 			{
 				log.error("Exception thrown handling change in presentation flag for material : " + materialID, e);
 			}
+		}
+
+		if (attributeChanged(Attribute.TASK_STATE, before, after, currentAttributes))
+		{
+			log.debug("State changed, sending purgeEventNotification");
+			purgeEvent.setPurgeEventForPurgeCandidateTask(currentAttributes);
 		}
 
 	}

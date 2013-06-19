@@ -12,6 +12,7 @@ import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventingDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.ManualQAEntityDAO;
 import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.PurgeDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.TitleDao;
 import com.mediasmiths.stdEvents.persistence.rest.impl.eventmapping.EventTypeMapper;
 import org.apache.log4j.Logger;
@@ -43,7 +44,10 @@ public class EventAPIImpl implements EventAPI
 
 	@Inject
 	protected ManualQAEntityDAO manualQaDao;
-	
+
+	@Inject
+	protected PurgeDao purgeDao;
+
 	private final EventingDao eventingDao;
 
 	@Inject
@@ -108,6 +112,12 @@ public class EventAPIImpl implements EventAPI
 			manualQaEvent(event);
 		}
 
+		if ((event.getEventName().equals(EventNames.PURGE_EVENT_NOTIFICATION)))
+		{
+			purgeEventNotification(event);
+		}
+
+
 //		if ((event.getEventName().equals(EventNames.CREATEOR_UPDATE_TITLE)) || (event.getEventName().equals(EventNames.ADD_OR_UPDATE_MATERIAL)) ||(event.getEventName().equals(EventNames.ADD_OR_UPDATE_PACKAGE))) {
 //			logger.info("BMS message detected");
 //			bmsDao.updateBMS(event);
@@ -115,6 +125,12 @@ public class EventAPIImpl implements EventAPI
 //
 
 		logger.info("Event saved");
+	}
+
+
+	private void purgeEventNotification(final EventEntity event)
+	{
+		purgeDao.purgeMessage(event);
 	}
 
 	private void manualQaEvent(final EventEntity event)

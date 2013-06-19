@@ -1,9 +1,5 @@
 package com.mediasmiths.mq.handlers.button;
 
-import au.com.foxtel.cf.mam.pms.Actions;
-import au.com.foxtel.cf.mam.pms.DeleteMaterial;
-import au.com.foxtel.cf.mam.pms.Material;
-import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
@@ -64,18 +60,6 @@ public class DeleteButton extends ButtonClickHandler
 	{
 		try
 		{
-			PlaceholderMessage ph = new PlaceholderMessage();
-			DeleteMaterial dm = new DeleteMaterial();
-			Material m = new Material();
-			m.setMaterialID((String) messageAttributes.getAttribute(Attribute.HOUSE_ID));
-			
-			dm.setTitleID(messageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
-			dm.setMaterial(m);
-			
-			Actions a = new Actions();
-			a.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(dm);
-			ph.setActions(a);
-
 			String title = messageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
 			sendManualPurgeEvent((String) messageAttributes.getAttribute(Attribute.HOUSE_ID), assetType, title,(StringList)messageAttributes.getAttribute(Attribute.CHANNELS), AssetProperties.isAO(messageAttributes));
 			

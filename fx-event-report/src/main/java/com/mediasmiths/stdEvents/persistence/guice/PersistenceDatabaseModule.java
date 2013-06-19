@@ -5,6 +5,7 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.Purge;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import com.mediasmiths.stdEvents.events.db.entity.EventingEntity;
 import com.mediasmiths.stdEvents.events.db.entity.nagios.NagiosReportEntity;
@@ -29,6 +30,8 @@ public class PersistenceDatabaseModule extends HibernateModule
 		config.addAnnotatedClass(AutoQC.class);
 
 		config.addAnnotatedClass(ManualQAEntity.class);
+
+		config.addAnnotatedClass(Purge.class);
 	}
 
 }

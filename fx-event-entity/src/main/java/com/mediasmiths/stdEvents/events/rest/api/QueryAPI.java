@@ -4,6 +4,7 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.Purge;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import org.joda.time.DateTime;
 
@@ -77,4 +78,8 @@ public interface QueryAPI
 	@GET
 	@Path("ManualQAByDate")
 	List<ManualQAEntity> getManualQAInDateRange(DateTime start, DateTime end);
+
+	@GET
+	@Path("PurgeEventsByDate")
+	List<Purge> getPurgeEventsInDateRange(DateTime start, DateTime end);
 }

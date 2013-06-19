@@ -59,4 +59,5 @@ public class EventNames
 	public static final String CERIFY_QC_ERROR = "CerifyQCError";
 	public static final String MARKETING_CONTENT_AVAILABLE = "MarketingContentAvailable";
 	public static final String PROGRAMME_CONTENT_AVAILABLE = "ProgrammeContentAvailable";
+	public static final String PURGE_EVENT_NOTIFICATION = "PurgeEventNotification";
 }

@@ -1,13 +1,9 @@
 package com.mediasmiths.stdEvents.reporting.csv;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
+import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -21,10 +17,13 @@ import org.supercsv.io.CsvMapWriter;
 import org.supercsv.io.ICsvMapWriter;
 import org.supercsv.prefs.CsvPreference;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
-import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class OrderStatusRpt
 {

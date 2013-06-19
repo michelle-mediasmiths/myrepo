@@ -16,11 +16,13 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 import com.mediasmiths.mq.handlers.FTPTransferJobHandler;
 import com.mediasmiths.mq.handlers.asset.AccessUpdateHandler;
+import com.mediasmiths.mq.handlers.asset.AssetDeleteHandler;
 import com.mediasmiths.mq.handlers.asset.DartRecordingTitleAssociationHandler;
 import com.mediasmiths.mq.handlers.asset.MaterialProtectHandler;
 import com.mediasmiths.mq.handlers.asset.MaterialUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.MediaMoveHandler;
 import com.mediasmiths.mq.handlers.asset.PresentationFlagClearedHandler;
+import com.mediasmiths.mq.handlers.asset.PurgeProtectedUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.TaskCreateHandler;
 import com.mediasmiths.mq.handlers.asset.TemporaryContentHandler;
 import com.mediasmiths.mq.handlers.asset.TitleUpdateHandler;
@@ -50,6 +52,7 @@ import com.mediasmiths.mq.handlers.preview.PreviewTaskCreateHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskEscalationHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskFailHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskFinishHandler;
+import com.mediasmiths.mq.handlers.purge.PurgeCandidateCreateHandler;
 import com.mediasmiths.mq.handlers.purge.PurgeCandidateExtendHandler;
 import com.mediasmiths.mq.handlers.purge.PurgeCandidateUpdateHandler;
 import com.mediasmiths.mq.handlers.qc.InitiateQcHandler;
@@ -69,6 +72,7 @@ public class IncomingListener extends MqClientListener
 {
 	private static final String CREATE_CHANGE_TYPE = "create";
 	private static final String UPDATE_CHANGE_TYPE = "update";
+	private static final String DELETE_CHANGE_TYPE = "delete";
 	private static final String MEDIA_MOVE_CHANGE_TYPE = "media_move";
 	
 	private static final String MAYAM_CHANGE_TYPE_PROPERTY = "MayamChangeType";
@@ -178,6 +182,12 @@ public class IncomingListener extends MqClientListener
 	InitiateExportHandler initiateExportHandler;
 	@Inject
 	PresentationFlagClearedHandler presentationFlagClearedHandler;
+	@Inject
+	AssetDeleteHandler assetDeleteHandler;
+	@Inject
+	PurgeProtectedUpdateHandler purgeProtectedUpdateHandler;
+	@Inject
+	PurgeCandidateCreateHandler purgeCandidateCreateHandler;
 
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -210,6 +220,10 @@ public class IncomingListener extends MqClientListener
 					else if (isAttributePair(type) && isAsset(origin) && isUpdate(changeType))
 					{
 						onAssetUpdate(msg);
+					}
+					else if (isAttributes(type) && isAsset(origin) && isDelete(changeType))
+					{
+						onAssetDelete(msg);
 					}
 					else if (isAttributes(type) && isTask(origin) && isCreate(changeType))
 					{
@@ -256,6 +270,7 @@ public class IncomingListener extends MqClientListener
 		passEventToHandler(initiateExportHandler, messageAttributes);
 		passEventToHandler(previewTaskCreateHandler, messageAttributes);
 		passEventToHandler(unmatchedTaskCreate, messageAttributes);
+		passEventToHandler(purgeCandidateCreateHandler, messageAttributes);
 
 	}
 
@@ -304,6 +319,7 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(initiateTxHandler, currentAttributes);
 				passEventToHandler(initiateExportHandler, currentAttributes);
 				passEventToHandler(initiateQcHandler, currentAttributes);
+				passEventToHandler(purgeCandidateCreateHandler, currentAttributes);
 			}
 		}
 		catch (Exception e)
@@ -411,12 +427,30 @@ public class IncomingListener extends MqClientListener
 			passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);	
 			passEventToUpdateHandler(accessUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(presentationFlagClearedHandler,currentAttributes,beforeAttributes,afterAttributes);
+			passEventToUpdateHandler(purgeProtectedUpdateHandler,currentAttributes,beforeAttributes,afterAttributes);
 		}
 		catch (Exception e)
 		{
-			logger.error("error onAssetUpdate");
+			logger.error("error onAssetUpdate",e);
 		}
 	
+	}
+
+
+	private void onAssetDelete(MqMessage msg)
+	{
+		logger.trace("onAssetDelete");
+
+		AttributeMap messageAttributes = msg.getSubject();
+
+		try
+		{
+			passEventToHandler(assetDeleteHandler,messageAttributes);
+		}
+		catch (Exception e)
+		{
+			log.error("error onAssetDelete", e);
+		}
 	}
 
 	private void onMediaMove(MqMessage msg)
@@ -442,6 +476,11 @@ public class IncomingListener extends MqClientListener
 	private boolean isUpdate(String changeType)
 	{
 		return changeType.equals(UPDATE_CHANGE_TYPE);
+	}
+
+	private boolean isDelete(String changeType)
+	{
+		return changeType.equals(DELETE_CHANGE_TYPE);
 	}
 
 	private boolean isAttributePair(MqContentType type)

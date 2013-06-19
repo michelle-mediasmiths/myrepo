@@ -858,6 +858,33 @@
 	</xs:element>
 
 
+	<xs:element name="PurgeEventNotification">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation>Used to track purge related activity for reporting</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="IPEvent">
+					<xs:sequence>
+						<xs:choice>
+							<xs:element name="titleId" type="xs:string"/>
+							<xs:element name="materialId" type="xs:string"/>
+						</xs:choice>
+						<xs:element name="houseId" type="xs:string"/>
+						<xs:element name="assetType" type="xs:string" />
+						<xs:element name="purged" type="xs:boolean" />
+						<xs:element name="protected" type="xs:boolean" />
+						<xs:element name="extended" type="xs:boolean" />
+						<xs:element name="hasPurgeCandidateTask" type="xs:boolean" />
+						<xs:element name="purgeCandidateCreated" type="xs:dateTime" />
+						<xs:element name="purgeCandidateUpdated" type="xs:dateTime" />
+						<xs:element name="expires" type="xs:dateTime" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
 	<xs:element name="CreationComplete">
 		<xs:complexType>
 			<xs:complexContent>

@@ -64,7 +64,7 @@ public class ManualQCEntityDAOImpl extends HibernateDao<ManualQAEntity, String> 
 
 		if (m == null)
 		{
-			log.debug(String.format("New manual qa entry for material %s", materialID));
+			log.info(String.format("New manual qa entry for material %s", materialID));
 			m = new ManualQAEntity();
 			m.setMaterialid(materialID);
 			m.setTaskCreated(eventTime);

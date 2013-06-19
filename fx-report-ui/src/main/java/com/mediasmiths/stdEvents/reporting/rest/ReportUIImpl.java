@@ -12,6 +12,7 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.Purge;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.reporting.csv.AcquisitionRpt;
@@ -216,13 +217,16 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly = true)
 	private void getPurgeContentCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		List<EventEntity> purged = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", EventNames.PURGE_TITLE,
-				MAX, start, end);
-		purged.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", EventNames.DELETE_MATERIAL,
-				MAX, start, end));
-		purged.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", EventNames.DELETE_PACKAGE,
-				MAX, start, end));
-		purgeContent.writePurgeTitles(purged, start, end, reportName);
+
+		List<Purge> purgeEntities = queryApi.getPurgeEventsInDateRange(start, end);
+
+//		List<EventEntity> purged = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", EventNames.PURGE_TITLE,
+//				MAX, start, end);
+//		purged.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", EventNames.DELETE_MATERIAL,
+//				MAX, start, end));
+//		purged.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", EventNames.DELETE_PACKAGE,
+//				MAX, start, end));
+		purgeContent.writePurgeTitles(purgeEntities, start, end, reportName);
 	}
 
 	@Transactional(readOnly = true)
