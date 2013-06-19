@@ -15,7 +15,6 @@ import com.mediasmiths.foxtel.ip.common.events.EventAttachment;
 import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.QcServerFail;
 import com.mediasmiths.foxtel.ip.common.events.TcEvent;
-import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.foxtel.tc.priorities.TranscodePriorities;
@@ -82,6 +81,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	private static final String TC_EVENT_NAMESPACE = "http://www.foxtel.com.au/ip/tc";
 	private static final String QC_EVENT_NAMESPACE = "http://www.foxtel.com.au/ip/qc";
 	private static final String TX_EVENT_NAMESPACE = "http://www.foxtel.com.au/ip/delivery";
+
+	private static final String SEGMENT_XML_WRITE = "Segment XML Write";
 
 	private final static Logger log = Logger.getLogger(WFAdapterRestServiceImpl.class);
 
@@ -536,7 +537,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		String username = task.getAttributeAsString(Attribute.TASK_CREATED_BY);
 		Emailaddresses emails = null;
-		if (username != null)
+
+		if (username != null && !notification.isForTXDelivery()) //emails for tx delivery tasks do not go to the user who created the task
 		{
 			String email = String.format("%s@foxtel.com.au",username);
 			emails = new Emailaddresses();
@@ -683,28 +685,34 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	}
 
+
 	@Override
 	public void notifyTXDeliveryFailed(TXDeliveryFailure notification) throws MayamClientException
 	{
-		log.fatal(String.format(
-				"TX DELIVERY FAILURE FOR PACKAGE %s AT STAGE %s",
-				notification.getPackageID(),
-				notification.getStage()));
+		log.fatal(String.format("TX DELIVERY FAILURE FOR PACKAGE %s AT STAGE %s",
+		                        notification.getPackageID(),
+		                        notification.getStage()));
 
 		mayamClient.txDeliveryFailed(notification.getPackageID(), notification.getTaskID(), notification.getStage());
 
-		TxDelivered d = new TxDelivered();
-		d.setPackageId(notification.getPackageID());
-		d.setStage(notification.getStage());
-		d.setTaskId(notification.getTaskID() + "");
+		AttributeMap packageAttributes = mayamClient.getPackageAttributes(notification.getPackageID());
+		final Set<String> channelGroups = mayamClient.getChannelGroupsForPackage(notification.getPackageID());
+		String title = packageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
+
 
 		TcEvent tce = new TcEvent();
-		String packageID = notification.getPackageID();
-		tce.setPackageID(packageID);
-		AttributeMap packageAttributes = mayamClient.getPackageAttributes(packageID);
-		String title = packageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
+		tce.setPackageID(notification.getPackageID());
 		tce.setTitle(title);
-		events.saveEvent(TC_EVENT_NAMESPACE, EventNames.TRANSCODE_DELIVERY_FAILED, tce);
+		tce.withChannelGroup(channelGroups);
+
+		if (SEGMENT_XML_WRITE.equals(notification.getStage()))
+		{
+			events.saveEvent(TC_EVENT_NAMESPACE, EventNames.FAILED_TO_GENERATE_XML, tce);
+		}
+		else
+		{
+			events.saveEvent(TC_EVENT_NAMESPACE, EventNames.TRANSCODE_DELIVERY_FAILED, tce);
+		}
 	}
 
 	@Override
@@ -756,17 +764,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 		catch (IOException e)
 		{
-			TcEvent tce = new TcEvent();
-			tce.setPackageID(packageID);
-			AttributeMap packageAttributes = mayamClient.getPackageAttributes(packageID);
-			String materialID = packageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
-			final Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
 
-			String title = packageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
-			tce.setTitle(title);
-			tce.withChannelGroup(channelGroups);
-			events.saveEvent(TC_EVENT_NAMESPACE, EventNames.FAILED_TO_GENERATE_XML, tce);
-			
 			log.error(String.format("Error writing companion xml for package %s", packageID), e);
 			throw e;
 		}

@@ -907,7 +907,7 @@
     <vertices xmi:type="bpmn:Activity" xmi:id="_x0Nh8WuUEeK7FdvgH5F2kQ" iD="_x0Nh8GuUEeK7FdvgH5F2kQ" associations="_s0YzYLugEeKie49fOWHWlg" outgoingEdges="_ZPpS0W68EeKvjs-uExigJg" activityType="EventStartMessage">
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_szfbgbugEeKie49fOWHWlg"/>
     </vertices>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_q_dB0WxeEeKl4J7m4-ouog" iD="_q_dB0GxeEeKl4J7m4-ouog" outgoingEdges="_6Lo9gW7iEeKkE6ll_3FDMA" incomingEdges="__VqsAW7aEeKkE6ll_3FDMA" name="Segment XML Written Successfully"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_q_dB0WxeEeKl4J7m4-ouog" iD="_q_dB0GxeEeKl4J7m4-ouog" outgoingEdges="_6Lo9gW7iEeKkE6ll_3FDMA" incomingEdges="_BOrq8Ni5EeKdDOzgfCwuwA" name="Segment XML Written Successfully"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_VG570W68EeKvjs-uExigJg" iD="_VG570G68EeKvjs-uExigJg" outgoingEdges="_Zk5xIW68EeKvjs-uExigJg" incomingEdges="_ZPpS0W68EeKvjs-uExigJg" name="initialise variables"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_joJ-wW68EeKvjs-uExigJg" iD="_joJ-wG68EeKvjs-uExigJg" outgoingEdges="_nAl6MW68EeKvjs-uExigJg _n70zYW68EeKvjs-uExigJg" incomingEdges="_kt43wW68EeKvjs-uExigJg" activityType="GatewayDataBasedExclusive"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_lQsp4W68EeKvjs-uExigJg" iD="_lQsp4G68EeKvjs-uExigJg" outgoingEdges="_j5V5gXHqEeKIgPAPmx2ukA" incomingEdges="_nAl6MW68EeKvjs-uExigJg" name="cancelled"/>
@@ -997,7 +997,7 @@
           </eAnnotations>
         </associations>
       </artifacts>
-      <vertices xmi:type="bpmn:SubProcess" xmi:id="_pw62MbcdEeK0Y4003rhWzw" iD="_pw62MLcdEeK0Y4003rhWzw" outgoingEdges="_Fh1iEXFGEeKXOL1w3D1sTw">
+      <vertices xmi:type="bpmn:SubProcess" xmi:id="_pw62MbcdEeK0Y4003rhWzw" iD="_pw62MLcdEeK0Y4003rhWzw" outgoingEdges="_al38sdi5EeKdDOzgfCwuwA" incomingEdges="_W3XDkdi5EeKdDOzgfCwuwA">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_yAnbgLcdEeK0Y4003rhWzw" source="odeFailureHandlingSource">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_yAnbgbcdEeK0Y4003rhWzw" key="odeFailureRetryDelay" value="60"/>
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_yODakLcdEeK0Y4003rhWzw" key="odeFailureRetryFor" value="10"/>
@@ -1007,7 +1007,7 @@
           <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_o2oTIW7aEeKkE6ll_3FDMA"/>
         </vertices>
       </vertices>
-      <vertices xmi:type="bpmn:SubProcess" xmi:id="_47Q5cbcdEeK0Y4003rhWzw" iD="_47Q5cLcdEeK0Y4003rhWzw" incomingEdges="_Fh1iEXFGEeKXOL1w3D1sTw">
+      <vertices xmi:type="bpmn:SubProcess" xmi:id="_47Q5cbcdEeK0Y4003rhWzw" iD="_47Q5cLcdEeK0Y4003rhWzw" outgoingEdges="_W3XDkdi5EeKdDOzgfCwuwA">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AeVpULceEeK0Y4003rhWzw" source="odeFailureHandlingSource">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AeVpUbceEeK0Y4003rhWzw" key="odeFailureRetryDelay" value="60"/>
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AvlxYLceEeK0Y4003rhWzw" key="odeFailureRetryFor" value="10"/>
@@ -1017,7 +1017,9 @@
           <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_JWKvUHFGEeKXOL1w3D1sTw"/>
         </vertices>
       </vertices>
-      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_Fh1iEXFGEeKXOL1w3D1sTw" iD="_Fh1iEHFGEeKXOL1w3D1sTw"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_Yslf0di5EeKdDOzgfCwuwA" iD="_Yslf0Ni5EeKdDOzgfCwuwA" incomingEdges="_al38sdi5EeKdDOzgfCwuwA" name="record that segment write failed"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_W3XDkdi5EeKdDOzgfCwuwA" iD="_W3XDkNi5EeKdDOzgfCwuwA"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_al38sdi5EeKdDOzgfCwuwA" iD="_al38sNi5EeKdDOzgfCwuwA"/>
     </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_5K55QW7iEeKkE6ll_3FDMA" iD="_5K55QG7iEeKkE6ll_3FDMA" associations="_6-LNsG7iEeKkE6ll_3FDMA _7VObwG7iEeKkE6ll_3FDMA" outgoingEdges="_6icT8W7iEeKkE6ll_3FDMA" incomingEdges="_6Lo9gW7iEeKkE6ll_3FDMA" name="notify complete">
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_69450W7iEeKkE6ll_3FDMA"/>
@@ -1222,7 +1224,7 @@
     </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_gnnRQcFCEeK6DtOy-Yu5NA" iD="_gnnRQMFCEeK6DtOy-Yu5NA" outgoingEdges="_maG0UcFCEeK6DtOy-Yu5NA _mxOT0cFCEeK6DtOy-Yu5NA _nITXEcFCEeK6DtOy-Yu5NA" incomingEdges="_hh0PscFCEeK6DtOy-Yu5NA" activityType="GatewayDataBasedExclusive"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_jHkFgcFCEeK6DtOy-Yu5NA" iD="_jHkFgMFCEeK6DtOy-Yu5NA" outgoingEdges="_6mtQgcFCEeK6DtOy-Yu5NA" incomingEdges="_maG0UcFCEeK6DtOy-Yu5NA" name="finished"/>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_j7O-IcFCEeK6DtOy-Yu5NA" iD="_j7O-IMFCEeK6DtOy-Yu5NA" outgoingEdges="_GUXxgcFDEeK6DtOy-Yu5NA" incomingEdges="_mxOT0cFCEeK6DtOy-Yu5NA" name="failed"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_j7O-IcFCEeK6DtOy-Yu5NA" iD="_j7O-IMFCEeK6DtOy-Yu5NA" outgoingEdges="_P5J6ccFDEeK6DtOy-Yu5NA" incomingEdges="_mxOT0cFCEeK6DtOy-Yu5NA" name="failed"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_kqwWkcFCEeK6DtOy-Yu5NA" iD="_kqwWkMFCEeK6DtOy-Yu5NA" outgoingEdges="_pj-vUcFCEeK6DtOy-Yu5NA" incomingEdges="_nITXEcFCEeK6DtOy-Yu5NA" name="cancelled"/>
     <vertices xmi:type="bpmn:SubProcess" xmi:id="_oOZcccFCEeK6DtOy-Yu5NA" iD="_oOZccMFCEeK6DtOy-Yu5NA" outgoingEdges="_r_gWkcFCEeK6DtOy-Yu5NA" incomingEdges="_pj-vUcFCEeK6DtOy-Yu5NA">
       <artifacts xmi:type="bpmn:DataObject" xmi:id="_L06hkcFGEeK6DtOy-Yu5NA" iD="_L06hkMFGEeK6DtOy-Yu5NA">
@@ -1289,7 +1291,7 @@
         <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_ryZx4cFGEeK6DtOy-Yu5NA"/>
       </vertices>
     </vertices>
-    <vertices xmi:type="bpmn:SubProcess" xmi:id="_EHkiwcFDEeK6DtOy-Yu5NA" iD="_EHkiwMFDEeK6DtOy-Yu5NA" outgoingEdges="_NflbAcFDEeK6DtOy-Yu5NA" incomingEdges="_GUXxgcFDEeK6DtOy-Yu5NA">
+    <vertices xmi:type="bpmn:SubProcess" xmi:id="_EHkiwcFDEeK6DtOy-Yu5NA" iD="_EHkiwMFDEeK6DtOy-Yu5NA" outgoingEdges="_NflbAcFDEeK6DtOy-Yu5NA" incomingEdges="_P5J6ccFDEeK6DtOy-Yu5NA">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_hYKAkMFGEeK6DtOy-Yu5NA" source="odeFailureHandlingSource">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_hYKnoMFGEeK6DtOy-Yu5NA" key="odeFailureRetryDelay" value="60"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_hr7RIMFGEeK6DtOy-Yu5NA" key="odeFailureRetryFor" value="10"/>
@@ -1323,7 +1325,7 @@
         <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_b-1ygcFGEeK6DtOy-Yu5NA"/>
       </vertices>
     </vertices>
-    <vertices xmi:type="bpmn:SubProcess" xmi:id="_McBsQcFDEeK6DtOy-Yu5NA" iD="_McBsQMFDEeK6DtOy-Yu5NA" outgoingEdges="_P5J6ccFDEeK6DtOy-Yu5NA" incomingEdges="_NflbAcFDEeK6DtOy-Yu5NA">
+    <vertices xmi:type="bpmn:SubProcess" xmi:id="_McBsQcFDEeK6DtOy-Yu5NA" iD="_McBsQMFDEeK6DtOy-Yu5NA" outgoingEdges="_CmFtUdi6EeKdDOzgfCwuwA" incomingEdges="_NflbAcFDEeK6DtOy-Yu5NA">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_n293EMFGEeK6DtOy-Yu5NA" source="odeFailureHandlingSource">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_n293EcFGEeK6DtOy-Yu5NA" key="odeFailureRetryDelay" value="60"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_oE7akMFGEeK6DtOy-Yu5NA" key="odeFailureRetryFor" value="10"/>
@@ -1357,7 +1359,10 @@
         <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_lZHUkcFGEeK6DtOy-Yu5NA"/>
       </vertices>
     </vertices>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_PVWCwcFDEeK6DtOy-Yu5NA" iD="_PVWCwMFDEeK6DtOy-Yu5NA" incomingEdges="_P5J6ccFDEeK6DtOy-Yu5NA" activityType="EventEndEmpty"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_PVWCwcFDEeK6DtOy-Yu5NA" iD="_PVWCwMFDEeK6DtOy-Yu5NA" incomingEdges="_CmFtUdi6EeKdDOzgfCwuwA" activityType="EventEndEmpty"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_AZDDcdi5EeKdDOzgfCwuwA" iD="_AZDDcNi5EeKdDOzgfCwuwA" outgoingEdges="_BOrq8Ni5EeKdDOzgfCwuwA _Fgrrodi5EeKdDOzgfCwuwA" incomingEdges="__VqsAW7aEeKkE6ll_3FDMA" name="write successful?" activityType="GatewayDataBasedExclusive"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_DcXDcdi5EeKdDOzgfCwuwA" iD="_DcXDcNi5EeKdDOzgfCwuwA" outgoingEdges="_JSjawdi5EeKdDOzgfCwuwA" incomingEdges="_Fgrrodi5EeKdDOzgfCwuwA" name="segment write failed"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_IjWLYdi5EeKdDOzgfCwuwA" iD="_IjWLYNi5EeKdDOzgfCwuwA" incomingEdges="_JSjawdi5EeKdDOzgfCwuwA" activityType="EventEndEmpty"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_ZPpS0W68EeKvjs-uExigJg" iD="_ZPpS0G68EeKvjs-uExigJg"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_Zk5xIW68EeKvjs-uExigJg" iD="_Zk5xIG68EeKvjs-uExigJg"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_kt43wW68EeKvjs-uExigJg" iD="_kt43wG68EeKvjs-uExigJg"/>
@@ -1383,9 +1388,12 @@
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_r_gWkcFCEeK6DtOy-Yu5NA" iD="_r_gWkMFCEeK6DtOy-Yu5NA"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_6mtQgcFCEeK6DtOy-Yu5NA" iD="_6mtQgMFCEeK6DtOy-Yu5NA"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_CS3D4cFDEeK6DtOy-Yu5NA" iD="_CS3D4MFDEeK6DtOy-Yu5NA"/>
-    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_GUXxgcFDEeK6DtOy-Yu5NA" iD="_GUXxgMFDEeK6DtOy-Yu5NA"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_NflbAcFDEeK6DtOy-Yu5NA" iD="_NflbAMFDEeK6DtOy-Yu5NA"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_P5J6ccFDEeK6DtOy-Yu5NA" iD="_P5J6cMFDEeK6DtOy-Yu5NA"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_BOrq8Ni5EeKdDOzgfCwuwA" iD="_BOrD4Ni5EeKdDOzgfCwuwA" conditionType="Default" isDefault="true"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_Fgrrodi5EeKdDOzgfCwuwA" iD="_FgrroNi5EeKdDOzgfCwuwA"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_JSjawdi5EeKdDOzgfCwuwA" iD="_JSjawNi5EeKdDOzgfCwuwA"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_CmFtUdi6EeKdDOzgfCwuwA" iD="_CmFtUNi6EeKdDOzgfCwuwA"/>
   </pools>
   <pools xmi:type="bpmn:Pool" xmi:id="_Gm-mQWuVEeK7FdvgH5F2kQ" iD="_Gm-mQGuVEeK7FdvgH5F2kQ" name="WFAdapter  2">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_H14pYGuVEeK7FdvgH5F2kQ" source="executablepool">

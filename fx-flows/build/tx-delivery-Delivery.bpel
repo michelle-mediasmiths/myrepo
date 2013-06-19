@@ -17,8 +17,8 @@
     <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk3Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk3" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery"/>
     <bpel:partnerLink name="fS_AdapterAndDeliveryForHttpPortPlk0Var" partnerLinkType="TX_Delivery:FS_AdapterAndDeliveryForHttpPortPlk0" initializePartnerRole="yes" partnerRole="FS_Adapter_for_Delivery"/>
     <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk2Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk2" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery"/>
-    <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk6Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk6" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery"/>
     <bpel:partnerLink name="fS_AdapterAndDeliveryForHttpPortPlk1Var" partnerLinkType="TX_Delivery:FS_AdapterAndDeliveryForHttpPortPlk1" initializePartnerRole="yes" partnerRole="FS_Adapter_for_Delivery"/>
+    <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk6Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk6" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery"/>
     <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk7Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk7" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery"/>
     <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk5Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk5" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery"/>
     <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk4Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk4" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery"/>
@@ -42,6 +42,7 @@
     <bpel:variable name="getDeliveryLocationGetDeliveryLocationResponseMsg" messageType="getDeliveryLocation:getDeliveryLocation_output"/>
     <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest"/>
     <bpel:variable name="FxpTransferStatus" type="xs:string"/>
+    <bpel:variable name="SegmentWriteSuccess" type="xs:boolean"/>
   </bpel:variables>
   <bpel:sequence>
     <bpel:receive partnerLink="auto_QcAndDeliveryPlkVar" portType="this:ForAuto_QC" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_x0Nh8GuUEeK7FdvgH5F2kQ">
@@ -77,6 +78,10 @@
       <bpel:copy>
         <bpel:from>""</bpel:from>
         <bpel:to>$FxpTransferStatus</bpel:to>
+      </bpel:copy>
+      <bpel:copy>
+        <bpel:from>true()</bpel:from>
+        <bpel:to>$SegmentWriteSuccess</bpel:to>
       </bpel:copy>
     </bpel:assign>
     <bpel:scope bpmn:label="SubProcess" name="SubProcess" bpmn:id="_ENyd8LcbEeKdLrMPHFRfaw">
@@ -402,47 +407,7 @@
                             <bpel:variable name="moveMoveResponseMsg" messageType="move:move_output"/>
                           </bpel:variables>
                           <bpel:sequence>
-                            <bpel:scope bpmn:label="SubProcess" name="SubProcess-10" bpmn:id="_pw62MLcdEeK0Y4003rhWzw">
-                              <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
-                                <ext:retryFor>10</ext:retryFor>
-                                <ext:retryDelay>60</ext:retryDelay>
-                              </ext:failureHandling>
-                              <bpel:variables>
-                                <bpel:variable name="txDeliveryFailureTxDeliveryFailureResponseMsg" messageType="txDeliveryFailure:txDeliveryFailure_output"/>
-                                <bpel:variable name="txDeliveryFailureTxDeliveryFailureRequestMsg" messageType="txDeliveryFailure:txDeliveryFailure_input"/>
-                              </bpel:variables>
-                              <bpel:sequence>
-                                <bpel:assign name="init-variables-SubProcess" bpmn:id="_pw62MLcdEeK0Y4003rhWzw">
-                                  <bpel:copy bpmn:label="$txDeliveryFailureTxDeliveryFailureRequestMsg">
-                                    <bpel:from>
-                                      <bpel:literal>
-<tns:txDeliveryFailure>
-  <tns:packageID></tns:packageID>
-  <tns:stage></tns:stage>
-  <tns:taskID></tns:taskID>
-</tns:txDeliveryFailure></bpel:literal>
-                                    </bpel:from>
-                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body</bpel:to>
-                                  </bpel:copy>
-                                </bpel:assign>
-                                <bpel:assign bpmn:label="Notify Segment Write Failed" name="Notify_Segment_Write_Failed" bpmn:id="_pw8EULcdEeK0Y4003rhWzw">
-                                  <bpel:copy>
-                                    <bpel:from>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()</bpel:from>
-                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID</bpel:to>
-                                  </bpel:copy>
-                                  <bpel:copy>
-                                    <bpel:from>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()</bpel:from>
-                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID</bpel:to>
-                                  </bpel:copy>
-                                  <bpel:copy>
-                                    <bpel:from>"Segment XML Write"</bpel:from>
-                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage</bpel:to>
-                                  </bpel:copy>
-                                </bpel:assign>
-                                <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk6Var" portType="txDeliveryFailure:restInterface" operation="txDeliveryFailure" inputVariable="txDeliveryFailureTxDeliveryFailureRequestMsg" outputVariable="txDeliveryFailureTxDeliveryFailureResponseMsg" bpmn:label="Notify Segment Write Failed" name="Notify_Segment_Write_Failed-1" bpmn:id="_pw8EULcdEeK0Y4003rhWzw"></bpel:invoke>
-                              </bpel:sequence>
-                            </bpel:scope>
-                            <bpel:scope bpmn:label="SubProcess" name="SubProcess-11" bpmn:id="_47Q5cLcdEeK0Y4003rhWzw">
+                            <bpel:scope bpmn:label="SubProcess" name="SubProcess-10" bpmn:id="_47Q5cLcdEeK0Y4003rhWzw">
                               <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
                                 <ext:retryFor>10</ext:retryFor>
                                 <ext:retryDelay>60</ext:retryDelay>
@@ -477,6 +442,52 @@
                                 <bpel:invoke partnerLink="fS_AdapterAndDeliveryForHttpPortPlk1Var" portType="move:restInterface" operation="move" inputVariable="moveMoveRequestMsg" outputVariable="moveMoveResponseMsg" bpmn:label="move transcoded media to quarrentine" name="move_transcoded_media_to_quarrentine-1" bpmn:id="_47SuoLcdEeK0Y4003rhWzw"></bpel:invoke>
                               </bpel:sequence>
                             </bpel:scope>
+                            <bpel:scope bpmn:label="SubProcess" name="SubProcess-11" bpmn:id="_pw62MLcdEeK0Y4003rhWzw">
+                              <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                                <ext:retryFor>10</ext:retryFor>
+                                <ext:retryDelay>60</ext:retryDelay>
+                              </ext:failureHandling>
+                              <bpel:variables>
+                                <bpel:variable name="txDeliveryFailureTxDeliveryFailureResponseMsg" messageType="txDeliveryFailure:txDeliveryFailure_output"/>
+                                <bpel:variable name="txDeliveryFailureTxDeliveryFailureRequestMsg" messageType="txDeliveryFailure:txDeliveryFailure_input"/>
+                              </bpel:variables>
+                              <bpel:sequence>
+                                <bpel:assign name="init-variables-SubProcess" bpmn:id="_pw62MLcdEeK0Y4003rhWzw">
+                                  <bpel:copy bpmn:label="$txDeliveryFailureTxDeliveryFailureRequestMsg">
+                                    <bpel:from>
+                                      <bpel:literal>
+<tns:txDeliveryFailure>
+  <tns:packageID></tns:packageID>
+  <tns:stage></tns:stage>
+  <tns:taskID></tns:taskID>
+</tns:txDeliveryFailure></bpel:literal>
+                                    </bpel:from>
+                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body</bpel:to>
+                                  </bpel:copy>
+                                </bpel:assign>
+                                <bpel:assign bpmn:label="Notify Segment Write Failed" name="Notify_Segment_Write_Failed" bpmn:id="_pw8EULcdEeK0Y4003rhWzw">
+                                  <bpel:copy>
+                                    <bpel:from>"Segment XML Write"</bpel:from>
+                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage</bpel:to>
+                                  </bpel:copy>
+                                  <bpel:copy>
+                                    <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID</bpel:to>
+                                  </bpel:copy>
+                                  <bpel:copy>
+                                    <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID</bpel:to>
+                                  </bpel:copy>
+                                </bpel:assign>
+                                <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk6Var" portType="txDeliveryFailure:restInterface" operation="txDeliveryFailure" inputVariable="txDeliveryFailureTxDeliveryFailureRequestMsg" outputVariable="txDeliveryFailureTxDeliveryFailureResponseMsg" bpmn:label="Notify Segment Write Failed" name="Notify_Segment_Write_Failed-1" bpmn:id="_pw8EULcdEeK0Y4003rhWzw"></bpel:invoke>
+                              </bpel:sequence>
+                            </bpel:scope>
+                            <bpel:assign bpmn:label="record that segment write failed" name="record_that_segment_write_failed" bpmn:id="_Yslf0Ni5EeKdDOzgfCwuwA">
+                              <bpel:copy>
+                                <bpel:from>false()</bpel:from>
+                                <bpel:to>$SegmentWriteSuccess</bpel:to>
+                              </bpel:copy>
+                            </bpel:assign>
                           </bpel:sequence>
                         </bpel:scope>
                       </bpel:catchAll>
@@ -500,19 +511,30 @@
                       <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk7Var" portType="writeSegmentXML:restInterface" operation="writeSegmentXML" inputVariable="writeSegmentXMLWriteSegmentXMLRequestMsg" outputVariable="writeSegmentXMLWriteSegmentXMLResponseMsg" bpmn:label="write segment xml" name="write_segment_xml-1" bpmn:id="_aHhaYG7aEeKkE6ll_3FDMA"></bpel:invoke>
                     </bpel:sequence>
                   </bpel:scope>
-                  <bpel:empty bpmn:label="Segment XML Written Successfully" name="Segment_XML_Written_Successfully" bpmn:id="_q_dB0GxeEeKl4J7m4-ouog"/>
-                  <bpel:assign bpmn:label="notify complete" name="notify_complete" bpmn:id="_5K55QG7iEeKkE6ll_3FDMA">
-                    <bpel:copy>
-                      <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
-                      <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID</bpel:to>
-                    </bpel:copy>
-                    <bpel:copy>
-                      <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
-                      <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID</bpel:to>
-                    </bpel:copy>
-                  </bpel:assign>
-                  <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk5Var" portType="txDeliveryComplete:restInterface" operation="txDeliveryComplete" inputVariable="txDeliveryCompleteTxDeliveryCompleteRequestMsg" outputVariable="txDeliveryCompleteTxDeliveryCompleteResponseMsg" bpmn:label="notify complete" name="notify_complete-1" bpmn:id="_5K55QG7iEeKkE6ll_3FDMA"></bpel:invoke>
-                  <bpel:empty bpmn:label="Message_End_Event" name="Message_End_Event" bpmn:id="_sjGPwG7YEeKkE6ll_3FDMA"/>
+                  <bpel:if>
+                    <bpel:condition>$SegmentWriteSuccess = false()</bpel:condition>
+                    <bpel:sequence>
+                      <bpel:empty bpmn:label="segment write failed" name="segment_write_failed" bpmn:id="_DcXDcNi5EeKdDOzgfCwuwA"/>
+                      <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event-1" bpmn:id="_IjWLYNi5EeKdDOzgfCwuwA"/>
+                    </bpel:sequence>
+                    <bpel:else>
+                      <bpel:sequence>
+                        <bpel:empty bpmn:label="Segment XML Written Successfully" name="Segment_XML_Written_Successfully" bpmn:id="_q_dB0GxeEeKl4J7m4-ouog"/>
+                        <bpel:assign bpmn:label="notify complete" name="notify_complete" bpmn:id="_5K55QG7iEeKkE6ll_3FDMA">
+                          <bpel:copy>
+                            <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+                            <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID</bpel:to>
+                          </bpel:copy>
+                          <bpel:copy>
+                            <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                            <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID</bpel:to>
+                          </bpel:copy>
+                        </bpel:assign>
+                        <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk5Var" portType="txDeliveryComplete:restInterface" operation="txDeliveryComplete" inputVariable="txDeliveryCompleteTxDeliveryCompleteRequestMsg" outputVariable="txDeliveryCompleteTxDeliveryCompleteResponseMsg" bpmn:label="notify complete" name="notify_complete-1" bpmn:id="_5K55QG7iEeKkE6ll_3FDMA"></bpel:invoke>
+                        <bpel:empty bpmn:label="Message_End_Event" name="Message_End_Event" bpmn:id="_sjGPwG7YEeKkE6ll_3FDMA"/>
+                      </bpel:sequence>
+                    </bpel:else>
+                  </bpel:if>
                 </bpel:sequence>
                 <bpel:elseif>
                   <bpel:condition>$TaskIsCancelled = true()</bpel:condition>
@@ -544,7 +566,7 @@
                         <bpel:invoke partnerLink="fS_AdapterAndDeliveryForHttpPortPlk0Var" portType="delete:restInterface" operation="delete" inputVariable="deleteDeleteRequestMsg" outputVariable="deleteDeleteResponseMsg" bpmn:label="Delete Media" name="Delete_Media-3" bpmn:id="_oOfjEMFCEeK6DtOy-Yu5NA"></bpel:invoke>
                       </bpel:sequence>
                     </bpel:scope>
-                    <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event-1" bpmn:id="_rW--AMFCEeK6DtOy-Yu5NA"/>
+                    <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event-2" bpmn:id="_rW--AMFCEeK6DtOy-Yu5NA"/>
                   </bpel:sequence>
                 </bpel:elseif>
                 <bpel:else>
@@ -625,7 +647,7 @@
                         <bpel:invoke partnerLink="fS_AdapterAndDeliveryForHttpPortPlk1Var" portType="move:restInterface" operation="move" inputVariable="moveMoveRequestMsg" outputVariable="moveMoveResponseMsg" bpmn:label="quarrentine media" name="quarrentine_media-1" bpmn:id="_McGkwMFDEeK6DtOy-Yu5NA"></bpel:invoke>
                       </bpel:sequence>
                     </bpel:scope>
-                    <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event-2" bpmn:id="_PVWCwMFDEeK6DtOy-Yu5NA"/>
+                    <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event-3" bpmn:id="_PVWCwMFDEeK6DtOy-Yu5NA"/>
                   </bpel:sequence>
                 </bpel:else>
               </bpel:if>
@@ -654,47 +676,7 @@
                           <bpel:variable name="moveMoveResponseMsg" messageType="move:move_output"/>
                         </bpel:variables>
                         <bpel:sequence>
-                          <bpel:scope bpmn:label="SubProcess" name="SubProcess-17" bpmn:id="_pw62MLcdEeK0Y4003rhWzw">
-                            <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
-                              <ext:retryFor>10</ext:retryFor>
-                              <ext:retryDelay>60</ext:retryDelay>
-                            </ext:failureHandling>
-                            <bpel:variables>
-                              <bpel:variable name="txDeliveryFailureTxDeliveryFailureResponseMsg" messageType="txDeliveryFailure:txDeliveryFailure_output"/>
-                              <bpel:variable name="txDeliveryFailureTxDeliveryFailureRequestMsg" messageType="txDeliveryFailure:txDeliveryFailure_input"/>
-                            </bpel:variables>
-                            <bpel:sequence>
-                              <bpel:assign name="init-variables-SubProcess" bpmn:id="_pw62MLcdEeK0Y4003rhWzw">
-                                <bpel:copy bpmn:label="$txDeliveryFailureTxDeliveryFailureRequestMsg">
-                                  <bpel:from>
-                                    <bpel:literal>
-<tns:txDeliveryFailure>
-  <tns:packageID></tns:packageID>
-  <tns:stage></tns:stage>
-  <tns:taskID></tns:taskID>
-</tns:txDeliveryFailure></bpel:literal>
-                                  </bpel:from>
-                                  <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body</bpel:to>
-                                </bpel:copy>
-                              </bpel:assign>
-                              <bpel:assign bpmn:label="Notify Segment Write Failed" name="Notify_Segment_Write_Failed-2" bpmn:id="_pw8EULcdEeK0Y4003rhWzw">
-                                <bpel:copy>
-                                  <bpel:from>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()</bpel:from>
-                                  <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID</bpel:to>
-                                </bpel:copy>
-                                <bpel:copy>
-                                  <bpel:from>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()</bpel:from>
-                                  <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID</bpel:to>
-                                </bpel:copy>
-                                <bpel:copy>
-                                  <bpel:from>"Segment XML Write"</bpel:from>
-                                  <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage</bpel:to>
-                                </bpel:copy>
-                              </bpel:assign>
-                              <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk6Var" portType="txDeliveryFailure:restInterface" operation="txDeliveryFailure" inputVariable="txDeliveryFailureTxDeliveryFailureRequestMsg" outputVariable="txDeliveryFailureTxDeliveryFailureResponseMsg" bpmn:label="Notify Segment Write Failed" name="Notify_Segment_Write_Failed-3" bpmn:id="_pw8EULcdEeK0Y4003rhWzw"></bpel:invoke>
-                            </bpel:sequence>
-                          </bpel:scope>
-                          <bpel:scope bpmn:label="SubProcess" name="SubProcess-18" bpmn:id="_47Q5cLcdEeK0Y4003rhWzw">
+                          <bpel:scope bpmn:label="SubProcess" name="SubProcess-17" bpmn:id="_47Q5cLcdEeK0Y4003rhWzw">
                             <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
                               <ext:retryFor>10</ext:retryFor>
                               <ext:retryDelay>60</ext:retryDelay>
@@ -729,6 +711,52 @@
                               <bpel:invoke partnerLink="fS_AdapterAndDeliveryForHttpPortPlk1Var" portType="move:restInterface" operation="move" inputVariable="moveMoveRequestMsg" outputVariable="moveMoveResponseMsg" bpmn:label="move transcoded media to quarrentine" name="move_transcoded_media_to_quarrentine-3" bpmn:id="_47SuoLcdEeK0Y4003rhWzw"></bpel:invoke>
                             </bpel:sequence>
                           </bpel:scope>
+                          <bpel:scope bpmn:label="SubProcess" name="SubProcess-18" bpmn:id="_pw62MLcdEeK0Y4003rhWzw">
+                            <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                              <ext:retryFor>10</ext:retryFor>
+                              <ext:retryDelay>60</ext:retryDelay>
+                            </ext:failureHandling>
+                            <bpel:variables>
+                              <bpel:variable name="txDeliveryFailureTxDeliveryFailureResponseMsg" messageType="txDeliveryFailure:txDeliveryFailure_output"/>
+                              <bpel:variable name="txDeliveryFailureTxDeliveryFailureRequestMsg" messageType="txDeliveryFailure:txDeliveryFailure_input"/>
+                            </bpel:variables>
+                            <bpel:sequence>
+                              <bpel:assign name="init-variables-SubProcess" bpmn:id="_pw62MLcdEeK0Y4003rhWzw">
+                                <bpel:copy bpmn:label="$txDeliveryFailureTxDeliveryFailureRequestMsg">
+                                  <bpel:from>
+                                    <bpel:literal>
+<tns:txDeliveryFailure>
+  <tns:packageID></tns:packageID>
+  <tns:stage></tns:stage>
+  <tns:taskID></tns:taskID>
+</tns:txDeliveryFailure></bpel:literal>
+                                  </bpel:from>
+                                  <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body</bpel:to>
+                                </bpel:copy>
+                              </bpel:assign>
+                              <bpel:assign bpmn:label="Notify Segment Write Failed" name="Notify_Segment_Write_Failed-2" bpmn:id="_pw8EULcdEeK0Y4003rhWzw">
+                                <bpel:copy>
+                                  <bpel:from>"Segment XML Write"</bpel:from>
+                                  <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage</bpel:to>
+                                </bpel:copy>
+                                <bpel:copy>
+                                  <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+                                  <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID</bpel:to>
+                                </bpel:copy>
+                                <bpel:copy>
+                                  <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                                  <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID</bpel:to>
+                                </bpel:copy>
+                              </bpel:assign>
+                              <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk6Var" portType="txDeliveryFailure:restInterface" operation="txDeliveryFailure" inputVariable="txDeliveryFailureTxDeliveryFailureRequestMsg" outputVariable="txDeliveryFailureTxDeliveryFailureResponseMsg" bpmn:label="Notify Segment Write Failed" name="Notify_Segment_Write_Failed-3" bpmn:id="_pw8EULcdEeK0Y4003rhWzw"></bpel:invoke>
+                            </bpel:sequence>
+                          </bpel:scope>
+                          <bpel:assign bpmn:label="record that segment write failed" name="record_that_segment_write_failed-1" bpmn:id="_Yslf0Ni5EeKdDOzgfCwuwA">
+                            <bpel:copy>
+                              <bpel:from>false()</bpel:from>
+                              <bpel:to>$SegmentWriteSuccess</bpel:to>
+                            </bpel:copy>
+                          </bpel:assign>
                         </bpel:sequence>
                       </bpel:scope>
                     </bpel:catchAll>
@@ -752,19 +780,30 @@
                     <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk7Var" portType="writeSegmentXML:restInterface" operation="writeSegmentXML" inputVariable="writeSegmentXMLWriteSegmentXMLRequestMsg" outputVariable="writeSegmentXMLWriteSegmentXMLResponseMsg" bpmn:label="write segment xml" name="write_segment_xml-3" bpmn:id="_aHhaYG7aEeKkE6ll_3FDMA"></bpel:invoke>
                   </bpel:sequence>
                 </bpel:scope>
-                <bpel:empty bpmn:label="Segment XML Written Successfully" name="Segment_XML_Written_Successfully-1" bpmn:id="_q_dB0GxeEeKl4J7m4-ouog"/>
-                <bpel:assign bpmn:label="notify complete" name="notify_complete-2" bpmn:id="_5K55QG7iEeKkE6ll_3FDMA">
-                  <bpel:copy>
-                    <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
-                    <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID</bpel:to>
-                  </bpel:copy>
-                  <bpel:copy>
-                    <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
-                    <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID</bpel:to>
-                  </bpel:copy>
-                </bpel:assign>
-                <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk5Var" portType="txDeliveryComplete:restInterface" operation="txDeliveryComplete" inputVariable="txDeliveryCompleteTxDeliveryCompleteRequestMsg" outputVariable="txDeliveryCompleteTxDeliveryCompleteResponseMsg" bpmn:label="notify complete" name="notify_complete-3" bpmn:id="_5K55QG7iEeKkE6ll_3FDMA"></bpel:invoke>
-                <bpel:empty bpmn:label="Message_End_Event" name="Message_End_Event-1" bpmn:id="_sjGPwG7YEeKkE6ll_3FDMA"/>
+                <bpel:if>
+                  <bpel:condition>$SegmentWriteSuccess = false()</bpel:condition>
+                  <bpel:sequence>
+                    <bpel:empty bpmn:label="segment write failed" name="segment_write_failed-1" bpmn:id="_DcXDcNi5EeKdDOzgfCwuwA"/>
+                    <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event-4" bpmn:id="_IjWLYNi5EeKdDOzgfCwuwA"/>
+                  </bpel:sequence>
+                  <bpel:else>
+                    <bpel:sequence>
+                      <bpel:empty bpmn:label="Segment XML Written Successfully" name="Segment_XML_Written_Successfully-1" bpmn:id="_q_dB0GxeEeKl4J7m4-ouog"/>
+                      <bpel:assign bpmn:label="notify complete" name="notify_complete-2" bpmn:id="_5K55QG7iEeKkE6ll_3FDMA">
+                        <bpel:copy>
+                          <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+                          <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                          <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID</bpel:to>
+                        </bpel:copy>
+                      </bpel:assign>
+                      <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk5Var" portType="txDeliveryComplete:restInterface" operation="txDeliveryComplete" inputVariable="txDeliveryCompleteTxDeliveryCompleteRequestMsg" outputVariable="txDeliveryCompleteTxDeliveryCompleteResponseMsg" bpmn:label="notify complete" name="notify_complete-3" bpmn:id="_5K55QG7iEeKkE6ll_3FDMA"></bpel:invoke>
+                      <bpel:empty bpmn:label="Message_End_Event" name="Message_End_Event-1" bpmn:id="_sjGPwG7YEeKkE6ll_3FDMA"/>
+                    </bpel:sequence>
+                  </bpel:else>
+                </bpel:if>
               </bpel:sequence>
             </bpel:else>
           </bpel:if>

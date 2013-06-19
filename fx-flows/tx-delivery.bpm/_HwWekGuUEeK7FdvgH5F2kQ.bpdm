@@ -89,6 +89,7 @@
             <bpel:variable name="getDeliveryLocationGetDeliveryLocationResponseMsg" messageType="getDeliveryLocation:getDeliveryLocation_output" binding="getDeliveryLocation:restBinding" operation="getDeliveryLocation" opMsgType="0" bpdm:id="_JwITFWuWEeK7FdvgH5F2kQ"/>
             <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest" bpdm:id="_s0IUsLugEeKie49fOWHWlg" bpdm:messageIds="inc:_szfbgLugEeKie49fOWHWlg"/>
             <bpel:variable name="FxpTransferStatus" type="xs:string"/>
+            <bpel:variable name="SegmentWriteSuccess" type="xs:boolean"/>
         </bpel:variables>
         <bpel:sequence>
             <bpdm:messagingtask eventType="start: message" operation="EventStartMessage" partnerLink="auto_QcAndDeliveryPlkVar" portType="this:ForAuto_QC" isMyRole="true" enableSharing="false" bpdm:label="Message_Start_Event" bpdm:ID="_x0Nh8GuUEeK7FdvgH5F2kQ">
@@ -113,6 +114,10 @@
                     <bpel:copy>
                         <bpel:from>""</bpel:from>
                         <bpel:to>$FxpTransferStatus</bpel:to><mapper:mapperLink><mapper:vertice id="10106840" targetPath="$FxpTransferStatus" targetedBy="31014037-arg0"></mapper:vertice><mapper:vertice id="31014037" dimension="78x24" location="839,716"><mapper:value>""</mapper:value></mapper:vertice></mapper:mapperLink>
+                    </bpel:copy>
+                    <bpel:copy>
+                        <bpel:from>true()</bpel:from>
+                        <bpel:to>$SegmentWriteSuccess</bpel:to><mapper:mapperLink><mapper:vertice id="20604790" targetPath="$SegmentWriteSuccess" targetedBy="27914757-arg0"></mapper:vertice><mapper:vertice id="27914757" dimension="78x24" location="410,577"><mapper:value>true()</mapper:value></mapper:vertice></mapper:mapperLink>
                     </bpel:copy>
                 </bpdm:linkset>
             </bpdm:messagingtask>
@@ -237,36 +242,6 @@
                                                 <bpel:variable name="moveMoveResponseMsg" messageType="move:move_output" binding="move:restBinding" operation="move" opMsgType="1" bpdm:id="_JWam9XFGEeKXOL1w3D1sTw"/>
                                             </bpel:variables>
                                             <bpel:sequence>
-                                                <bpel:scope bpdm:label="SubProcess" bpdm:ID="_pw62MLcdEeK0Y4003rhWzw" bpdm:retryFor="10" bpdm:retryDelay="60">
-                                                    <bpel:variables>
-                                                        <bpel:variable name="txDeliveryFailureTxDeliveryFailureResponseMsg" messageType="txDeliveryFailure:txDeliveryFailure_output" binding="txDeliveryFailure:restBinding" operation="txDeliveryFailure" opMsgType="1" bpdm:messageIds="inc:_o2oTIG7aEeKkE6ll_3FDMA"/>
-                                                        <bpel:variable name="txDeliveryFailureTxDeliveryFailureRequestMsg" messageType="txDeliveryFailure:txDeliveryFailure_input" binding="txDeliveryFailure:restBinding" operation="txDeliveryFailure" opMsgType="0" bpdm:messageIds=" out:_od-ikG7aEeKkE6ll_3FDMA">
-                                                            <bpel:from bpdm:toPart="body">
-                                                                <bpel:literal bpdm:linkedMessageType="txDeliveryFailure:txDeliveryFailure_input" bpdm:linkedPart="body" bpdm:binding="txDeliveryFailure:restBinding" bpdm:opMsgType="0" bpdm:operation="txDeliveryFailure"></bpel:literal>
-                                                            </bpel:from>
-                                                        </bpel:variable>
-                                                    </bpel:variables>
-                                                    <bpel:sequence>
-                                                        <bpdm:messagingtask operation="txDeliveryFailure" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk6Var" portType="txDeliveryFailure:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Notify Segment Write Failed" bpdm:ID="_pw8EULcdEeK0Y4003rhWzw">
-                                                            <bpdm:linkset bpdm:type="assignments">
-                                                                <bpel:copy>
-                                                                    <bpel:from>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()</bpel:from>
-                                                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="29110880" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID/text()" targetedBy="11985921-arg0"></mapper:vertice><mapper:vertice id="11985921" sourcePath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()"></mapper:vertice></mapper:mapperLink>
-                                                                </bpel:copy>
-                                                                <bpel:copy>
-                                                                    <bpel:from>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()</bpel:from>
-                                                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="17829720" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID/text()" targetedBy="18978161-arg0"></mapper:vertice><mapper:vertice id="18978161" sourcePath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
-                                                                </bpel:copy>
-                                                                <bpel:copy>
-                                                                    <bpel:from>"Segment XML Write"</bpel:from>
-                                                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage/text()</bpel:to><mapper:mapperLink><mapper:vertice id="11115322" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage/text()" targetedBy="22113811-arg0"></mapper:vertice><mapper:vertice id="22113811" dimension="78x24" location="626,603"><mapper:value>"Segment XML Write"</mapper:value></mapper:vertice></mapper:mapperLink>
-                                                                </bpel:copy>
-                                                            </bpdm:linkset>
-                                                            <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_input" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_od-ikG7aEeKkE6ll_3FDMA"></bpdm:linkset>
-                                                            <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_output" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_o2oTIG7aEeKkE6ll_3FDMA"></bpdm:linkset>
-                                                        </bpdm:messagingtask>
-                                                    </bpel:sequence>
-                                                </bpel:scope>
                                                 <bpel:scope bpdm:label="SubProcess" bpdm:ID="_47Q5cLcdEeK0Y4003rhWzw" bpdm:retryFor="10" bpdm:retryDelay="60">
                                                     <bpel:variables>
                                                         <bpel:variable name="moveMoveResponseMsg" messageType="move:move_output" binding="move:restBinding" operation="move" opMsgType="1" bpdm:messageIds="inc:_JWKIQHFGEeKXOL1w3D1sTw"/>
@@ -293,6 +268,52 @@
                                                         </bpdm:messagingtask>
                                                     </bpel:sequence>
                                                 </bpel:scope>
+                                                <bpel:scope bpdm:label="SubProcess" bpdm:ID="_pw62MLcdEeK0Y4003rhWzw" bpdm:retryFor="10" bpdm:retryDelay="60">
+                                                    <bpel:variables>
+                                                        <bpel:variable name="txDeliveryFailureTxDeliveryFailureResponseMsg" messageType="txDeliveryFailure:txDeliveryFailure_output" binding="txDeliveryFailure:restBinding" operation="txDeliveryFailure" opMsgType="1" bpdm:messageIds="inc:_o2oTIG7aEeKkE6ll_3FDMA"/>
+                                                        <bpel:variable name="txDeliveryFailureTxDeliveryFailureRequestMsg" messageType="txDeliveryFailure:txDeliveryFailure_input" binding="txDeliveryFailure:restBinding" operation="txDeliveryFailure" opMsgType="0" bpdm:messageIds=" out:_od-ikG7aEeKkE6ll_3FDMA">
+                                                            <bpel:from bpdm:toPart="body">
+                                                                <bpel:literal bpdm:linkedMessageType="txDeliveryFailure:txDeliveryFailure_input" bpdm:linkedPart="body" bpdm:binding="txDeliveryFailure:restBinding" bpdm:opMsgType="0" bpdm:operation="txDeliveryFailure"></bpel:literal>
+                                                            </bpel:from>
+                                                        </bpel:variable>
+                                                    </bpel:variables>
+                                                    <bpel:sequence>
+                                                        <bpdm:messagingtask operation="txDeliveryFailure" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk6Var" portType="txDeliveryFailure:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Notify Segment Write Failed" bpdm:ID="_pw8EULcdEeK0Y4003rhWzw">
+                                                            <bpdm:linkset bpdm:type="assignments">
+                                                                <bpel:copy>
+                                                                    <bpel:from>"Segment XML Write"</bpel:from>
+                                                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage/text()</bpel:to><mapper:mapperLink><mapper:vertice id="19098932" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage/text()" targetedBy="23582439-arg0"></mapper:vertice><mapper:vertice id="23582439" dimension="109x24" location="480,576"><mapper:value>"Segment XML Write"</mapper:value></mapper:vertice></mapper:mapperLink>
+                                                                </bpel:copy>
+                                                                <bpel:copy>
+                                                                    <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+                                                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="17071695" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID/text()" targetedBy="17345494-arg0"></mapper:vertice>
+  <mapper:vertice id="17345494" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice>
+</mapper:mapperLink>
+                                                                </bpel:copy>
+                                                                <bpel:copy>
+                                                                    <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                                                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="17661745" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID/text()" targetedBy="17191772-arg0"></mapper:vertice>
+  <mapper:vertice id="17191772" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice>
+</mapper:mapperLink>
+                                                                </bpel:copy>
+                                                            </bpdm:linkset>
+                                                            <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_input" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_od-ikG7aEeKkE6ll_3FDMA"></bpdm:linkset>
+                                                            <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_output" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_o2oTIG7aEeKkE6ll_3FDMA"></bpdm:linkset>
+                                                        </bpdm:messagingtask>
+                                                    </bpel:sequence>
+                                                </bpel:scope>
+                                                <bpdm:messagingtask bpdm:label="record that segment write failed" bpdm:ID="_Yslf0Ni5EeKdDOzgfCwuwA">
+                                                    <bpdm:linkset bpdm:type="assignments">
+                                                        <bpel:copy>
+                                                            <bpel:from>false()</bpel:from>
+                                                            <bpel:to>$SegmentWriteSuccess</bpel:to><mapper:mapperLink><mapper:vertice id="16680031" targetPath="$SegmentWriteSuccess" targetedBy="15533570-arg0"></mapper:vertice><mapper:vertice id="15533570" dimension="78x24" location="325,571"><mapper:value>false()</mapper:value></mapper:vertice></mapper:mapperLink>
+                                                        </bpel:copy>
+                                                    </bpdm:linkset>
+                                                </bpdm:messagingtask>
                                             </bpel:sequence>
                                         </bpel:scope>
                                     </bpel:catchAll>
@@ -310,22 +331,34 @@
                                     </bpdm:messagingtask>
                                 </bpel:sequence>
                             </bpel:scope>
-                            <bpdm:messagingtask bpdm:label="Segment XML Written Successfully" bpdm:ID="_q_dB0GxeEeKl4J7m4-ouog"></bpdm:messagingtask>
-                            <bpdm:messagingtask operation="txDeliveryComplete" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk5Var" portType="txDeliveryComplete:restInterface" isMyRole="false" enableSharing="false" bpdm:label="notify complete" bpdm:ID="_5K55QG7iEeKkE6ll_3FDMA">
-                                <bpdm:linkset bpdm:type="assignments">
-                                    <bpel:copy>
-                                        <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
-                                        <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="12534988" targetPath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()" targetedBy="3402296-arg0"></mapper:vertice><mapper:vertice id="3402296" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice></mapper:mapperLink>
-                                    </bpel:copy>
-                                    <bpel:copy>
-                                        <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
-                                        <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="1490260" targetPath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()" targetedBy="5270776-arg0"></mapper:vertice><mapper:vertice id="5270776" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
-                                    </bpel:copy>
+                            <bpdm:gateway bpdm:label="write successful?" bpdm:ID="_AZDDcNi5EeKdDOzgfCwuwA" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
+                                <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_BOrD4Ni5EeKdDOzgfCwuwA" bpdm:targetDisplayName="default"></bpdm:linkset>
+                                <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_FgrroNi5EeKdDOzgfCwuwA" bpdm:targetDisplayName="[write successful? - segment write failed]">
+                                    <bpel:condition>$SegmentWriteSuccess = false()<mapper:mapperLink><mapper:vertice id="6084103" targetPath="$condition" targetedBy="30647226-arg2"></mapper:vertice><mapper:vertice id="30647226" dimension="78x24" location="319,554"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="26544947" sourcePath="$SegmentWriteSuccess" targetedBy="30647226-arg0"></mapper:vertice><mapper:vertice id="14165488" dimension="78x24" location="230,593" targetedBy="30647226-arg1"><mapper:value>false()</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
                                 </bpdm:linkset>
-                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="txDeliveryCompleteTxDeliveryCompleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryComplete:txDeliveryComplete_input" bpdm:binding="txDeliveryComplete:restBinding" bpdm:ID="_69450G7iEeKkE6ll_3FDMA"></bpdm:linkset>
-                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="txDeliveryCompleteTxDeliveryCompleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryComplete:txDeliveryComplete_output" bpdm:binding="txDeliveryComplete:restBinding" bpdm:ID="_7UteYG7iEeKkE6ll_3FDMA"></bpdm:linkset>
-                            </bpdm:messagingtask>
-                            <bpdm:messagingtask eventType="end: message" bpdm:label="Message_End_Event" bpdm:ID="_sjGPwG7YEeKkE6ll_3FDMA"></bpdm:messagingtask>
+                                <bpel:sequence>
+                                    <bpdm:messagingtask bpdm:label="Segment XML Written Successfully" bpdm:ID="_q_dB0GxeEeKl4J7m4-ouog"></bpdm:messagingtask>
+                                    <bpdm:messagingtask operation="txDeliveryComplete" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk5Var" portType="txDeliveryComplete:restInterface" isMyRole="false" enableSharing="false" bpdm:label="notify complete" bpdm:ID="_5K55QG7iEeKkE6ll_3FDMA">
+                                        <bpdm:linkset bpdm:type="assignments">
+                                            <bpel:copy>
+                                                <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+                                                <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="12534988" targetPath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()" targetedBy="3402296-arg0"></mapper:vertice><mapper:vertice id="3402296" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice></mapper:mapperLink>
+                                            </bpel:copy>
+                                            <bpel:copy>
+                                                <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                                                <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="1490260" targetPath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()" targetedBy="5270776-arg0"></mapper:vertice><mapper:vertice id="5270776" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
+                                            </bpel:copy>
+                                        </bpdm:linkset>
+                                        <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="txDeliveryCompleteTxDeliveryCompleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryComplete:txDeliveryComplete_input" bpdm:binding="txDeliveryComplete:restBinding" bpdm:ID="_69450G7iEeKkE6ll_3FDMA"></bpdm:linkset>
+                                        <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="txDeliveryCompleteTxDeliveryCompleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryComplete:txDeliveryComplete_output" bpdm:binding="txDeliveryComplete:restBinding" bpdm:ID="_7UteYG7iEeKkE6ll_3FDMA"></bpdm:linkset>
+                                    </bpdm:messagingtask>
+                                    <bpdm:messagingtask eventType="end: message" bpdm:label="Message_End_Event" bpdm:ID="_sjGPwG7YEeKkE6ll_3FDMA"></bpdm:messagingtask>
+                                </bpel:sequence>
+                                <bpel:sequence>
+                                    <bpdm:messagingtask bpdm:label="segment write failed" bpdm:ID="_DcXDcNi5EeKdDOzgfCwuwA"></bpdm:messagingtask>
+                                    <bpdm:messagingtask eventType="end: empty" bpdm:label="Empty_End_Event" bpdm:ID="_IjWLYNi5EeKdDOzgfCwuwA"></bpdm:messagingtask>
+                                </bpel:sequence>
+                            </bpdm:gateway>
                         </bpel:sequence>
                         <bpel:sequence>
                             <bpdm:messagingtask bpdm:label="ao" bpdm:ID="_UcplsMFBEeK6DtOy-Yu5NA"></bpdm:messagingtask>
@@ -519,36 +552,6 @@
                                                         <bpel:variable name="moveMoveResponseMsg" messageType="move:move_output" binding="move:restBinding" operation="move" opMsgType="1" bpdm:id="_JWam9XFGEeKXOL1w3D1sTw"/>
                                                     </bpel:variables>
                                                     <bpel:sequence>
-                                                        <bpel:scope bpdm:label="SubProcess" bpdm:ID="_pw62MLcdEeK0Y4003rhWzw" bpdm:retryFor="10" bpdm:retryDelay="60">
-                                                            <bpel:variables>
-                                                                <bpel:variable name="txDeliveryFailureTxDeliveryFailureResponseMsg" messageType="txDeliveryFailure:txDeliveryFailure_output" binding="txDeliveryFailure:restBinding" operation="txDeliveryFailure" opMsgType="1" bpdm:messageIds="inc:_o2oTIG7aEeKkE6ll_3FDMA"/>
-                                                                <bpel:variable name="txDeliveryFailureTxDeliveryFailureRequestMsg" messageType="txDeliveryFailure:txDeliveryFailure_input" binding="txDeliveryFailure:restBinding" operation="txDeliveryFailure" opMsgType="0" bpdm:messageIds=" out:_od-ikG7aEeKkE6ll_3FDMA">
-                                                                    <bpel:from bpdm:toPart="body">
-                                                                        <bpel:literal bpdm:linkedMessageType="txDeliveryFailure:txDeliveryFailure_input" bpdm:linkedPart="body" bpdm:binding="txDeliveryFailure:restBinding" bpdm:opMsgType="0" bpdm:operation="txDeliveryFailure"></bpel:literal>
-                                                                    </bpel:from>
-                                                                </bpel:variable>
-                                                            </bpel:variables>
-                                                            <bpel:sequence>
-                                                                <bpdm:messagingtask operation="txDeliveryFailure" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk6Var" portType="txDeliveryFailure:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Notify Segment Write Failed" bpdm:ID="_pw8EULcdEeK0Y4003rhWzw">
-                                                                    <bpdm:linkset bpdm:type="assignments">
-                                                                        <bpel:copy>
-                                                                            <bpel:from>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()</bpel:from>
-                                                                            <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="29110880" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID/text()" targetedBy="11985921-arg0"></mapper:vertice><mapper:vertice id="11985921" sourcePath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()"></mapper:vertice></mapper:mapperLink>
-                                                                        </bpel:copy>
-                                                                        <bpel:copy>
-                                                                            <bpel:from>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()</bpel:from>
-                                                                            <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="17829720" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID/text()" targetedBy="18978161-arg0"></mapper:vertice><mapper:vertice id="18978161" sourcePath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
-                                                                        </bpel:copy>
-                                                                        <bpel:copy>
-                                                                            <bpel:from>"Segment XML Write"</bpel:from>
-                                                                            <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage/text()</bpel:to><mapper:mapperLink><mapper:vertice id="11115322" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage/text()" targetedBy="22113811-arg0"></mapper:vertice><mapper:vertice id="22113811" dimension="78x24" location="626,603"><mapper:value>"Segment XML Write"</mapper:value></mapper:vertice></mapper:mapperLink>
-                                                                        </bpel:copy>
-                                                                    </bpdm:linkset>
-                                                                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_input" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_od-ikG7aEeKkE6ll_3FDMA"></bpdm:linkset>
-                                                                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_output" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_o2oTIG7aEeKkE6ll_3FDMA"></bpdm:linkset>
-                                                                </bpdm:messagingtask>
-                                                            </bpel:sequence>
-                                                        </bpel:scope>
                                                         <bpel:scope bpdm:label="SubProcess" bpdm:ID="_47Q5cLcdEeK0Y4003rhWzw" bpdm:retryFor="10" bpdm:retryDelay="60">
                                                             <bpel:variables>
                                                                 <bpel:variable name="moveMoveResponseMsg" messageType="move:move_output" binding="move:restBinding" operation="move" opMsgType="1" bpdm:messageIds="inc:_JWKIQHFGEeKXOL1w3D1sTw"/>
@@ -575,6 +578,52 @@
                                                                 </bpdm:messagingtask>
                                                             </bpel:sequence>
                                                         </bpel:scope>
+                                                        <bpel:scope bpdm:label="SubProcess" bpdm:ID="_pw62MLcdEeK0Y4003rhWzw" bpdm:retryFor="10" bpdm:retryDelay="60">
+                                                            <bpel:variables>
+                                                                <bpel:variable name="txDeliveryFailureTxDeliveryFailureResponseMsg" messageType="txDeliveryFailure:txDeliveryFailure_output" binding="txDeliveryFailure:restBinding" operation="txDeliveryFailure" opMsgType="1" bpdm:messageIds="inc:_o2oTIG7aEeKkE6ll_3FDMA"/>
+                                                                <bpel:variable name="txDeliveryFailureTxDeliveryFailureRequestMsg" messageType="txDeliveryFailure:txDeliveryFailure_input" binding="txDeliveryFailure:restBinding" operation="txDeliveryFailure" opMsgType="0" bpdm:messageIds=" out:_od-ikG7aEeKkE6ll_3FDMA">
+                                                                    <bpel:from bpdm:toPart="body">
+                                                                        <bpel:literal bpdm:linkedMessageType="txDeliveryFailure:txDeliveryFailure_input" bpdm:linkedPart="body" bpdm:binding="txDeliveryFailure:restBinding" bpdm:opMsgType="0" bpdm:operation="txDeliveryFailure"></bpel:literal>
+                                                                    </bpel:from>
+                                                                </bpel:variable>
+                                                            </bpel:variables>
+                                                            <bpel:sequence>
+                                                                <bpdm:messagingtask operation="txDeliveryFailure" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk6Var" portType="txDeliveryFailure:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Notify Segment Write Failed" bpdm:ID="_pw8EULcdEeK0Y4003rhWzw">
+                                                                    <bpdm:linkset bpdm:type="assignments">
+                                                                        <bpel:copy>
+                                                                            <bpel:from>"Segment XML Write"</bpel:from>
+                                                                            <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage/text()</bpel:to><mapper:mapperLink><mapper:vertice id="19098932" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage/text()" targetedBy="23582439-arg0"></mapper:vertice><mapper:vertice id="23582439" dimension="109x24" location="480,576"><mapper:value>"Segment XML Write"</mapper:value></mapper:vertice></mapper:mapperLink>
+                                                                        </bpel:copy>
+                                                                        <bpel:copy>
+                                                                            <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+                                                                            <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="17071695" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID/text()" targetedBy="17345494-arg0"></mapper:vertice>
+  <mapper:vertice id="17345494" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice>
+</mapper:mapperLink>
+                                                                        </bpel:copy>
+                                                                        <bpel:copy>
+                                                                            <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                                                                            <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="17661745" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID/text()" targetedBy="17191772-arg0"></mapper:vertice>
+  <mapper:vertice id="17191772" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice>
+</mapper:mapperLink>
+                                                                        </bpel:copy>
+                                                                    </bpdm:linkset>
+                                                                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_input" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_od-ikG7aEeKkE6ll_3FDMA"></bpdm:linkset>
+                                                                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_output" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_o2oTIG7aEeKkE6ll_3FDMA"></bpdm:linkset>
+                                                                </bpdm:messagingtask>
+                                                            </bpel:sequence>
+                                                        </bpel:scope>
+                                                        <bpdm:messagingtask bpdm:label="record that segment write failed" bpdm:ID="_Yslf0Ni5EeKdDOzgfCwuwA">
+                                                            <bpdm:linkset bpdm:type="assignments">
+                                                                <bpel:copy>
+                                                                    <bpel:from>false()</bpel:from>
+                                                                    <bpel:to>$SegmentWriteSuccess</bpel:to><mapper:mapperLink><mapper:vertice id="16680031" targetPath="$SegmentWriteSuccess" targetedBy="15533570-arg0"></mapper:vertice><mapper:vertice id="15533570" dimension="78x24" location="325,571"><mapper:value>false()</mapper:value></mapper:vertice></mapper:mapperLink>
+                                                                </bpel:copy>
+                                                            </bpdm:linkset>
+                                                        </bpdm:messagingtask>
                                                     </bpel:sequence>
                                                 </bpel:scope>
                                             </bpel:catchAll>
@@ -592,22 +641,34 @@
                                             </bpdm:messagingtask>
                                         </bpel:sequence>
                                     </bpel:scope>
-                                    <bpdm:messagingtask bpdm:label="Segment XML Written Successfully" bpdm:ID="_q_dB0GxeEeKl4J7m4-ouog"></bpdm:messagingtask>
-                                    <bpdm:messagingtask operation="txDeliveryComplete" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk5Var" portType="txDeliveryComplete:restInterface" isMyRole="false" enableSharing="false" bpdm:label="notify complete" bpdm:ID="_5K55QG7iEeKkE6ll_3FDMA">
-                                        <bpdm:linkset bpdm:type="assignments">
-                                            <bpel:copy>
-                                                <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
-                                                <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="12534988" targetPath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()" targetedBy="3402296-arg0"></mapper:vertice><mapper:vertice id="3402296" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice></mapper:mapperLink>
-                                            </bpel:copy>
-                                            <bpel:copy>
-                                                <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
-                                                <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="1490260" targetPath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()" targetedBy="5270776-arg0"></mapper:vertice><mapper:vertice id="5270776" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
-                                            </bpel:copy>
+                                    <bpdm:gateway bpdm:label="write successful?" bpdm:ID="_AZDDcNi5EeKdDOzgfCwuwA" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
+                                        <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_BOrD4Ni5EeKdDOzgfCwuwA" bpdm:targetDisplayName="default"></bpdm:linkset>
+                                        <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_FgrroNi5EeKdDOzgfCwuwA" bpdm:targetDisplayName="[write successful? - segment write failed]">
+                                            <bpel:condition>$SegmentWriteSuccess = false()<mapper:mapperLink><mapper:vertice id="6084103" targetPath="$condition" targetedBy="30647226-arg2"></mapper:vertice><mapper:vertice id="30647226" dimension="78x24" location="319,554"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="26544947" sourcePath="$SegmentWriteSuccess" targetedBy="30647226-arg0"></mapper:vertice><mapper:vertice id="14165488" dimension="78x24" location="230,593" targetedBy="30647226-arg1"><mapper:value>false()</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
                                         </bpdm:linkset>
-                                        <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="txDeliveryCompleteTxDeliveryCompleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryComplete:txDeliveryComplete_input" bpdm:binding="txDeliveryComplete:restBinding" bpdm:ID="_69450G7iEeKkE6ll_3FDMA"></bpdm:linkset>
-                                        <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="txDeliveryCompleteTxDeliveryCompleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryComplete:txDeliveryComplete_output" bpdm:binding="txDeliveryComplete:restBinding" bpdm:ID="_7UteYG7iEeKkE6ll_3FDMA"></bpdm:linkset>
-                                    </bpdm:messagingtask>
-                                    <bpdm:messagingtask eventType="end: message" bpdm:label="Message_End_Event" bpdm:ID="_sjGPwG7YEeKkE6ll_3FDMA"></bpdm:messagingtask>
+                                        <bpel:sequence>
+                                            <bpdm:messagingtask bpdm:label="Segment XML Written Successfully" bpdm:ID="_q_dB0GxeEeKl4J7m4-ouog"></bpdm:messagingtask>
+                                            <bpdm:messagingtask operation="txDeliveryComplete" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk5Var" portType="txDeliveryComplete:restInterface" isMyRole="false" enableSharing="false" bpdm:label="notify complete" bpdm:ID="_5K55QG7iEeKkE6ll_3FDMA">
+                                                <bpdm:linkset bpdm:type="assignments">
+                                                    <bpel:copy>
+                                                        <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+                                                        <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="12534988" targetPath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()" targetedBy="3402296-arg0"></mapper:vertice><mapper:vertice id="3402296" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice></mapper:mapperLink>
+                                                    </bpel:copy>
+                                                    <bpel:copy>
+                                                        <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                                                        <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="1490260" targetPath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()" targetedBy="5270776-arg0"></mapper:vertice><mapper:vertice id="5270776" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
+                                                    </bpel:copy>
+                                                </bpdm:linkset>
+                                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="txDeliveryCompleteTxDeliveryCompleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryComplete:txDeliveryComplete_input" bpdm:binding="txDeliveryComplete:restBinding" bpdm:ID="_69450G7iEeKkE6ll_3FDMA"></bpdm:linkset>
+                                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="txDeliveryCompleteTxDeliveryCompleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryComplete:txDeliveryComplete_output" bpdm:binding="txDeliveryComplete:restBinding" bpdm:ID="_7UteYG7iEeKkE6ll_3FDMA"></bpdm:linkset>
+                                            </bpdm:messagingtask>
+                                            <bpdm:messagingtask eventType="end: message" bpdm:label="Message_End_Event" bpdm:ID="_sjGPwG7YEeKkE6ll_3FDMA"></bpdm:messagingtask>
+                                        </bpel:sequence>
+                                        <bpel:sequence>
+                                            <bpdm:messagingtask bpdm:label="segment write failed" bpdm:ID="_DcXDcNi5EeKdDOzgfCwuwA"></bpdm:messagingtask>
+                                            <bpdm:messagingtask eventType="end: empty" bpdm:label="Empty_End_Event" bpdm:ID="_IjWLYNi5EeKdDOzgfCwuwA"></bpdm:messagingtask>
+                                        </bpel:sequence>
+                                    </bpdm:gateway>
                                 </bpel:sequence>
                                 <bpel:sequence>
                                     <bpdm:messagingtask bpdm:label="failed" bpdm:ID="_j7O-IMFCEeK6DtOy-Yu5NA"></bpdm:messagingtask>

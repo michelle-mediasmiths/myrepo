@@ -14,11 +14,11 @@
   <dd:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk2Var">
     <dd:service name="getDeliveryLocation:restService" port="httpPort"/>
   </dd:invoke>
-  <dd:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk6Var">
-    <dd:service name="txDeliveryFailure:restService" port="httpPort"/>
-  </dd:invoke>
   <dd:invoke partnerLink="fS_AdapterAndDeliveryForHttpPortPlk1Var">
     <dd:service name="move:restService" port="httpPort"/>
+  </dd:invoke>
+  <dd:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk6Var">
+    <dd:service name="txDeliveryFailure:restService" port="httpPort"/>
   </dd:invoke>
   <dd:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk7Var">
     <dd:service name="writeSegmentXML:restService" port="httpPort"/>
