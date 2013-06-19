@@ -1,10 +1,5 @@
 package com.mediasmiths.mq.handlers.fixstitch;
 
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
@@ -23,6 +18,10 @@ import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.RevisionUtil;
 import com.mediasmiths.mq.handlers.JobHandler;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class ConformJobHandler extends JobHandler
 {
@@ -124,6 +123,7 @@ public class ConformJobHandler extends JobHandler
 					String houseID = item.getAttributeAsString(Attribute.HOUSE_ID);
 					String siteID =  item.getAttributeAsString(Attribute.ASSET_SITE_ID);
 					String sourceHouseID = item.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
+					String previewStatus = item.getAttributeAsString(Attribute.QC_PREVIEW_STATUS);
 					
 					if (sourceHouseID == null) //item is not a compliance item
 					{
@@ -164,8 +164,23 @@ public class ConformJobHandler extends JobHandler
 							log.info("Content not of type edit clips, publicity or associated, no purge candidate task required. Content Type = " + contentType);
 						}
 					}
+
 					else {
 						log.info("asset is a compliance item, no purge candidate task required.");
+					}
+					//Initiates a QC task if the content is Edit_Clip.
+					if (sourceHouseID == null && contentType.equals(MayamContentTypes.EDIT_CLIPS.toString()))
+					{
+						try
+						{
+							log.info("Creating QC task for Edit Clips content");
+							taskController.createQCTaskForMaterial(houseID,previewStatus,item);
+							log.info("QC task been created");
+						}
+						catch (MayamClientException e)
+						{
+							log.error("Error creating QC task for Edit Clips content", e);
+						}
 					}
 				}
 
