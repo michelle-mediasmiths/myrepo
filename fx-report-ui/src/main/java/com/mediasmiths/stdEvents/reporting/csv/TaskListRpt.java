@@ -79,6 +79,7 @@ public class TaskListRpt
 			if (channels != null)
 			{
 				String concatChannels = "";
+				Log.info("Number of channels found = " + channels.size());
 				for (String channel: channels)
 				{
 					concatChannels += (channel + " ");
