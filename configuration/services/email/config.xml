@@ -273,7 +273,7 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>TCFailed</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
-			<subject>TX transcode failed: Material ID(%s) Title(%s)</subject>
+			<subject>URGENT ISSUE: TX transcode failed: Material ID(%s) Title(%s)</subject>
 			<body>Item remains on TX Delivery task list so has not transcoded and therefore has not been transferred to play out. Please resolve URGENTLY.</body>
 			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
