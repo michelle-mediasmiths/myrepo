@@ -26,7 +26,7 @@ public class MayamClientTest
 			@Override
 			public void registerModules(List<Module> modules, PropertyFile config)
 			{
-				modules.add(new MayamClientModule());
+				modules.add(new MayamClientModule(false));
 				modules.add(new AbstractModule()
 				{
 					

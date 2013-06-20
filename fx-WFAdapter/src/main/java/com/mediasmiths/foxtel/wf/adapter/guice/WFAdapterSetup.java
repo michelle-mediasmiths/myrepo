@@ -1,7 +1,5 @@
 package com.mediasmiths.foxtel.wf.adapter.guice;
 
-import java.util.List;
-
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mediasmiths.foxtel.channels.config.ChannelConfigModule;
@@ -11,6 +9,8 @@ import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.guice.MayamClientStubModule;
 import com.mediasmiths.std.guice.web.rest.setup.AbstractRESTGuiceSetup;
 import com.mediasmiths.std.io.PropertyFile;
+
+import java.util.List;
 
 public class WFAdapterSetup extends AbstractRESTGuiceSetup
 {
@@ -28,7 +28,7 @@ public class WFAdapterSetup extends AbstractRESTGuiceSetup
 		}
 		else
 		{
-			modules.add(new MayamClientModule());
+			modules.add(new MayamClientModule(true));
 		}
 		
 		modules.add(new TranscodePrioritiesModule());

@@ -19,7 +19,7 @@ public class PDPSetUp extends AbstractRESTGuiceSetup
 		modules.add(new MayamPDPSetUp());
 		modules.add(new EventServiceModule());
 		modules.add(new ChannelConfigModule());
-		modules.add(new MayamClientModule());		
+		modules.add(new MayamClientModule(true));
 	}
 
 	@Override
