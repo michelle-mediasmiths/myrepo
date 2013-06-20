@@ -191,8 +191,9 @@ public class OrderStatus
 		{
 			try
 			{
-				Timecode t = Timecode.getInstance(titleLength,false, Framerate.HZ_1000,true);
-				return t.toSMPTEString();
+				Timecode t = Timecode.getInstance(titleLength,false, Framerate.HZ_1000,true); //these values are supplied by mayam in mz
+				t.resample(Framerate.HZ_25)
+				return resample.toSMPTEString();
 			}
 			catch (Exception e)
 			{
