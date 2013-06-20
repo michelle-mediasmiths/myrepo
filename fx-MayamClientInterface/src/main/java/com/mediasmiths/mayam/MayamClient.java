@@ -307,8 +307,6 @@ public interface MayamClient
 
 	public boolean attemptAutoMatch(String siteID, String fileName);
 
-	public long createWFEErrorTaskForUnmatched(String aggregator, String fileName);
-
 	public boolean autoQcRequiredForTXTask(Long taskID) throws MayamClientException;
 
 	public boolean isPackageSD(String packageID) throws MayamClientException;

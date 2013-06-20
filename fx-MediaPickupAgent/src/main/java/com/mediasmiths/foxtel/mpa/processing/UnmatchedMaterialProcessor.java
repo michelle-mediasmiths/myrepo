@@ -1,22 +1,19 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
-import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.agent.WatchFolders;
+import com.mediasmiths.foxtel.ip.event.EventService;
+import com.mediasmiths.mayam.MayamClient;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.agent.WatchFolders;
-import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
-import com.mediasmiths.foxtel.ip.event.EventService;
-import com.mediasmiths.mayam.MayamClient;
+import java.io.File;
+import java.io.IOException;
+
+import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
 
 public class UnmatchedMaterialProcessor
 {
@@ -92,10 +89,6 @@ public class UnmatchedMaterialProcessor
 
 			logger.info(String.format("Trying to move file %s to %s", mxf.getAbsolutePath(), destination));
 			FileUtils.moveFile(mxf, dest);
-
-			String path = FilenameUtils.separatorsToUnix(FilenameUtils.getPathNoEndSeparator(mxf.getAbsolutePath()));
-			String aggregator = path.substring(path.lastIndexOf("/"));
-			mayamClient.createWFEErrorTaskForUnmatched(aggregator, FilenameUtils.getBaseName(mxf.getAbsolutePath()));
 
 			// send event
 			events.saveEvent("UnmatchedContentAvailable", destination);
