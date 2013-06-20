@@ -1,10 +1,12 @@
 package com.mediasmiths.stdEvents.reporting.csv;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
+import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
+import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
@@ -13,13 +15,10 @@ import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
-import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ComplianceRpt extends ReportUtils
 {
@@ -30,7 +29,7 @@ public class ComplianceRpt extends ReportUtils
 	public String REPORT_LOC;
 	
 	@Inject
-	private QueryAPI queryApi;
+	private QueryAPIImpl queryApi;
 	
 	public void writeCompliance(List<EventEntity> events, DateTime startDate, DateTime endDate, String reportName)
 	{

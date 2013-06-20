@@ -1,16 +1,11 @@
 package com.mediasmiths.stdEvents.reporting.csv;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mediasmiths.foxtel.ip.common.events.report.TaskList;
+import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import org.apache.log4j.Logger;
 import org.jfree.util.Log;
 import org.joda.time.DateTime;
@@ -20,14 +15,14 @@ import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.ip.common.events.report.TaskList;
-import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
-import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mayam.wf.attributes.shared.Attribute;
-import com.mayam.wf.attributes.shared.AttributeMap;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class TaskListRpt
 {
@@ -38,7 +33,7 @@ public class TaskListRpt
 	public String REPORT_LOC;
 	
 	@Inject 
-	private QueryAPI queryApi;
+	private QueryAPIImpl queryApi;
 	
 	public void writeTaskList(List<AttributeMap> tasks, DateTime startDate, DateTime endDate, String reportName)
 	{

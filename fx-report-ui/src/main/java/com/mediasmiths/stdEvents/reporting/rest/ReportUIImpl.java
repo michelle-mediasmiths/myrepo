@@ -14,7 +14,7 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Purge;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
-import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.reporting.csv.AcquisitionRpt;
 import com.mediasmiths.stdEvents.reporting.csv.AutoQCRpt;
 import com.mediasmiths.stdEvents.reporting.csv.ComplianceRpt;
@@ -38,7 +38,7 @@ public class ReportUIImpl implements ReportUI
 	@Inject
 	private ThymeleafTemplater templater;
 	@Inject
-	private QueryAPI queryApi;
+	private QueryAPIImpl queryApi;
 	@Inject
 	private EventAPI eventApi;
 	@Inject
@@ -219,13 +219,6 @@ public class ReportUIImpl implements ReportUI
 	{
 
 		List<Purge> purgeEntities = queryApi.getPurgeEventsInDateRange(start, end);
-
-//		List<EventEntity> purged = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", EventNames.PURGE_TITLE,
-//				MAX, start, end);
-//		purged.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", EventNames.DELETE_MATERIAL,
-//				MAX, start, end));
-//		purged.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", EventNames.DELETE_PACKAGE,
-//				MAX, start, end));
 		purgeContent.writePurgeTitles(purgeEntities, start, end, reportName);
 	}
 

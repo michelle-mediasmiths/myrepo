@@ -56,7 +56,7 @@ public class PurgeDaoImpl extends HibernateDao<Purge, String> implements PurgeDa
 		final XMLGregorianCalendar purgeCandidateUpdated = pe.getPurgeCandidateUpdated();
 		final XMLGregorianCalendar expires = pe.getExpires();
 
-		log.debug(String.format("PurgetEventNotification Asset Type %s MaterialID %s titleID %s houseId %s",
+		log.debug(String.format("PurgeEventNotification Asset Type %s MaterialID %s titleID %s houseId %s",
 		                        assetType,
 		                        materialID,
 		                        titleID,
@@ -64,7 +64,7 @@ public class PurgeDaoImpl extends HibernateDao<Purge, String> implements PurgeDa
 
 		if (houseID == null)
 		{
-			log.error("cannot use a PurgetEventNotification that has a null house id, ignoring");
+			log.error("cannot use a PurgeEventNotification that has a null house id, ignoring");
 			return;
 		}
 

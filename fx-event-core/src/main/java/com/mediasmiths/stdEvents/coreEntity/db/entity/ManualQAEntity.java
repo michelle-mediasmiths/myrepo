@@ -287,6 +287,14 @@ public class ManualQAEntity
 			DateTime set = new DateTime(timeEscalatedSet1);
 			DateTime cleared = new DateTime(timeEscalatedCleared1);
 
+			if (cleared.isAfter(set))
+			{
+				log.info("Cleared date after set date, assuming this has been reescalated at some point");
+				cleared = DateTime.now();
+			}
+
+			log.debug(String.format("Set %s Cleared %s",set,cleared));
+
 			Interval time = new Interval(set, cleared);
 			return time;
 		}

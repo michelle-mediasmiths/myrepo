@@ -1,7 +1,6 @@
 package com.mediasmiths.stdEvents.coreEntity.db.entity;
 
 import com.mediasmiths.std.types.Framerate;
-import com.mediasmiths.std.types.SampleCount;
 import com.mediasmiths.std.types.Timecode;
 import org.apache.log4j.Logger;
 
@@ -181,17 +180,18 @@ public class OrderStatus
 	@Transient
 	public String getTitleLengthReadableString()
 	{
-		if (getTitleLength() == null)
+
+		final Integer titleLength = getTitleLength();
+
+		if (titleLength == null)
 		{
 			return null;
 		}
 		else
 		{
-
-			final Integer titleLength = getTitleLength();
 			try
 			{
-				Timecode t = Timecode.getInstance(new SampleCount(titleLength, Framerate.HZ_25));
+				Timecode t = Timecode.getInstance(titleLength,false, Framerate.HZ_25,true);
 				return t.toSMPTEString();
 			}
 			catch (Exception e)

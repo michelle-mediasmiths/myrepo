@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Purge;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
-import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -39,7 +39,7 @@ public class PurgeContentRpt extends ReportUtils
 	public String REPORT_LOC;
 
 	@Inject
-	private QueryAPI queryApi;
+	private QueryAPIImpl queryApi;
 
 
 	public void writePurgeTitles(List<Purge> purgeReportRecords, DateTime startDate, DateTime endDate, String reportName)

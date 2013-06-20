@@ -3,7 +3,7 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
-import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -34,7 +34,7 @@ public class OrderStatusRpt extends ReportUtils
 	public String REPORT_LOC;
 
 	@Inject
-	private QueryAPI queryApi;
+	private QueryAPIImpl queryApi;
 
 	@Inject
 	@Named("windowMax")

@@ -1,16 +1,15 @@
 package com.mediasmiths.stdEvents.reporting.csv;
 
-import java.util.Date;
-import java.util.List;
-
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import org.apache.log4j.Logger;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
-import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import java.util.Date;
+import java.util.List;
 
 public class TranscoderLoadRpt
 {
@@ -21,7 +20,7 @@ public class TranscoderLoadRpt
 	public String REPORT_LOC;
 	
 	@Inject
-	private QueryAPI queryApi;
+	private QueryAPIImpl queryApi;
 	
 	public void writeTranscoderLoad(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{

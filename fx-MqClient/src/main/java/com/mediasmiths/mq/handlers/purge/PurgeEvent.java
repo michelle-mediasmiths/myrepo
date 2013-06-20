@@ -22,7 +22,7 @@ public class PurgeEvent
 	private String namespace;
 
 	@Inject
-	protected EventService eventsService;
+	private EventService eventsService;
 
 	@Inject
 	private DateUtil dateUtil;
@@ -72,7 +72,7 @@ public class PurgeEvent
 	/**
 	 * Sends a PurgeEventNotification, called when a purge candidate task is created or changes state
 	 *
-	 * @param taskAttributes
+	 * @param taskAttributes - Attributes of a purge candidate task
 	 */
 	public void setPurgeEventForPurgeCandidateTask(AttributeMap taskAttributes)
 	{

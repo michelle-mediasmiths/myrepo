@@ -3,7 +3,7 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
-import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -35,7 +35,7 @@ public class AutoQCRpt extends ReportUtils
 	public String REPORT_LOC;
 
 	@Inject
-	private QueryAPI queryApi;
+	private QueryAPIImpl queryApi;
 
 	public void writeAutoQc(List<AutoQC> events, DateTime start, DateTime end, String reportName)
 	{
