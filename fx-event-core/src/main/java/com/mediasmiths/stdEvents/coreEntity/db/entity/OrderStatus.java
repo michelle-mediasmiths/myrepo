@@ -191,7 +191,7 @@ public class OrderStatus
 		{
 			try
 			{
-				Timecode t = Timecode.getInstance(titleLength,false, Framerate.HZ_25,true);
+				Timecode t = Timecode.getInstance(titleLength,false, Framerate.HZ_1000,true);
 				return t.toSMPTEString();
 			}
 			catch (Exception e)
