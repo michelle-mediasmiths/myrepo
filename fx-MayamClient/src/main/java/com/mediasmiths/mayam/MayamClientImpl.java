@@ -1119,10 +1119,10 @@ public class MayamClientImpl implements MayamClient
 			criteria.getFilterRanges().setAttributeRange(Attribute.TASK_CREATED, start, end);
 			criteria.getFilterRanges().setAttributeRange(Attribute.TASK_UPDATED, start, end);
 			criteria.getFilterRanges().setAttributeRange(Attribute.CLOSED, start, end);
-			criteria.getFilterAlternatives().addAsInclusion(Attribute.TASK_LIST_ID, MayamTaskListType.COMPLIANCE_EDIT);
-			criteria.getFilterAlternatives().addAsInclusion(Attribute.TASK_LIST_ID, MayamTaskListType.COMPLIANCE_LOGGING);
-			criteria.getFilterAlternatives().addAsInclusion(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW);
-			criteria.getFilterAlternatives().addAsInclusion(Attribute.TASK_LIST_ID, MayamTaskListType.SEGMENTATION);
+			criteria.getFilterAlternatives().addAsInclusion(Attribute.TASK_LIST_ID, MayamTaskListType.COMPLIANCE_EDIT.getText());
+			criteria.getFilterAlternatives().addAsInclusion(Attribute.TASK_LIST_ID, MayamTaskListType.COMPLIANCE_LOGGING.getText());
+			criteria.getFilterAlternatives().addAsInclusion(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW.getText());
+			criteria.getFilterAlternatives().addAsInclusion(Attribute.TASK_LIST_ID, MayamTaskListType.SEGMENTATION.getText());
 			
 			FilterResult result = client.taskApi().getTasks(criteria, 100, 0);
 			log.info("Total matches: " + result.getTotalMatches());
