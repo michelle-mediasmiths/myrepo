@@ -118,7 +118,7 @@ public class ManualQARpt extends ReportUtils
 			                         "taskStatus",
 			                         "previewStatus",
 			                         "hrPreview",
-			                         "hrPreviewRequested",
+			                         "hrPreviewRequested by",
 			                         "escalated",
 			                         "timeEscalated",
 			                         "titleLength",
