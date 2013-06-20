@@ -1,6 +1,9 @@
 package com.mediasmiths.stdEvents.coreEntity.db.entity;
 
-import java.util.Date;
+import com.mediasmiths.std.types.Framerate;
+import com.mediasmiths.std.types.SampleCount;
+import com.mediasmiths.std.types.Timecode;
+import org.apache.log4j.Logger;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -16,11 +19,15 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import java.util.Date;
 
 @Entity
 @Table(name="OrderStatus")
 public class OrderStatus
 {
+
+	public static final transient Logger logger = Logger.getLogger(OrderStatus.class);
+
 	@Id
 	private String materialid;
 	@ManyToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
@@ -170,6 +177,31 @@ public class OrderStatus
 	{
 		this.titleLength = titleLength;
 	}
+
+	@Transient
+	public String getTitleLengthReadableString()
+	{
+		if (getTitleLength() == null)
+		{
+			return null;
+		}
+		else
+		{
+
+			final Integer titleLength = getTitleLength();
+			try
+			{
+				Timecode t = Timecode.getInstance(new SampleCount(titleLength, Framerate.HZ_25));
+				return t.toSMPTEString();
+			}
+			catch (Exception e)
+			{
+				logger.error("Error producing timecode string for length " + titleLength, e);
+				return titleLength.toString();
+			}
+		}
+	}
+
 
 	public enum TaskType{INGEST,UNMATCHED}
 }

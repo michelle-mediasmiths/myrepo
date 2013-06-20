@@ -1,10 +1,12 @@
 package com.mediasmiths.stdEvents.reporting.csv;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
+import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -14,13 +16,10 @@ import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
-import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AcquisitionRpt extends ReportUtils
 {
@@ -220,9 +219,12 @@ public class AcquisitionRpt extends ReportUtils
 
 			acq.setChannels(channels);
 		}
-		if (order.getTitleLength() != null)
+
+		String orderTitleLength = order.getTitleLengthReadableString();
+
+		if (orderTitleLength!= null)
 		{
-			acq.setTitleLength(order.getTitleLength().toString());
+			acq.setTitleLength(orderTitleLength);
 		}
 		return acq;
 	}

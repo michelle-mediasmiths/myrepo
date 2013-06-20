@@ -2,9 +2,6 @@ package com.mediasmiths.stdEvents.reporting.csv;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.std.types.Framerate;
-import com.mediasmiths.std.types.SampleCount;
-import com.mediasmiths.std.types.Timecode;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
@@ -151,25 +148,15 @@ public class AutoQCRpt extends ReportUtils
 				}
 				aqcMap.put(header[12], a.getFailureParameter());
 
-				if (a.getOrderStatus() != null && a.getOrderStatus().getTitleLength() != null)
+				if (a.getOrderStatus() != null)
 				{
-
-					final Integer titleLength = a.getOrderStatus().getTitleLength();
-					try
-					{
-						Timecode t = Timecode.getInstance(new SampleCount(titleLength, Framerate.HZ_25));
-						aqcMap.put(header[13], t.toSMPTEString());
-					}
-					catch (Exception e)
-					{
-						logger.error("Error producing timecode string for length " + titleLength, e);
-						aqcMap.put(header[13], null);
-					}
+					aqcMap.put(header[13],a.getOrderStatus().getTitleLengthReadableString());
 				}
 				else
 				{
 					aqcMap.put(header[13], null);
 				}
+
 				csvwriter.write(aqcMap, header, getProcessor());
 			}
 			

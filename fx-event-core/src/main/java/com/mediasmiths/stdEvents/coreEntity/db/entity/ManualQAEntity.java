@@ -299,18 +299,17 @@ public class ManualQAEntity
 
 
 	@Transient
-	public Integer getTitleLength()
+	public String getTitleLengthReadableString()
 	{
 		if (orderStatus != null)
 		{
-			return orderStatus.getTitleLength();
+			return orderStatus.getTitleLengthReadableString();
 		}
 		else
 		{
 			return null;
 		}
 	}
-
 
 
 }

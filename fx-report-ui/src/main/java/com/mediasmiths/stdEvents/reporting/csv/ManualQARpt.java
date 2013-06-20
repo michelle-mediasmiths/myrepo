@@ -2,9 +2,6 @@ package com.mediasmiths.stdEvents.reporting.csv;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.std.types.Framerate;
-import com.mediasmiths.std.types.SampleCount;
-import com.mediasmiths.std.types.Timecode;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
@@ -194,24 +191,7 @@ public class ManualQARpt extends ReportUtils
 					mqaMap.put(header[11], null);
 				}
 
-				final Integer titleLength = m.getTitleLength();
-				if (titleLength != null)
-				{
-					try
-					{
-						Timecode t = Timecode.getInstance(new SampleCount(titleLength, Framerate.HZ_25));
-						mqaMap.put(header[12], t.toSMPTEString());
-					}
-					catch (Exception e)
-					{
-						logger.error("Error producing timecode string for length " + titleLength, e);
-						mqaMap.put(header[12], null);
-					}
-				}
-				else
-				{
-					mqaMap.put(header[12], null);
-				}
+				mqaMap.put(header[12],m.getTitleLengthReadableString());
 
 				Boolean reordered = m.getReordered();
 
