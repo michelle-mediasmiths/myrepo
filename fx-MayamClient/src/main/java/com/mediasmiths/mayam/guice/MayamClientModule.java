@@ -41,6 +41,11 @@ public class MayamClientModule extends AbstractModule
 		requiresSecurity = securityRequired;
 	}
 	
+	public MayamClientModule()
+	{
+
+	}
+	
 	@Override
 	protected void configure()
 	{
