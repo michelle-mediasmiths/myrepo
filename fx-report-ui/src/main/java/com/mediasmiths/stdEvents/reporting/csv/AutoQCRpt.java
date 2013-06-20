@@ -106,7 +106,7 @@ public class AutoQCRpt extends ReportUtils
 					aqcMap.put(header[3], null);
 				}
 
-				aqcMap.put(header[4], a.getContentType());
+				aqcMap.put(header[4], contentTypeToHumanString(a.getContentType()));
 				aqcMap.put(header[5], a.getOperator());
 				aqcMap.put(header[6], a.getTaskStatus());
 				aqcMap.put(header[7], a.getQcStatus());

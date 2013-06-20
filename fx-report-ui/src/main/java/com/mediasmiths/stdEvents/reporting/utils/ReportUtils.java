@@ -13,6 +13,37 @@ public abstract class ReportUtils
 	
 	public static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd-MM-yyyy");
 
+
+	protected String contentTypeToHumanString(String contentType)
+	{
+
+		if ("PG".equals(contentType))
+		{
+			return "Programme";
+		}
+		else if ("TM".equals(contentType))
+		{
+			return "Unmatched";
+		}
+		else if ("CP".equals(contentType))
+		{
+			return "Publicity";
+		}
+		else if ("CU".equals(contentType))
+		{
+			return "Edit Clip";
+		}
+		else if ("PE".equals(contentType))
+		{
+			return "Associated";
+		}
+		else
+		{
+			logger.warn("Unknown asset type :" + contentType);
+			return contentType;
+		}
+	}
+
 	public Object unmarshallEvent(EventEntity event)
 	{
 		logger.debug(">>>unmarshallEvent");
