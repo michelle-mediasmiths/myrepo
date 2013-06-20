@@ -1,4 +1,4 @@
-package com.mediasmiths.stdEvents.persistence.guice;
+package com.mediasmiths.stdEvents.reporting.guice;
 
 import com.mediasmiths.std.guice.hibernate.module.HibernateModule;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
