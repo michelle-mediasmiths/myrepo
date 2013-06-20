@@ -218,8 +218,14 @@ public class ReportUIImpl implements ReportUI
 	private void getPurgeContentCSV(final DateTime start, final DateTime end, final String reportName)
 	{
 
-		List<Purge> purgeEntities = queryApi.getPurgeEventsInDateRange(start, end);
+		List<Purge> purgeEntities = getPurgeEntitiesInDateRange(start, end);
 		purgeContent.writePurgeTitles(purgeEntities, start, end, reportName);
+	}
+
+
+	private List<Purge> getPurgeEntitiesInDateRange(DateTime start, DateTime end)
+	{
+		return queryApi.getPurgeEventsInDateRange(start, end);
 	}
 
 	@Transactional(readOnly = true)

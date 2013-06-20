@@ -1,17 +1,17 @@
 package com.mediasmiths.stdEvents.ui.rest;
 
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
 import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
-import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.ui.rss.NotificationServiceAPI;
+import org.apache.log4j.Logger;
+
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 
 public class EventUIImpl implements EventUI
 {
@@ -19,7 +19,7 @@ public class EventUIImpl implements EventUI
 	private ThymeleafTemplater templater;
 	
 	@Inject
-	private QueryAPI queryApi;
+	private QueryAPIImpl queryApi;
 	
 	@Inject
 	private EventAPI eventApi;

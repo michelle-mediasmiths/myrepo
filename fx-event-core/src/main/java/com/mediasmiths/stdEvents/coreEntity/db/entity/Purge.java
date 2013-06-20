@@ -24,7 +24,7 @@ public class Purge
 	private String houseID;
 	@Basic
 	private String assetType;
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Title title;
 	@Basic
 	private Boolean everProtected = false;
@@ -42,7 +42,6 @@ public class Purge
 	private Boolean hasPurgeCandidateTask = false;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date datePurgeCandidateTaskCreated;
-
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date datePurgeCandidateTaskUpdated;
 	@Temporal(TemporalType.TIMESTAMP)

@@ -14,8 +14,8 @@ import com.mediasmiths.stdEvents.persistence.db.dao.AutoQCDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.ManualQAEntityDAO;
 import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
-import com.mediasmiths.stdEvents.persistence.db.dao.PurgeDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.TitleDao;
+import com.mediasmiths.stdEvents.persistence.db.impl.PurgeDaoImpl;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
@@ -45,7 +45,7 @@ public class QueryAPIImpl implements QueryAPI
 	protected ManualQAEntityDAO manualQADao;
 
 	@Inject
-	protected PurgeDao purgeDao;
+	protected PurgeDaoImpl purgeDao;
 	
 	private static final transient Logger logger = Logger.getLogger(QueryAPIImpl.class);
 
@@ -166,6 +166,8 @@ public class QueryAPIImpl implements QueryAPI
 
 
 	@Override
+	@GET
+	@Path("PurgeEventsByDate")
 	public List<Purge> getPurgeEventsInDateRange(final DateTime start, final DateTime end)
 	{
 		return purgeDao.getPurgeInDateRange(start,end);

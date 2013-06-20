@@ -22,7 +22,6 @@ import java.util.List;
 
 public class PurgeDaoImpl extends HibernateDao<Purge, String> implements PurgeDao
 {
-
 	private final JAXBSerialiser serializer = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 	private final static Logger log = Logger.getLogger(PurgeDaoImpl.class);
 
@@ -219,8 +218,9 @@ public class PurgeDaoImpl extends HibernateDao<Purge, String> implements PurgeDa
 	@Override
 	public List<Purge> getPurgeInDateRange(final DateTime start, final DateTime end)
 	{
-		Criteria criteria = createCriteria();
+		log.debug("Creating criteria");
 
+		Criteria criteria = createCriteria();
 		criteria.add(Restrictions.or(Restrictions.between("dateEntityCreated", start.toDate(), end.plusDays(1).toDate()),
 		                             Restrictions.between("dateProtected", start.toDate(), end.plusDays(1).toDate()),
 		                             Restrictions.between("dateUnProtected", start.toDate(), end.plusDays(1).toDate()),
@@ -235,6 +235,8 @@ public class PurgeDaoImpl extends HibernateDao<Purge, String> implements PurgeDa
 		                             Restrictions.between("dateExpires", start.toDate(), end.plusDays(1).toDate())));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
-		return getList(criteria);
+		final List<Purge> list = getList(criteria);
+		log.debug("Result count "+list.size());
+		return  list;
 	}
 }
