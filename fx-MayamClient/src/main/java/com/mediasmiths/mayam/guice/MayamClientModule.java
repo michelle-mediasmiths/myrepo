@@ -34,11 +34,20 @@ public class MayamClientModule extends AbstractModule
 	public static final String SETUP_TASKS_CLIENT = "SETUP.TASKS.CLIENT";
 	private static final String MAYAM_AUTH_TOKEN =  "mayam.auth.token";
 	private static final String MAYAM_ENDPOINT ="mayam.endpoint";
+	boolean requiresSecurity = true;
+	
+	public MayamClientModule(boolean securityRequired)
+	{
+		requiresSecurity = securityRequired;
+	}
 	
 	@Override
 	protected void configure()
 	{
-		install(new SecurityModule());
+		if (requiresSecurity)
+		{
+			install(new SecurityModule());
+		}
 		install(new AttributesModule());
 		install(new MayamAudioVisualModule());
 
