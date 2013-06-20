@@ -7,7 +7,6 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -35,7 +34,6 @@ public class PurgeContentRpt extends ReportUtils
 	private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern(formatString);
 	private static final DateFormat df = new SimpleDateFormat(formatString);
 
-	//Edit this variable to change where your reports get saved to
 	@Inject
 	@Named("reportLoc")
 	public String REPORT_LOC;
@@ -150,15 +148,7 @@ public class PurgeContentRpt extends ReportUtils
 				if (title != null)
 				{
 					map.put(header[2], title.getTitle());
-					List<String> channelsList = title.getChannels();
-					if (channelsList != null)
-					{
-						map.put(header[4], StringUtils.join(channelsList, ';'));
-					}
-					else
-					{
-						map.put(header[4], null);
-					}
+					putChannelListToCSVMap(header,4,map,title.getChannels());
 				}
 				else
 				{
@@ -170,16 +160,7 @@ public class PurgeContentRpt extends ReportUtils
 				putPossibleNullBooleanInCSVMap(header, 5, map, record.getProtected());
 				putPossibleNullBooleanInCSVMap(header, 6, map, record.getExtended());
 				putPossibleNullBooleanInCSVMap(header, 7, map, record.getPurged());
-
-				final Date dateExpires = record.getDateExpires();
-				if (dateExpires != null)
-				{
-					map.put(header[8], df.format(dateExpires));
-				}
-				else
-				{
-					map.put(header[8], null);
-				}
+				putFormattedDateInCSVMap(header,8,map, record.getDateExpires(), df);
 
 				csvwriter.write(map, header, processors);
 			}
@@ -213,23 +194,6 @@ public class PurgeContentRpt extends ReportUtils
 			}
 		}
 	}
-
-
-	private void putPossibleNullBooleanInCSVMap(final String[] header,
-	                                            int index,
-	                                            final Map<String, Object> map,
-	                                            final Boolean value)
-	{
-		if (value != null && value)
-		{
-			map.put(header[index], "1");
-		}
-		else
-		{
-			map.put(header[index], "0");
-		}
-	}
-
 
 	private CellProcessor[] getProcessor()
 	{

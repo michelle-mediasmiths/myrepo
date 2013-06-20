@@ -6,7 +6,6 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -138,39 +137,16 @@ public class ManualQARpt extends ReportUtils
 
 				mqaMap.put(header[1], m.getAssetTitle());
 				mqaMap.put(header[2], m.getMaterialid());
-				List<String> channelsList = m.getChannelsList();
-				if (channelsList != null)
-				{
-					mqaMap.put(header[3], StringUtils.join(channelsList, ';'));
-				}
-				else
-				{
-					mqaMap.put(header[3], null);
-				}
+
+				putChannelListToCSVMap(header, 3, mqaMap, m.getChannelsList());
+
 				mqaMap.put(header[4], m.getOperator());
 				mqaMap.put(header[5], m.getAggregator());
 				mqaMap.put(header[6], m.getTaskStatus());
 				mqaMap.put(header[7], m.getPreviewStatus());
-				final Boolean hrPreview = m.getHrPreview();
-				if (hrPreview != null && hrPreview)
-				{
-					mqaMap.put(header[8], "1");
-				}
-				else
-				{
-					mqaMap.put(header[8], "0");
-				}
+				putPossibleNullBooleanInCSVMap(header, 8, mqaMap, m.getHrPreview());
 				mqaMap.put(header[9], m.getHrPreviewRequestedBy());
-
-				final Boolean escalated = m.getEverEscalated();
-				if (escalated != null && escalated)
-				{
-					mqaMap.put(header[10], "1");
-				}
-				else
-				{
-					mqaMap.put(header[10], "0");
-				}
+				putPossibleNullBooleanInCSVMap(header, 10, mqaMap, m.getEverEscalated());
 
 				Interval timeEscalated = null;
 
@@ -192,17 +168,8 @@ public class ManualQARpt extends ReportUtils
 				}
 
 				mqaMap.put(header[12],m.getTitleLengthReadableString());
+				putPossibleNullBooleanInCSVMap(header, 13, mqaMap, m.getReordered());
 
-				Boolean reordered = m.getReordered();
-
-				if (reordered != null && reordered)
-				{
-					mqaMap.put(header[13], "1");
-				}
-				else
-				{
-					mqaMap.put(header[13], "0");
-				}
 				csvwriter.write(mqaMap, header, processors);
 			}
 

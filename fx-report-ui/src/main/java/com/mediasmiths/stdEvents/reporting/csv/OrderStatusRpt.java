@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OrderStatusRpt
+public class OrderStatusRpt extends ReportUtils
 {
 	public static final transient Logger logger = Logger.getLogger(OrderStatusRpt.class);
 
@@ -179,7 +179,7 @@ public class OrderStatusRpt
 				if (order.getTitle() != null)
 				{
 					orderMap.put(header[1], order.getTitle().getTitle());
-					orderMap.put(header[3], StringUtils.join(order.getTitle().getChannels(), ';'));
+					putChannelListToCSVMap(header, 3, orderMap, order.getTitle().getChannels());
 				}
 				else
 				{
@@ -188,26 +188,15 @@ public class OrderStatusRpt
 				}
 				orderMap.put(header[2], order.getMaterialid());
 				orderMap.put(header[4], order.getOrderReference());
-				if (order.getRequiredBy() == null)
-				{
-					orderMap.put(header[5], order.getRequiredBy());
-				}
-				else
-				{
-					orderMap.put(header[5], df.format(order.getRequiredBy()));
-				}
+				putFormattedDateInCSVMap(header,5,orderMap,order.getRequiredBy(),df);
+
 				orderMap.put(header[6], order.getComplete());
 				orderMap.put(header[7], order.getOverdue());
 				orderMap.put(header[8], order.getAggregatorID());
 				orderMap.put(header[9], order.getTaskType());
-				if (order.getCompleted() == null)
-				{
-					orderMap.put(header[10], order.getCompleted());
-				}
-				else
-				{
-					orderMap.put(header[10], df.format(order.getCompleted()));
-				}
+
+				putFormattedDateInCSVMap(header,10,orderMap,order.getCompleted(),df);
+
 				csvwriter.write(orderMap, header, processors);
 			}
 

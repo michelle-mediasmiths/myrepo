@@ -6,7 +6,6 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
@@ -99,7 +98,7 @@ public class AutoQCRpt extends ReportUtils
 				aqcMap.put(header[2], a.getMaterialid());
 				if (a.getOrderStatus() != null && a.getOrderStatus().getTitle() != null)
 				{
-					aqcMap.put(header[3], StringUtils.join(a.getOrderStatus().getTitle().getChannels(), ';'));
+					putChannelListToCSVMap(header, 3, aqcMap, a.getOrderStatus().getTitle().getChannels());
 				}
 				else
 				{
@@ -111,32 +110,9 @@ public class AutoQCRpt extends ReportUtils
 				aqcMap.put(header[6], a.getTaskStatus());
 				aqcMap.put(header[7], a.getQcStatus());
 
-				if (a.getCreatedTime() == null)
-				{
-					aqcMap.put(header[8], null);
-				}
-				else
-				{
-					aqcMap.put(header[8], df.format(a.getCreatedTime()));
-				}
-
-				if (a.getTaskFinishedTime() == null)
-				{
-					aqcMap.put(header[9], null);
-				}
-				else
-				{
-					aqcMap.put(header[9], df.format(a.getTaskFinishedTime()));
-				}
-
-				if (a.getWarningTime() == null)
-				{
-					aqcMap.put(header[10], null);
-				}
-				else
-				{
-					aqcMap.put(header[10], df.format(a.getWarningTime()));
-				}
+				putFormattedDateInCSVMap(header,8,aqcMap, a.getCreatedTime(), df);
+				putFormattedDateInCSVMap(header,9,aqcMap, a.getTaskFinishedTime(), df);
+				putFormattedDateInCSVMap(header,10,aqcMap, a.getWarningTime(), df);
 
 				if (a.getOverride() != null && a.getOverride().equals(Boolean.TRUE))
 				{
