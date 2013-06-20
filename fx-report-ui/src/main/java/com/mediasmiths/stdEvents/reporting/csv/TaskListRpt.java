@@ -93,7 +93,7 @@ public class TaskListRpt
 			}
 			
 			List<String> channelGroups = mayamTask.getAttribute(Attribute.CHANNEL_GROUPS);
-			if (channelGroups != null)
+			if (channelGroups != null && !channelGroups.isEmpty())
 			{
 				String concatGroups = "";
 				for (String group: channelGroups)
