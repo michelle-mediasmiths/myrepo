@@ -2,6 +2,7 @@ package com.mediasmiths.stdEvents.reporting.rest;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.mayam.MayamClientImpl;
@@ -31,6 +32,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReportUIImpl implements ReportUI
@@ -272,7 +274,13 @@ public class ReportUIImpl implements ReportUI
 		logger.debug(">>>getTaskListCSV");
 
 		List<AttributeMap> tasks = mayamClient.getTasksInDateRange(start.toDate(), end.toDate());
-
+		List<AttributeMap> mayamTasks = new ArrayList<AttributeMap>(); 
+		for (AttributeMap task : tasks)
+		{
+			long taskId = task.getAttribute(Attribute.TASK_ID);
+			mayamTasks.add(mayamClient.getTask(taskId));
+		}
+		
 		String startDate = start.toString(dateFormatter);
 		String endDate = end.toString(dateFormatter);
 		logger.info("dates readable start: " + startDate + " end: " + endDate);
@@ -282,7 +290,7 @@ public class ReportUIImpl implements ReportUI
 				start.toString(),
 				end.toString(),
 				reportName));
-		taskList.writeTaskList(tasks, start, end, reportName);
+		taskList.writeTaskList(mayamTasks, start, end, reportName);
 
 		logger.debug("<<<getTaskListCSV");
 	}
