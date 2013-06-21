@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.ip.common.events.report.TaskList;
 import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import org.apache.log4j.Logger;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
 
 public class TaskListRpt
 {
@@ -34,6 +36,9 @@ public class TaskListRpt
 	
 	@Inject 
 	private QueryAPIImpl queryApi;
+	
+	@Inject
+	private ChannelProperties channelProperties;
 	
 	public void writeTaskList(List<AttributeMap> tasks, DateTime startDate, DateTime endDate, String reportName)
 	{
@@ -88,7 +93,7 @@ public class TaskListRpt
 			}
 			
 			List<String> channelGroups = mayamTask.getAttribute(Attribute.CHANNEL_GROUPS);
-			if (channelGroups != null)
+			if (channelGroups != null && !channelGroups.isEmpty())
 			{
 				String concatGroups = "";
 				for (String group: channelGroups)
@@ -96,6 +101,16 @@ public class TaskListRpt
 					concatGroups += (group + " ");
 				}
 				task.setDepartment(concatGroups);
+			}
+			else {
+				Set <String> channelOwnerList = channelProperties.groupsForChannels(channels);
+				String concatGroups = "";
+				for (String group: channelOwnerList)
+				{
+					concatGroups += (group + " ");
+				}
+				task.setDepartment(concatGroups);
+				
 			}
 			
 			tasks.add(task);
