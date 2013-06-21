@@ -1,10 +1,5 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
@@ -22,6 +17,10 @@ import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 public class MaterialExchangeProcessor extends MediaPickupProcessor<Material>
 {
@@ -217,36 +216,6 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material>
 		}
 
 	}
-
-	//
-	// private void updatePackages(List<Package> packages, String materialID)
-	// throws MessageProcessingFailedException {
-	// logger.trace("updatePackages");
-	// if(packages != null)
-	// for (Package txPackage : packages) {
-	// updatePackage(txPackage, materialID);
-	// }
-	// }
-	//
-	// /**
-	// * Update tx-package in viz ardome with information from the aggregator
-	// *
-	// * @param txPackage
-	// * @param materialID
-	// * @throws MessageProcessingFailedException
-	// */
-	// private void updatePackage(Package txPackage, String materialID)
-	// throws MessageProcessingFailedException {
-	// logger.trace("updatePackage");
-	// MayamClientErrorCode result = mayamClient.updatePackage(txPackage);
-	//
-	// if (result != MayamClientErrorCode.SUCCESS) {
-	// logger.error(String.format("Error updating package %s",
-	// txPackage.getPresentationID()));
-	// throw new MessageProcessingFailedException(
-	// MessageProcessingFailureReason.MAYAM_CLIENT_ERRORCODE);
-	// }
-	// }
 
 	protected AutoMatchInfo getSiteIDForAutomatch(MediaEnvelope<Material> unmatchedMessage)
 	{
