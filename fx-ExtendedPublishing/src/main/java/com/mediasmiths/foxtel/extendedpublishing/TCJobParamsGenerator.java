@@ -1,9 +1,5 @@
 package com.mediasmiths.foxtel.extendedpublishing;
 
-import java.util.Date;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
@@ -17,6 +13,9 @@ import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeColour;
 import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeOptions;
 import com.mediasmiths.foxtel.transcode.TranscodeRules;
+import org.apache.log4j.Logger;
+
+import java.util.Date;
 
 public class TCJobParamsGenerator
 {

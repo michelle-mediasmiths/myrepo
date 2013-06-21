@@ -1,11 +1,11 @@
 package com.mediasmiths.foxtel.ibmshelper.guice;
 
-import java.util.List;
-
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mediasmiths.std.guice.web.rest.setup.AbstractRESTGuiceSetup;
 import com.mediasmiths.std.io.PropertyFile;
+
+import java.util.List;
 
 public class IbmsGuiceSetup extends AbstractRESTGuiceSetup
 {

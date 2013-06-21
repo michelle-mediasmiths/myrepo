@@ -1,9 +1,6 @@
 package com.mediasmiths.mq.handlers.qc;
 
 
-import org.apache.log4j.Logger;
-
-import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
@@ -12,6 +9,7 @@ import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
+import org.apache.log4j.Logger;
 
 public class QcCompleteHandler extends TaskStateChangeHandler
 {

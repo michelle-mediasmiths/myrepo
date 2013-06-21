@@ -1,5 +1,26 @@
 package com.mediasmiths.mayam.controllers;
 
+import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
+import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
+import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeDescription;
+import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.AttributeValidator;
+import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.veneer.AssetApiVeneer;
+import com.mediasmiths.mayam.veneer.TaskApiVeneer;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentMatcher;
+
+import java.math.BigInteger;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -9,33 +30,6 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import java.math.BigInteger;
-
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentMatcher;
-
-import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
-import au.com.foxtel.cf.mam.pms.PurgeTitle;
-import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
-
-import com.mayam.wf.attributes.shared.Attribute;
-import com.mayam.wf.attributes.shared.AttributeDescription;
-import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.AttributeValidator;
-import com.mayam.wf.ws.client.AssetApi;
-import com.mayam.wf.ws.client.TaskApi;
-import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.exception.RemoteException;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.mayam.MayamAssetType;
-import com.mediasmiths.mayam.MayamClientErrorCode;
-import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.mayam.veneer.AssetApiVeneer;
-import com.mediasmiths.mayam.veneer.TaskApiVeneer;
-import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 
 public class MayamTitleControllerTest_FXT_4_2_1 {
 	

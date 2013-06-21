@@ -1,19 +1,17 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators;
 
+import au.com.foxtel.cf.mam.pms.ClassificationEnumType;
+import au.com.foxtel.cf.mam.pms.PackageType;
+import au.com.foxtel.cf.mam.pms.PresentationFormatType;
+import org.apache.commons.lang.RandomStringUtils;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.apache.commons.lang.RandomStringUtils;
-
-import au.com.foxtel.cf.mam.pms.ClassificationEnumType;
-import au.com.foxtel.cf.mam.pms.PackageType;
-import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
 public class MSTxPackage {
 

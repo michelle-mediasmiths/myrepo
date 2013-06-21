@@ -60,10 +60,8 @@ public class IncomingFolderWatcherTest_FXT_4_1_x_1 {
 			writeRandomFile(xml1Backup);
 			writeRandomFile(xml2Backup);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

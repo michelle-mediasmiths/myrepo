@@ -1,11 +1,11 @@
 package com.mediasmiths.stdEvents.ui.rss;
 
-import java.util.List;
+import org.jboss.resteasy.plugins.providers.atom.Feed;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import org.jboss.resteasy.plugins.providers.atom.Feed;
+import java.util.List;
 
 @Path("/notification")
 public interface NotificationServiceAPI

@@ -1,8 +1,7 @@
 package com.mediasmiths.foxtel.qc.model;
 
-import java.math.BigInteger;
-
 import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigInteger;
 
 @XmlRootElement
 public class QCJobStatus {

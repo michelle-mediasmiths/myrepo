@@ -1,14 +1,13 @@
 package com.mediasmiths.foxtel.tc.priorities;
 
-import java.util.Date;
-import java.util.List;
-
+import com.google.inject.Inject;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Instant;
 
-import com.google.inject.Inject;
+import java.util.Date;
+import java.util.List;
 
 public class TranscodePriorities
 {

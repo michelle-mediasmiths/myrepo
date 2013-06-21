@@ -1,11 +1,10 @@
 package com.mediasmiths.foxtel.placeholder.validation;
 
-import java.io.File;
-
-import org.apache.commons.lang.RandomStringUtils;
-
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import org.apache.commons.lang.RandomStringUtils;
+
+import java.io.File;
 
 /**
  * Used to stub out some request validation behavior for testing

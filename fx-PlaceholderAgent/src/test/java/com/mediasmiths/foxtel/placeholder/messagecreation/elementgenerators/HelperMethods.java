@@ -1,5 +1,10 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators;
 
+import org.apache.commons.lang.RandomStringUtils;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -9,12 +14,6 @@ import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.apache.commons.lang.RandomStringUtils;
 
 public class HelperMethods {
 

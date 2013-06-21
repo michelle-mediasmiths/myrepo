@@ -1,16 +1,6 @@
 package com.mediasmiths.foxtel.placeholder;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -18,7 +8,15 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Ignore;
 import org.xml.sax.SAXException;
 
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 @Ignore //this is not a test class but maven thinks it is from the name
 public class TestUtil {

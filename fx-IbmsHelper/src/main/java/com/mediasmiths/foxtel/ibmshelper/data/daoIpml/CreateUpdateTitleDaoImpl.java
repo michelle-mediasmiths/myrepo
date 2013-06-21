@@ -1,13 +1,12 @@
 package com.mediasmiths.foxtel.ibmshelper.data.daoIpml;
 
-import java.util.List;
-
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
-
 import com.mediasmiths.foxtel.ibmshelper.data.dao.CreateUpdateTitleDao;
 import com.mediasmiths.std.guice.hibernate.dao.HibernateDao;
+
+import java.util.List;
 
 public class CreateUpdateTitleDaoImpl extends HibernateDao<CreateOrUpdateTitle, Long> implements CreateUpdateTitleDao
 {

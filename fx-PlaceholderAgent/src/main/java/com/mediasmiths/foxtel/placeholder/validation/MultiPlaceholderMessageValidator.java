@@ -181,8 +181,7 @@ public class MultiPlaceholderMessageValidator extends
 
 	private MessageValidationResult validateConsumerAdvice(String consumerAdvice) {
 
-		// TODO match consumer advice with regex [ADHLNSV,]* ?
-		logger.warn("consumer advice not being validated");
+		logger.info("consumer advice not being validated");
 		return MessageValidationResult.IS_VALID;
 
 	}
@@ -645,8 +644,7 @@ public class MultiPlaceholderMessageValidator extends
 	}
 
 	private boolean validateSenderID(String senderID) {
-		logger.debug("Validating sender id" + senderID);
-		// TODO is any validation of this field required?
+		logger.info("Sender id is not validated " + senderID);
 		return true;
 	}
 

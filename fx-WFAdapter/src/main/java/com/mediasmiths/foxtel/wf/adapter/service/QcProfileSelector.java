@@ -1,7 +1,5 @@
 package com.mediasmiths.foxtel.wf.adapter.service;
 
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
@@ -11,6 +9,7 @@ import com.mediasmiths.foxtel.transcode.TranscodeRules;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.util.AssetProperties;
+import org.apache.log4j.Logger;
 
 public class QcProfileSelector
 {

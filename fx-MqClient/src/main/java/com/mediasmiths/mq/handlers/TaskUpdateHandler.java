@@ -1,10 +1,9 @@
 package com.mediasmiths.mq.handlers;
 
-import org.apache.log4j.Logger;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.mayam.MayamTaskListType;
+import org.apache.log4j.Logger;
 
 /**
  * Handles updates for a given task list, recieves the attributes before and after the task update

@@ -1,18 +1,16 @@
 package com.mediasmiths.foxtel.agent.validation;
 
-import java.io.File;
-import java.io.IOException;
+import com.google.inject.Inject;
+import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
+import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
-
-import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
-
-import com.google.inject.Inject;
-import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.queue.PickupPackage;
+import java.io.File;
+import java.io.IOException;
 
 public abstract class MessageValidator<T> {
 

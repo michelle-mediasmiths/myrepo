@@ -1,11 +1,5 @@
 package com.mediasmiths.foxtel.tc.rest.impl;
 
-import java.net.URI;
-import java.sql.Time;
-
-import org.apache.cxf.binding.soap.tcp.TCPConduit;
-import org.junit.Test;
-
 import com.google.inject.Injector;
 import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
 import com.mediasmiths.foxtel.tc.rest.api.TCBugOptions;
@@ -23,6 +17,8 @@ import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
 import com.mediasmiths.std.guice.web.rest.CoreRestServicesModule;
 import com.mediasmiths.std.io.PropertyFile;
+
+import java.net.URI;
 
 public class PreviewExportJobs
 {

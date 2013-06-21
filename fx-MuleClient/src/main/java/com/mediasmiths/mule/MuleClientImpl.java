@@ -1,16 +1,15 @@
 package com.mediasmiths.mule;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
-
 import org.mule.api.MuleContext;
 import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
 import org.mule.api.MuleMessageCollection;
 import org.mule.module.client.MuleClient;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 
 public class MuleClientImpl implements IMuleClient {
 	protected  MuleClient client = null;

@@ -17,7 +17,6 @@ import com.mediasmiths.foxtel.multiplaceholder.foxtel.placeholder.util.Util;
 import com.mediasmiths.foxtel.multiplaceholder.foxtel.placeholder.validmessagepickup.FileWriter;
 import com.mediasmiths.foxtel.placeholder.processing.MultiPlaceholderMessageProcessor;
 import com.mediasmiths.foxtel.placeholder.validation.MultiPlaceholderMessageValidator;
-import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.validation.MayamValidator;
 import org.apache.commons.lang.RandomStringUtils;
@@ -94,8 +93,6 @@ public abstract class PlaceHolderMessageShortTest
 			return null;
 		}
 	};
-	protected final AlertInterface alert = mock(AlertInterface.class);
-	protected final String alertRecipient = "alert@foxtel.com.au";
 
 	protected static String createMessageID() {
 		return RandomStringUtils.randomAlphabetic(10);

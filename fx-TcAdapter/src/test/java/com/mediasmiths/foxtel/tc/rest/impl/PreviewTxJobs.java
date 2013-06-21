@@ -1,28 +1,18 @@
 package com.mediasmiths.foxtel.tc.rest.impl;
 
-import java.net.URI;
-import java.sql.Time;
-
-import org.apache.cxf.binding.soap.tcp.TCPConduit;
-import org.junit.Test;
-
 import com.google.inject.Injector;
 import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
-import com.mediasmiths.foxtel.tc.rest.api.TCBugOptions;
-import com.mediasmiths.foxtel.tc.rest.api.TCFTPUpload;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
-import com.mediasmiths.foxtel.tc.rest.api.TCLocation;
 import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 import com.mediasmiths.foxtel.tc.rest.api.TCRestService;
-import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeColour;
-import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeOptions;
-import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeSize;
 import com.mediasmiths.std.guice.apploader.BasicSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
 import com.mediasmiths.std.guice.web.rest.CoreRestServicesModule;
 import com.mediasmiths.std.io.PropertyFile;
+
+import java.net.URI;
 
 public class PreviewTxJobs
 {

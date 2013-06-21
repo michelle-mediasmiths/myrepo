@@ -1,11 +1,11 @@
 package com.mediasmiths.foxtel.extendedpublishing;
 
+import com.mediasmiths.foxtel.channels.config.ChannelProperties;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 
 public class ChannelPropertiesStub implements ChannelProperties
 {

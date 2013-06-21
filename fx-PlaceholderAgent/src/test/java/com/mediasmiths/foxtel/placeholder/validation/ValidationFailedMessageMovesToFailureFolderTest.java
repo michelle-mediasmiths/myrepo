@@ -1,24 +1,6 @@
 package com.mediasmiths.foxtel.placeholder.validation;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import javax.xml.bind.JAXBException;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.junit.Test;
-import org.xml.sax.SAXException;
-
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
-
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.PlaceholderManagerTest;
 import com.mediasmiths.foxtel.placeholder.TestUtil;
@@ -26,6 +8,21 @@ import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.TestAddOrUpdateMaterial;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+import org.junit.Test;
+import org.xml.sax.SAXException;
+
+import javax.xml.bind.JAXBException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 
 public class ValidationFailedMessageMovesToFailureFolderTest extends
 		PlaceholderManagerTest {

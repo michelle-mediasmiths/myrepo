@@ -1,21 +1,5 @@
 package com.mediasmiths.foxtel.qc.service;
 
-import java.rmi.RemoteException;
-
-import javassist.NotFoundException;
-
-import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-
-import org.apache.axis.types.URI.MalformedURIException;
-
 import com.mediasmiths.foxtel.cerify.medialocation.MediaLocationNotFoundException;
 import com.mediasmiths.foxtel.qc.model.QCJobIdentifier;
 import com.mediasmiths.foxtel.qc.model.QCJobResult;
@@ -24,6 +8,16 @@ import com.mediasmiths.foxtel.qc.model.QCMediaResult;
 import com.mediasmiths.foxtel.qc.model.QCStartRequest;
 import com.mediasmiths.foxtel.qc.model.QCStartResponse;
 import com.mediasmiths.foxtel.qc.model.QCStartStatus;
+import javassist.NotFoundException;
+
+import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 @Path("/qc")
 public interface QCRestService {

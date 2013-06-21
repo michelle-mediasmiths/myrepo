@@ -1,13 +1,12 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators;
 
+import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
+import org.apache.commons.lang.RandomStringUtils;
+
 import java.math.BigInteger;
 import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
-
-import org.apache.commons.lang.RandomStringUtils;
-
-import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
 
 public class MSTitleDescription {
 

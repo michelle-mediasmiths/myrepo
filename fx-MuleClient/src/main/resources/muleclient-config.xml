@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mule xmlns="http://www.mulesoft.org/schema/mule/core"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
-        xmlns:file="http://www.mulesoft.org/schema/mule/file"
-        xmlns:http="http://www.mulesoft.org/schema/mule/http"
-        xmlns:https="http://www.mulesoft.org/schema/mule/https"
-        xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp"
-        xsi:schemaLocation="
-        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.3/mule.xsd
-        http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/3.2.1/mule-jms.xsd
-        http://www.mulesoft.org/schema/mule/tcp http://www.mulesoft.org/schema/mule/tcp/3.3/mule-tcp.xsd
-        http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/3.3/mule-http.xsd
-        http://www.mulesoft.org/schema/mule/https http://www.mulesoft.org/schema/mule/http/3.3/mule-https.xsd
-        http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/3.2.1/mule-file.xsd">
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:http="http://www.mulesoft.org/schema/mule/http"
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.3/mule.xsd
+
+
+        http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/3.3/mule-http.xsd">
         
 	<description>
 	This config is for Mule Client examples.

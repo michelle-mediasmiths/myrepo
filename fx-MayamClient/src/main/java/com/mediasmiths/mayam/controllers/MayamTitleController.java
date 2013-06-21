@@ -9,17 +9,13 @@ import au.com.foxtel.cf.mam.pms.LicensePeriodType;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.GenericTable;
-import com.mayam.wf.attributes.shared.type.GenericTable.Row;
 import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.exception.RemoteException;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
@@ -35,16 +31,13 @@ import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
-
 import org.apache.log4j.Logger;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.xml.datatype.DatatypeConstants;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 public class MayamTitleController extends MayamController{
 	private static final String TITLE_AGL_NAME = "episode";
@@ -837,40 +830,6 @@ public class MayamTitleController extends MayamController{
 		return isProtected;
 	}
 
-	public String getRightsStart(AttributeMap titleAttributes)
-	{
-		// TODO find very first?
-		GenericTable rights = titleAttributes.getAttribute(Attribute.MEDIA_RIGHTS);
-
-		if (rights != null)
-		{
-			List<Row> rows = rights.getRows();
-			if (rows.size() > 0 && rows.get(0).size() > 3)
-			{
-				return rows.get(0).get(2);
-			}
-		}
-
-		log.warn("could not find licence for title");
-		return "";
-	}
-
-	public String getRightsEnd(AttributeMap titleAttributes)
-	{
-		// TODO find very last?
-		GenericTable rights = titleAttributes.getAttribute(Attribute.MEDIA_RIGHTS);
-		if (rights != null)
-		{
-			List<Row> rows = rights.getRows();
-			if (rows.size() > 0 && rows.get(0).size() > 3)
-			{
-				return rows.get(0).get(3);
-			}
-		}
-		log.warn("could not find licence for title");
-		return "";
-	}
-	
 	public List<AttributeMap> getMaterialsFortitle(String titleId, String titleAssetID) throws RemoteException{
 		
 		log.debug(String.format("Searching for materials of title %s (%s)", titleId, titleAssetID));

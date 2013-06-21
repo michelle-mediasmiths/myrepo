@@ -1,13 +1,8 @@
 package com.mediasmiths.foxtel.tx.ftp;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.util.Collection;
-
-import javax.inject.Inject;
-
+import com.google.inject.name.Named;
+import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
+import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.net.PrintCommandListener;
@@ -18,9 +13,12 @@ import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
 
-import com.google.inject.name.Named;
-import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
-import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
+import javax.inject.Inject;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.util.Collection;
 
 public class TxFtpDelivery implements StoppableService
 {

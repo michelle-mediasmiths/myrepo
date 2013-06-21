@@ -1,13 +1,12 @@
 package com.mediasmiths.mq;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Injector;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.guice.serviceregistry.ApplicationContextNameRegistry;
+import org.apache.log4j.Logger;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 
 public class MqService  implements ServletContextListener {

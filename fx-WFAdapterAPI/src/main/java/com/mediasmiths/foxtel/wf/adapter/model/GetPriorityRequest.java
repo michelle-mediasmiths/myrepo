@@ -1,9 +1,8 @@
 package com.mediasmiths.foxtel.wf.adapter.model;
 
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 
 @XmlRootElement
 public class GetPriorityRequest

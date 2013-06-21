@@ -1,10 +1,8 @@
 package com.mediasmiths.mayam;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
-import com.mediasmiths.mayam.FileFormatVerification.FileFormatTest;
+import static org.junit.Assert.assertEquals;
 
 public class FileFormatCsVParamsTest
 {

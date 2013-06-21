@@ -1,19 +1,5 @@
 package com.mediasmiths.foxtel.wf.adapter.service;
 
-import java.io.IOException;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.xml.bind.JAXBException;
-
-import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 import com.mediasmiths.foxtel.wf.adapter.model.AbortFxpTransferRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
@@ -24,7 +10,6 @@ import com.mediasmiths.foxtel.wf.adapter.model.ExportFailedRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.GetPriorityRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.GetPriorityResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
-import com.mediasmiths.foxtel.wf.adapter.model.InvokeIntalioTXFlow;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.RemoveTransferRequest;
@@ -36,6 +21,18 @@ import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
 import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFinished;
 import com.mediasmiths.foxtel.wf.adapter.model.WriteExportCompanions;
 import com.mediasmiths.mayam.MayamClientException;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
 
 @Path("/wf")
 public interface WFAdapterRestService

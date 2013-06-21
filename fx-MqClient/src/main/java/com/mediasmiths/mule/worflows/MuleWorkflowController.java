@@ -1,16 +1,5 @@
 package com.mediasmiths.mule.worflows;
 
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-
-import org.apache.log4j.Logger;
-import org.mule.api.MuleException;
-import org.mule.api.MuleMessage;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.wf.adapter.model.InvokeExport;
@@ -21,6 +10,11 @@ import com.mediasmiths.mq.MediasmithsDestinations;
 import com.mediasmiths.mule.IMuleClient;
 import com.mediasmiths.mule.MuleClientImpl;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+import org.apache.log4j.Logger;
+import org.mule.api.MuleException;
+
+import javax.xml.bind.JAXBException;
+import java.io.UnsupportedEncodingException;
 
 public class MuleWorkflowController {
 

@@ -1,13 +1,12 @@
 package com.mediasmiths.foxtel.tc.priorities;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 
 public class TranscodePriorityConfiguration
 {

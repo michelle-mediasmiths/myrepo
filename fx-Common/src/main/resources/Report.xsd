@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="http://com.mediasmiths.foxtel.ip.common.events.report"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://com/mediasmiths/foxtel/ip/common/events/report"
-	xmlns:fns="http://com.mediasmiths.foxtel.ip.common.events.report"
-	elementFormDefault="qualified" attributeFormDefault="unqualified"
-	version="1.0">
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://com/mediasmiths/foxtel/ip/common/events/report"
+           elementFormDefault="qualified" attributeFormDefault="unqualified"
+           version="1.0">
 	
 	<xs:complexType name="Report">
 		<xs:annotation>

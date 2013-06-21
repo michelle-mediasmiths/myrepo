@@ -1,10 +1,9 @@
 package com.mediasmiths.foxtel.agent.validation;
 
-import java.io.File;
-
+import com.google.inject.Inject;
 import org.apache.log4j.Logger;
 
-import com.google.inject.Inject;
+import java.io.File;
 
 public class ConfigValidator {
 

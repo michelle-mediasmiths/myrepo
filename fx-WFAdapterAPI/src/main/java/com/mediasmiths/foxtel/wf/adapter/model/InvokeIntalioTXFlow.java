@@ -1,11 +1,10 @@
 package com.mediasmiths.foxtel.wf.adapter.model;
 
-import java.util.Date;
+import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
+import java.util.Date;
 
 @XmlRootElement
 public class InvokeIntalioTXFlow

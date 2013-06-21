@@ -1,9 +1,3 @@
-import java.util.List;
-import java.util.UUID;
-
-import org.junit.Ignore;
-import org.junit.Test;
-
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mediasmiths.foxtel.carbonwfs.WfsClient;
@@ -12,6 +6,11 @@ import com.mediasmiths.foxtel.carbonwfs.guice.WfsClientModule;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.io.PropertyFile;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import java.util.List;
+import java.util.UUID;
 
 public class TestBuildTemplateXML
 {
@@ -44,7 +43,6 @@ public class TestBuildTemplateXML
 			@Override
 			public void injectorCreated(Injector arg0)
 			{
-				// TODO Auto-generated method stub
 
 			}
 		});

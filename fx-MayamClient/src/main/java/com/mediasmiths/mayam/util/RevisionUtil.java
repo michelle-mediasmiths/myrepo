@@ -1,14 +1,13 @@
 package com.mediasmiths.mayam.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.exception.RemoteException;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RevisionUtil
 {

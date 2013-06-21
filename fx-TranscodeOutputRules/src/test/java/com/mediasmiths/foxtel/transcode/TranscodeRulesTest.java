@@ -1,16 +1,15 @@
 package com.mediasmiths.foxtel.transcode;
 
-import static org.junit.Assert.*;
-
+import com.google.inject.Inject;
+import com.google.inject.name.Names;
+import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
+import com.mediasmiths.std.io.PropertyFile;
 import org.jukito.JukitoModule;
 import org.jukito.JukitoRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Names;
-import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
-import com.mediasmiths.std.io.PropertyFile;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(JukitoRunner.class)
 public class TranscodeRulesTest

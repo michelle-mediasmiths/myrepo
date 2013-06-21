@@ -1,11 +1,5 @@
 package com.mediasmiths.mayam.util;
 
-import java.math.BigInteger;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.generated.materialexport.ChannelType;
@@ -13,9 +7,13 @@ import com.mediasmiths.foxtel.generated.materialexport.MaterialExport;
 import com.mediasmiths.foxtel.generated.materialexport.PresentationInformationType;
 import com.mediasmiths.foxtel.generated.materialexport.PresentationInformationType.LicensedChannels;
 import com.mediasmiths.foxtel.generated.materialexport.PresentationInformationType.SegmentationInformation;
-import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.FullProgrammePackageInfo;
+import org.apache.log4j.Logger;
+
+import java.math.BigInteger;
+import java.util.Date;
+import java.util.List;
 
 public class MaterialExportBuilder
 {

@@ -37,8 +37,6 @@ public class WFAdapterSetup extends AbstractRESTGuiceSetup
 	@Override
 	public void injectorWasCreated(Injector arg0)
 	{
-		// TODO Auto-generated method stub
-
 	}
 
 }

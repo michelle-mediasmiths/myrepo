@@ -1,19 +1,13 @@
 package com.mediasmiths.mq.handlers.purge;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mayam.wf.ws.client.FilterResult;
-import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.TaskUpdateHandler;
+import org.apache.log4j.Logger;
+
+import java.util.Date;
 
 public class PurgeCandidateExtendHandler extends TaskUpdateHandler
 {

@@ -23,7 +23,6 @@ import com.mediasmiths.mayam.FullProgrammePackageInfo;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.util.Comparators;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -31,7 +30,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;

@@ -1,7 +1,5 @@
 package com.mediasmiths.mq.handlers.asset;
 
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
@@ -11,6 +9,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mq.handlers.AttributeHandler;
 import com.mediasmiths.mq.transferqueue.UnmatchedTransferManager;
+import org.apache.log4j.Logger;
 
 /***
  * When an asset is created through DART a title id may be specified, if so this will be included in the AUX_VAL attribute in the asset create message if this is present attempt to associate the asst

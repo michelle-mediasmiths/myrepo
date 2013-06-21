@@ -1,6 +1,11 @@
 package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
-import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.agent.WatchFolders;
+import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.nio.file.FileSystems;
@@ -9,13 +14,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.agent.WatchFolders;
-import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 
 public class PickupExistingFilesOnlyDirectoryWatcher extends
 		DirectoryWatchingQueuer {

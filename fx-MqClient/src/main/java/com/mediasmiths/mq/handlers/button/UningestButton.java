@@ -1,13 +1,12 @@
 package com.mediasmiths.mq.handlers.button;
 
-import org.apache.log4j.Logger;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClientException;
+import org.apache.log4j.Logger;
 
 public class UningestButton extends ButtonClickHandler
 {

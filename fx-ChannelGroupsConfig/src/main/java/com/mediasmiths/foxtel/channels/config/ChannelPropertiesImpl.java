@@ -1,16 +1,14 @@
 package com.mediasmiths.foxtel.channels.config;
 
-import java.io.IOException;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mediasmiths.std.io.PropertyFile;
+import org.apache.log4j.Logger;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.apache.log4j.Logger;
-
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mediasmiths.std.io.PropertyFile;
 
 public class ChannelPropertiesImpl implements ChannelProperties {
 

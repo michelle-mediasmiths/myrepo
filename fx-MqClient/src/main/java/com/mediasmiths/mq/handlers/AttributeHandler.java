@@ -1,18 +1,15 @@
 package com.mediasmiths.mq.handlers;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.mayam.MayamClientImpl;
+import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
-import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
-import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 
 public abstract class AttributeHandler implements Handler

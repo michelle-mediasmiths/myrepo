@@ -1,13 +1,9 @@
 package com.mediasmiths.foxtel.agent;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 
-import com.google.inject.name.Named;
+import java.util.HashMap;
+import java.util.List;
 
 public class WatchFolders extends HashMap<String, WatchFolder>
 {

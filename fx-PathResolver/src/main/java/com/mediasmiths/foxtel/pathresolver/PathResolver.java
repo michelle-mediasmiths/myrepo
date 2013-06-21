@@ -1,13 +1,12 @@
 package com.mediasmiths.foxtel.pathresolver;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import org.apache.log4j.Logger;
+
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 
 public class PathResolver
 {

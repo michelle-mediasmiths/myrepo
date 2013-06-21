@@ -1,8 +1,7 @@
 package com.mediasmiths.foxtel.ibmshelper.guice;
 
-import org.hibernate.cfg.Configuration;
-
 import com.mediasmiths.std.guice.hibernate.module.HibernateModule;
+import org.hibernate.cfg.Configuration;
 
 public class IbmsGuiceDatabaseModule extends HibernateModule
 {

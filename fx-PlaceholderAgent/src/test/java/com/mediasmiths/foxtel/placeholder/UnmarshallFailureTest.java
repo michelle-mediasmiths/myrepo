@@ -1,25 +1,6 @@
 package com.mediasmiths.foxtel.placeholder;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.GregorianCalendar;
-
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.datatype.DatatypeConfigurationException;
-
-import org.apache.commons.lang.RandomStringUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.xml.sax.SAXException;
-
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
-
 import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
@@ -30,6 +11,22 @@ import com.mediasmiths.foxtel.placeholder.validation.ReceiptWriterThatAlwaysRetu
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.FileWriter;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.validation.MayamValidator;
+import org.apache.commons.lang.RandomStringUtils;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+import org.xml.sax.SAXException;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.DatatypeConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.util.GregorianCalendar;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class UnmarshallFailureTest {
 

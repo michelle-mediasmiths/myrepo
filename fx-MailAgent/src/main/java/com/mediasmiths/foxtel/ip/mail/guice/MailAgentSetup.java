@@ -20,7 +20,6 @@ public class MailAgentSetup extends AbstractRESTGuiceSetup
 	@Override
 	public void injectorWasCreated(Injector injector)
 	{
-		// TODO Auto-generated method stub
 	}
 
 }

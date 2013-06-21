@@ -1,10 +1,9 @@
 package com.mediasmiths.foxtel.qc.model;
 
-import java.net.URI;
-import java.util.Calendar;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.net.URI;
+import java.util.Calendar;
 
 
 @XmlRootElement

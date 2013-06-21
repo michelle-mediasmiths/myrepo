@@ -1,9 +1,8 @@
 package com.mediasmiths.foxtel.wf.adapter.util;
 
-import org.apache.log4j.Logger;
-
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
+import org.apache.log4j.Logger;
 
 public class TxUtil
 {

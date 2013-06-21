@@ -1,14 +1,13 @@
 package com.mediasmiths.foxtel.agent;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
+import com.google.inject.Inject;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
-import com.google.inject.Inject;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class ReceiptWriter {
 

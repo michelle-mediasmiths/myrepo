@@ -1,9 +1,8 @@
 package com.mediasmiths.mayam.retrying;
 
+import com.mediasmiths.std.threading.retry.Retryable;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.log4j.Logger;
-
-import com.mediasmiths.std.threading.retry.Retryable;
 
 final class TasksWSInvocationRetry implements Retryable<Object>
 {

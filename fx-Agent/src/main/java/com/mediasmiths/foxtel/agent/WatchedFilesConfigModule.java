@@ -1,17 +1,16 @@
 package com.mediasmiths.foxtel.agent;
 
-import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
-import com.google.inject.name.Named;
+import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
 
 public class WatchedFilesConfigModule extends AbstractModule
 {

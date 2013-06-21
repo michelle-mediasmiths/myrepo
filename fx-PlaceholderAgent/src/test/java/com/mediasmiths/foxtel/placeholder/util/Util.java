@@ -1,15 +1,14 @@
 package com.mediasmiths.foxtel.placeholder.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Locale;
-
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 
-import com.mediasmiths.foxtel.agent.queue.PickupPackage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Locale;
 
 public class Util {
 

@@ -1,15 +1,14 @@
 package com.mediasmiths.foxtel.ip.event.guice;
 
-import java.net.URI;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
+import org.apache.log4j.Logger;
+
+import java.net.URI;
 
 @Singleton
 public class EventAPIProvider implements Provider<EventAPI>

@@ -11,13 +11,12 @@ import org.apache.log4j.Logger;
 import org.datacontract.schemas._2004._07.rhozet.Job;
 import org.jdom2.output.XMLOutputter;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.UUID;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.UUID;
 
 public class TCRestServiceImpl implements TCRestService
 {

@@ -1,11 +1,10 @@
 package com.mediasmiths.mayam.controllers;
 
-import org.apache.log4j.Logger;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.std.types.Framerate;
 import com.mediasmiths.std.types.Timecode;
+import org.apache.log4j.Logger;
 
 public abstract class MayamController
 {

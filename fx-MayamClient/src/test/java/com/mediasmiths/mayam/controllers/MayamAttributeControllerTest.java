@@ -1,6 +1,19 @@
 package com.mediasmiths.mayam.controllers;
 
 
+import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeDescription;
+import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.AttributeValidationException;
+import com.mayam.wf.attributes.shared.AttributeValidationException.FailureType;
+import com.mayam.wf.attributes.shared.AttributeValidator;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -8,22 +21,6 @@ import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import java.util.Date;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-
-import com.mayam.wf.attributes.shared.Attribute;
-import com.mayam.wf.attributes.shared.AttributeDescription;
-import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.AttributeValidationException;
-import com.mayam.wf.attributes.shared.AttributeValidator;
-import com.mayam.wf.attributes.shared.AttributeValidationException.FailureType;
-import com.mayam.wf.ws.client.TasksClient;
-import com.mediasmiths.mayam.veneer.TaskApiVeneer;
-import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 
 public class MayamAttributeControllerTest {
 	

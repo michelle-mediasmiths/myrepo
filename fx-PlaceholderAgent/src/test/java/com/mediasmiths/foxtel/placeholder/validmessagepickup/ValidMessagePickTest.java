@@ -1,27 +1,6 @@
 package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.io.IOException;
-
-import javax.xml.bind.JAXBException;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.log4j.Logger;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.xml.sax.SAXException;
-
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
-
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
@@ -31,6 +10,24 @@ import com.mediasmiths.foxtel.placeholder.categories.MessageCreation;
 import com.mediasmiths.foxtel.placeholder.categories.PickuptoFailure;
 import com.mediasmiths.foxtel.placeholder.categories.PickuptoReceipt;
 import com.mediasmiths.foxtel.placeholder.util.Util;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.log4j.Logger;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+import org.xml.sax.SAXException;
+
+import javax.xml.bind.JAXBException;
+import java.io.File;
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.when;
 
 public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 

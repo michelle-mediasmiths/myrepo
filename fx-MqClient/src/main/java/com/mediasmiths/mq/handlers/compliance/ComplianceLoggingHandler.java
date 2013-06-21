@@ -1,7 +1,5 @@
 package com.mediasmiths.mq.handlers.compliance;
 
-import org.apache.log4j.Logger;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
@@ -11,6 +9,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
+import org.apache.log4j.Logger;
 
 public class ComplianceLoggingHandler extends TaskStateChangeHandler
 {

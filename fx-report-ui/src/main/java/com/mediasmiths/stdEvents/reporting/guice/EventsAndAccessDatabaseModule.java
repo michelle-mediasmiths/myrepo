@@ -1,5 +1,6 @@
 package com.mediasmiths.stdEvents.reporting.guice;
 
+import com.mediasmiths.mayam.accessrights.MayamAccessRights;
 import com.mediasmiths.std.guice.hibernate.module.HibernateModule;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
@@ -9,7 +10,6 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.Purge;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import com.mediasmiths.stdEvents.events.db.entity.EventingEntity;
 import com.mediasmiths.stdEvents.events.db.entity.nagios.NagiosReportEntity;
-import com.mediasmiths.mayam.accessrights.MayamAccessRights;
 import org.hibernate.cfg.Configuration;
 
 public class EventsAndAccessDatabaseModule extends HibernateModule
