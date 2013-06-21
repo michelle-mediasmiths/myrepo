@@ -174,7 +174,14 @@ public class ConformJobHandler extends JobHandler
 						try
 						{
 							log.info("Creating QC task for Edit Clips content");
-							taskController.createQCTaskForMaterial(houseID,previewStatus,item);
+							if (siteID == null)
+							{
+								log.warn("SiteID is null- cannot create a QC task for the edit clip content");
+							}
+							else
+							{
+							taskController.createQCTaskForMaterial(siteID,previewStatus,item);
+							}
 							log.info("QC task been created");
 						}
 						catch (MayamClientException e)
