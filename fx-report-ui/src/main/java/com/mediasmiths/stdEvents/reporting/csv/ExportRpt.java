@@ -2,6 +2,7 @@ package com.mediasmiths.stdEvents.reporting.csv;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ExtendedPublishing;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
@@ -49,15 +50,15 @@ public class ExportRpt extends ReportUtils
 
 			final String exportType = task.getExportType();
 
-			if ("Compliance Proxy".equals(exportType))
+			if (TranscodeJobType.COMPLIANCE_PROXY.getText().equals(exportType))
 			{
 				ret.compliance++;
 			}
-			else if ("Publicity Proxy".equals(exportType))
+			else if (TranscodeJobType.PUBLICITY_PROXY.getText().equals(exportType))
 			{
 				ret.publicity++;
 			}
-			else if ("Caption Proxy".equals(exportType))
+			else if (TranscodeJobType.CAPTION_PROXY.getText().equals(exportType))
 			{
 				ret.captions++;
 			}
