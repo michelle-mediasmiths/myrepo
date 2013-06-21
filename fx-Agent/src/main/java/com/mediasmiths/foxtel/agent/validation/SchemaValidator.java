@@ -1,9 +1,7 @@
 package com.mediasmiths.foxtel.agent.validation;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.IOException;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
@@ -11,8 +9,12 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import java.io.File;
-import java.io.IOException;
+
+import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
+
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 public class SchemaValidator
 {

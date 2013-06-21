@@ -6,7 +6,7 @@
             xmlns:templates="http://www.tektronix.com/cerify/templateInfo/2008/06/06"
             attributeFormDefault="unqualified"
             elementFormDefault="qualified"
-		>
+            xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
     <xsd:import schemaLocation="TemplateInformation.xsd"
               namespace="http://www.tektronix.com/cerify/templateInfo/2008/06/06"/>
   <xsd:element name="jobstart">

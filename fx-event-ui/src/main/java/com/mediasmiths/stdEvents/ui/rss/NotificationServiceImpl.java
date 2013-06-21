@@ -1,12 +1,13 @@
 package com.mediasmiths.stdEvents.ui.rss;
 
+import java.util.List;
+
+import org.jboss.resteasy.plugins.providers.atom.Feed;
+
 import com.google.inject.Inject;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
-import org.jboss.resteasy.plugins.providers.atom.Feed;
-
-import java.util.List;
 
 public class NotificationServiceImpl implements NotificationServiceAPI
 {

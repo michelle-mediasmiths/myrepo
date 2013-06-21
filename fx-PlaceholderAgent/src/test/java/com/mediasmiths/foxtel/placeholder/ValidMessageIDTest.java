@@ -1,21 +1,24 @@
 package com.mediasmiths.foxtel.placeholder;
 
-import au.com.foxtel.cf.mam.pms.Actions;
-import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
-import au.com.foxtel.cf.mam.pms.PurgeTitle;
-import com.mediasmiths.foxtel.agent.queue.PickupPackage;
-import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
-import com.mediasmiths.foxtel.placeholder.util.Util;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
+
+import javax.xml.bind.JAXBException;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import javax.xml.bind.JAXBException;
-import java.io.File;
-import java.io.IOException;
+import au.com.foxtel.cf.mam.pms.Actions;
+import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
+import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
-import static org.junit.Assert.assertEquals;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.placeholder.util.Util;
 
 public class ValidMessageIDTest extends PlaceHolderMessageShortTest {
 

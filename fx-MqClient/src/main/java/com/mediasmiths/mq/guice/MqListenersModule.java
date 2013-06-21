@@ -7,6 +7,8 @@ import com.mediasmiths.mq.MqListeners;
 import com.mediasmiths.mq.transferqueue.UnmatchedTransferManager;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
+import javax.xml.bind.Marshaller;
+
 public class MqListenersModule extends AbstractModule
 {
 

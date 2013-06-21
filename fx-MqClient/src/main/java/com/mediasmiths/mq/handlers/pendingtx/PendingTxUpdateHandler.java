@@ -1,5 +1,10 @@
 package com.mediasmiths.mq.handlers.pendingtx;
 
+import java.util.EnumSet;
+
+
+import org.apache.log4j.Logger;
+
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.SegmentList;
@@ -10,9 +15,6 @@ import com.mediasmiths.mayam.PackageNotFoundException;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskUpdateHandler;
-import org.apache.log4j.Logger;
-
-import java.util.EnumSet;
 
 public class PendingTxUpdateHandler extends TaskUpdateHandler
 {

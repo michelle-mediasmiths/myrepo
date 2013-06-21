@@ -1,6 +1,7 @@
 package com.mediasmiths.foxtel.placeholder.guice;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;

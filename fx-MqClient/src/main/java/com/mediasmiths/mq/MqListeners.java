@@ -1,6 +1,14 @@
 package com.mediasmiths.mq;
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Provider;
+import com.google.inject.name.Named;
+import com.mayam.wf.mq.AttributeMessageBuilder;
 import com.mayam.wf.mq.Mq;
 import com.mayam.wf.mq.Mq.Detachable;
 import com.mayam.wf.mq.Mq.ListenIntensity;
@@ -8,17 +16,17 @@ import com.mayam.wf.mq.Mq.Listener;
 import com.mayam.wf.mq.MqDestination;
 import com.mayam.wf.mq.MqException;
 import com.mayam.wf.mq.MqMessage;
+import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
+import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 import com.mediasmiths.mq.listeners.IncomingListener;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 import com.mediasmiths.std.threading.Daemon;
-import org.apache.log4j.Logger;
-
-import java.util.ArrayList;
 
 public class MqListeners extends Daemon implements StoppableService {
 	private ArrayList<Detachable> listeners;

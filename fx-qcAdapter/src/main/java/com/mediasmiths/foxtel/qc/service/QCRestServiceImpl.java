@@ -1,5 +1,14 @@
 package com.mediasmiths.foxtel.qc.service;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.rmi.RemoteException;
+import java.util.List;
+
+import org.apache.axis.types.URI.MalformedURIException;
+import org.apache.log4j.Logger;
+import org.jboss.resteasy.spi.InternalServerErrorException;
+
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.cerify.CerifyClient;
 import com.mediasmiths.foxtel.cerify.medialocation.MediaLocation;
@@ -21,14 +30,6 @@ import com.tektronix.www.cerify.soap.client.GetMediaFileResultsResponse;
 import com.tektronix.www.cerify.soap.client.JobDoesntExistFault;
 import com.tektronix.www.cerify.soap.client.JobIsArchivedFault;
 import com.tektronix.www.cerify.soap.client.MediaFileNotInJobFault;
-import org.apache.axis.types.URI.MalformedURIException;
-import org.apache.log4j.Logger;
-import org.jboss.resteasy.spi.InternalServerErrorException;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.rmi.RemoteException;
-import java.util.List;
 
 public class QCRestServiceImpl implements QCRestService
 {
@@ -222,6 +223,7 @@ public class QCRestServiceImpl implements QCRestService
 				throw new QCAdapterException("error getting media result",e);
 			}
 			
+			//TODO: include serialized full report!
 			final String resultValue = res.getResult().getValue();
 			log.info("returning result of "+ resultValue);
 			

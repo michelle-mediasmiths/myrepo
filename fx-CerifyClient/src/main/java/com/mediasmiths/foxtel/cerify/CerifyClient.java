@@ -1,6 +1,17 @@
 package com.mediasmiths.foxtel.cerify;
 
 
+import java.rmi.RemoteException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Date;
+import java.util.Calendar;
+
+import org.apache.axis.types.URI;
+import org.apache.axis.types.URI.MalformedURIException;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mediasmiths.foxtel.cerify.medialocation.MediaLocation;
@@ -9,43 +20,36 @@ import com.mediasmiths.foxtel.cerify.medialocation.MediaLocationService;
 import com.tektronix.www.cerify.soap.client.BaseCeritalkFault;
 import com.tektronix.www.cerify.soap.client.CeriTalk_PortType;
 import com.tektronix.www.cerify.soap.client.ControlJob;
-import com.tektronix.www.cerify.soap.client.ControlJobResponse;
 import com.tektronix.www.cerify.soap.client.ControlMediaSet;
+import com.tektronix.www.cerify.soap.client.ControlJob;
+import com.tektronix.www.cerify.soap.client.ControlJobResponse;
 import com.tektronix.www.cerify.soap.client.ControlMediaSetResponse;
 import com.tektronix.www.cerify.soap.client.CreateJob;
+import com.tektronix.www.cerify.soap.client.GetJobs;
 import com.tektronix.www.cerify.soap.client.CreateMediaSet;
 import com.tektronix.www.cerify.soap.client.GetJobResultsResponse;
 import com.tektronix.www.cerify.soap.client.GetJobStatus;
 import com.tektronix.www.cerify.soap.client.GetJobStatusResponse;
-import com.tektronix.www.cerify.soap.client.GetJobs;
-import com.tektronix.www.cerify.soap.client.GetJobsResponse;
 import com.tektronix.www.cerify.soap.client.GetMediaFileResultsResponse;
 import com.tektronix.www.cerify.soap.client.GetProfiles;
 import com.tektronix.www.cerify.soap.client.GetProfilesResponse;
-import com.tektronix.www.cerify.soap.client.InvalidRangeFault;
+import com.tektronix.www.cerify.soap.client.GetJobsResponse;
 import com.tektronix.www.cerify.soap.client.JobActionType;
 import com.tektronix.www.cerify.soap.client.JobDoesntExistFault;
 import com.tektronix.www.cerify.soap.client.JobIsArchivedFault;
 import com.tektronix.www.cerify.soap.client.JobStatusType;
+import com.tektronix.www.cerify.soap.client.JobActionType;
 import com.tektronix.www.cerify.soap.client.MediaFileNotInJobFault;
 import com.tektronix.www.cerify.soap.client.MediaLocationDoesntExistFault;
 import com.tektronix.www.cerify.soap.client.MediaSetActionType;
-import com.tektronix.www.cerify.soap.client.MediaSetDoesntExistFault;
 import com.tektronix.www.cerify.soap.client.MediaSetNameInUseFault;
+import com.tektronix.www.cerify.soap.client.InvalidRangeFault;
 import com.tektronix.www.cerify.soap.client.PriorityType;
+import com.tektronix.www.cerify.soap.client.MediaSetDoesntExistFault;
 import com.tektronix.www.cerify.soap.client.URLNotAccessibleFault;
 import com.tektronix.www.cerify.soap.client.URLNotInMediaLocationFault;
 import com.tektronix.www.cerify.soap.client._20101220.GetJobResults;
 import com.tektronix.www.cerify.soap.client._20101220.GetMediaFileResults;
-import org.apache.axis.types.URI;
-import org.apache.axis.types.URI.MalformedURIException;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
-import java.rmi.RemoteException;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
 
 @Singleton
 public class CerifyClient

@@ -1,9 +1,9 @@
 package com.mediasmiths.mayam.veneer;
 
+import java.util.Set;
+
 import com.google.inject.ImplementedBy;
 import com.mayam.wf.exception.RemoteException;
-
-import java.util.Set;
 
 @ImplementedBy(UserApiVeneerImpl.class)
 public interface UserApiVeneer

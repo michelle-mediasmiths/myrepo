@@ -7,10 +7,12 @@ import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.exception.RemoteException;
+import com.mayam.wf.ws.client.AssetApi;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.veneer.AssetApiVeneer;
+
 import org.apache.log4j.Logger;
 
 import java.util.Date;

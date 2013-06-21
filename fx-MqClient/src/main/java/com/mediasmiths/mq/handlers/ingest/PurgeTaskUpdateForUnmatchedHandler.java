@@ -1,17 +1,18 @@
 package com.mediasmiths.mq.handlers.ingest;
 
+import org.apache.log4j.Logger;
+
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.MediaStatus;
-import com.mayam.wf.attributes.shared.type.QcStatus;
-import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.attributes.shared.type.QcStatus;
+import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.TaskUpdateHandler;
-import org.apache.log4j.Logger;
 
 public class PurgeTaskUpdateForUnmatchedHandler extends TaskUpdateHandler
 {

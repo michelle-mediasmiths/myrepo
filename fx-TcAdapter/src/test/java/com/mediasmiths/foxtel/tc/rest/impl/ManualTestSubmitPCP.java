@@ -2,9 +2,11 @@ package com.mediasmiths.foxtel.tc.rest.impl;
 
 import com.google.inject.Injector;
 import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
+import com.mediasmiths.foxtel.tc.rest.api.TCBugOptions;
 import com.mediasmiths.foxtel.tc.rest.api.TCFTPUpload;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobInfo;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
+import com.mediasmiths.foxtel.tc.rest.api.TCLocation;
 import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 import com.mediasmiths.foxtel.tc.rest.api.TCRestService;

@@ -1,10 +1,5 @@
 package com.mediasmiths.stdEvents.events.db.entity.nagios;
 
-import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
-import com.mediasmiths.stdEvents.events.db.entity.HibernateEventingMessage;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,10 +7,16 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAccessType;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
+import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.events.db.entity.HibernateEventingMessage;
 
 @Entity
 @Table(name = "NagiosReport")

@@ -1,13 +1,14 @@
 package com.mediasmiths.stdEvents.events.rest.api;
 
-import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+
+
+import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 
 /**
  * EventAPI is now used just to save the events

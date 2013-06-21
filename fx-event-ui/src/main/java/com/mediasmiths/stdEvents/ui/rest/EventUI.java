@@ -1,7 +1,5 @@
 package com.mediasmiths.stdEvents.ui.rest;
 
-import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -10,6 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+
+import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 
 @Path("/ui")
 public interface EventUI

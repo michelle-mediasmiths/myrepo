@@ -1,6 +1,12 @@
 package com.mediasmiths.stdEvents.ui.rss;
 
-import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.digester.rss.Channel;
 import org.apache.commons.digester.rss.Item;
 import org.apache.log4j.Logger;
@@ -10,12 +16,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 
 public class RSSFeed
 {

@@ -1,8 +1,9 @@
 package com.mediasmiths.mq.handlers.button.export;
 
+import org.apache.log4j.Logger;
+
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.mayam.MayamButtonType;
-import org.apache.log4j.Logger;
 
 public class ComplianceProxy extends ExportProxyButton
 {

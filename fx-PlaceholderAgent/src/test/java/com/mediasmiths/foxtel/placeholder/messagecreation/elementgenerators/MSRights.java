@@ -1,17 +1,19 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators;
 
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.apache.commons.lang.RandomStringUtils;
+
 import au.com.foxtel.cf.mam.pms.ChannelType;
 import au.com.foxtel.cf.mam.pms.Channels;
 import au.com.foxtel.cf.mam.pms.License;
 import au.com.foxtel.cf.mam.pms.LicenseHolderType;
 import au.com.foxtel.cf.mam.pms.LicensePeriodType;
 import au.com.foxtel.cf.mam.pms.RightsType;
-import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods.Relative;
-import org.apache.commons.lang.RandomStringUtils;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.XMLGregorianCalendar;
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods.Relative;
 
 public class MSRights {
 
@@ -43,7 +45,7 @@ public class MSRights {
 		licensePeriod.setEndDate(endDate);
 		license1.setLicensePeriod(licensePeriod);
 
-		channel1.setChannelTag("FOX");
+		channel1.setChannelTag("FOX");  //TODO : pick these out of a larger set
 		channel1.setChannelName("FOX8");
 		channels.getChannel().add(channel1);
 		license1.setChannels(channels);

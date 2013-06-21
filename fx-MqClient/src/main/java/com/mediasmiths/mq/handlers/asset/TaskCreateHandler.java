@@ -1,12 +1,13 @@
 package com.mediasmiths.mq.handlers.asset;
 
+import org.apache.log4j.Logger;
+
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskCreateHandler;
-import org.apache.log4j.Logger;
 
 public class TaskCreateHandler extends TaskStateChangeHandler
 {

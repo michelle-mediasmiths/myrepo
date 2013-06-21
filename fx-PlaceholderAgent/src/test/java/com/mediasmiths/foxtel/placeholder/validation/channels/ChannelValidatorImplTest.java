@@ -1,15 +1,16 @@
 package com.mediasmiths.foxtel.placeholder.validation.channels;
 
-import com.mediasmiths.foxtel.channels.config.ChannelPropertiesImpl;
-import com.mediasmiths.std.io.PropertyFile;
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import com.mediasmiths.foxtel.channels.config.ChannelPropertiesImpl;
+import com.mediasmiths.std.io.PropertyFile;
 
 public class ChannelValidatorImplTest {
 	ChannelPropertiesImpl validator;

@@ -1,9 +1,8 @@
 package com.mediasmiths.foxtel.wf.adapter.model;
 
-import com.mediasmiths.foxtel.tc.rest.api.TCFTPUpload;
-
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import com.mediasmiths.foxtel.tc.rest.api.TCFTPUpload;
+import javax.xml.bind.annotation.XmlElement;
 
 @XmlRootElement
 public class TCPassedNotification extends TCNotification

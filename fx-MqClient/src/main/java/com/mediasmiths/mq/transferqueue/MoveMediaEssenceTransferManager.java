@@ -1,14 +1,16 @@
 package com.mediasmiths.mq.transferqueue;
 
+import java.util.concurrent.TimeUnit;
+
+import org.apache.log4j.Logger;
+
 import com.mayam.wf.exception.RemoteException;
+import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 import com.mediasmiths.std.threading.Daemon;
 import com.mediasmiths.std.threading.Timeout;
-import org.apache.log4j.Logger;
-
-import java.util.concurrent.TimeUnit;
 
 public abstract class MoveMediaEssenceTransferManager  extends Daemon implements StoppableService
 {

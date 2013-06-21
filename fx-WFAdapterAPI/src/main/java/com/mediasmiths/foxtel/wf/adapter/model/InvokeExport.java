@@ -1,10 +1,11 @@
 package com.mediasmiths.foxtel.wf.adapter.model;
 
-import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Date;
+
+import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 
 @XmlRootElement
 public class InvokeExport

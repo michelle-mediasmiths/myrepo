@@ -1,11 +1,17 @@
 package com.mediasmiths.mq.handlers.asset;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamPreviewResults;
+import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.UpdateAttributeHandler;
 import org.apache.log4j.Logger;

@@ -1,11 +1,12 @@
 package com.mediasmiths.foxtel.pathresolver;
 
-import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
+import static org.junit.Assert.assertEquals;
+
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import com.mediasmiths.foxtel.pathresolver.PathResolver;
+import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
 
 public class PathResolverTest_FXT_4_4_4SinglePath
 {	

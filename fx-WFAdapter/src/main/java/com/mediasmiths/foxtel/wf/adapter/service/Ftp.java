@@ -1,5 +1,11 @@
 package com.mediasmiths.foxtel.wf.adapter.service;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ProtocolCommandListener;
@@ -7,11 +13,6 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
 
 
 public class Ftp

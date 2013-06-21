@@ -1,10 +1,15 @@
 package com.mediasmiths.mq.handlers.button.export;
 
+import java.util.Date;
+
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.ip.event.EventService;
@@ -15,7 +20,6 @@ import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.button.ButtonClickHandler;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
-import org.apache.log4j.Logger;
 
 public abstract class ExportProxyButton extends ButtonClickHandler
 {

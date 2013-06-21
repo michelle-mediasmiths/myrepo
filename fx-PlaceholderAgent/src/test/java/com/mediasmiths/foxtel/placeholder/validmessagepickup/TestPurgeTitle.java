@@ -1,18 +1,20 @@
 package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
-import au.com.foxtel.cf.mam.pms.Actions;
-import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
-import au.com.foxtel.cf.mam.pms.PurgeTitle;
-import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
-import com.mediasmiths.mayam.MayamClientErrorCode;
-import org.apache.commons.lang.RandomStringUtils;
-import org.xml.sax.SAXException;
-
-import javax.xml.bind.JAXBException;
-
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import javax.xml.bind.JAXBException;
+
+import org.apache.commons.lang.RandomStringUtils;
+import org.xml.sax.SAXException;
+
+import au.com.foxtel.cf.mam.pms.Actions;
+import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
+import au.com.foxtel.cf.mam.pms.PurgeTitle;
+
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
+import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class TestPurgeTitle extends ValidMessagePickTest {
 

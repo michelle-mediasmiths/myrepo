@@ -1,10 +1,11 @@
 package com.mediasmiths.foxtel.agent.queue;
 
-import com.mediasmiths.std.io.filter.FilenameExtensionFilter;
-import org.apache.commons.io.FilenameUtils;
-
 import java.io.File;
 import java.io.FilenameFilter;
+
+import org.apache.commons.io.FilenameUtils;
+
+import com.mediasmiths.std.io.filter.FilenameExtensionFilter;
 
 /**
  * define a filename filter for suffixes and root file names

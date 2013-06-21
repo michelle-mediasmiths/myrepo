@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
-             targetNamespace="http://www.tek.com/cerify/2007/03/22/reports/wsdl"
-             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-             xmlns:service="http://www.tek.com/cerify/2007/03/22/reports/wsdl"
-             xmlns:service20080509="http://www.tek.com/cerify/2008/05/09/reports/wsdl"
-             xmlns:service20091202="http://www.tek.com/cerify/2009/12/02/reports/wsdl"
-             xmlns:service20100523="http://www.tek.com/cerify/2010/05/23/reports/wsdl"
-             xmlns:service20101220="http://www.tek.com/cerify/2010/12/20/reports/wsdl"
-             xmlns:report="http://www.tek.com/cerify/2007/03/22/reports"
-             xmlns:template="http://www.tektronix.com/cerify/templateInfo/2008/06/06">
+    targetNamespace="http://www.tek.com/cerify/2007/03/22/reports/wsdl"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:service="http://www.tek.com/cerify/2007/03/22/reports/wsdl"
+    xmlns:service20080509="http://www.tek.com/cerify/2008/05/09/reports/wsdl"
+    xmlns:service20091202="http://www.tek.com/cerify/2009/12/02/reports/wsdl"
+    xmlns:service20100523="http://www.tek.com/cerify/2010/05/23/reports/wsdl"
+    xmlns:service20101220="http://www.tek.com/cerify/2010/12/20/reports/wsdl"
+    xmlns:report="http://www.tek.com/cerify/2007/03/22/reports"
+    xmlns:p="http://www.w3.org/2001/XMLSchema"
+    xmlns:template="http://www.tektronix.com/cerify/templateInfo/2008/06/06">
     <types>
 
     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"

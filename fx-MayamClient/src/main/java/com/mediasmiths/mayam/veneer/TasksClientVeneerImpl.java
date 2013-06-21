@@ -1,5 +1,9 @@
 package com.mediasmiths.mayam.veneer;
 
+import java.net.URL;
+
+import javax.inject.Provider;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.server.AttributeMapMapper;
@@ -10,9 +14,6 @@ import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.retrying.TasksWSRetryable;
-
-import javax.inject.Provider;
-import java.net.URL;
 
 public class TasksClientVeneerImpl implements TasksClientVeneer
 {

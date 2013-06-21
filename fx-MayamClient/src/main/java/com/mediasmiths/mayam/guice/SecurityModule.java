@@ -1,8 +1,9 @@
 package com.mediasmiths.mayam.guice;
 
+import org.hibernate.cfg.Configuration;
+
 import com.mediasmiths.mayam.accessrights.MayamAccessRights;
 import com.mediasmiths.std.guice.hibernate.module.HibernateModule;
-import org.hibernate.cfg.Configuration;
 
 public class SecurityModule extends HibernateModule
 {

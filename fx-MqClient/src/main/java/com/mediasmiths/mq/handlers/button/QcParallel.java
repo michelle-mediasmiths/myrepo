@@ -1,12 +1,15 @@
 package com.mediasmiths.mq.handlers.button;
 
+import org.apache.log4j.Logger;
+import org.mortbay.log.Log;
+
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.QcStatus;
+import com.mediasmiths.mayam.util.AssetProperties;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.mayam.util.AssetProperties;
-import org.apache.log4j.Logger;
 
 public class QcParallel extends ButtonClickHandler
 {

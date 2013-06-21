@@ -3,11 +3,11 @@ package com.mediasmiths.mayam.util;
 import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
-import com.mayam.wf.attributes.shared.type.AudioTrack.EncodingType;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.FileFormatInfo;
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.StringList;
+import com.mayam.wf.attributes.shared.type.AudioTrack.EncodingType;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioTrackType;
 import com.mediasmiths.foxtel.generated.mediaexchange.ClassificationType;
@@ -31,10 +31,12 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Primarily used to output tx package information but some information can be overriden to provide companion xml for different outputs, eg caption exports

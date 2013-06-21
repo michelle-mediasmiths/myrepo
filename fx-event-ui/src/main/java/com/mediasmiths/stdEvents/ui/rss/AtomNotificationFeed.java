@@ -1,15 +1,17 @@
 package com.mediasmiths.stdEvents.ui.rss;
 
-import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.ws.rs.core.MediaType;
+
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.atom.Content;
 import org.jboss.resteasy.plugins.providers.atom.Entry;
 import org.jboss.resteasy.plugins.providers.atom.Feed;
 
-import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 
 public class AtomNotificationFeed
 {

@@ -1,9 +1,22 @@
 package com.mediasmiths.foxtel.placeholder;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+
+import javax.xml.bind.JAXBException;
+
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+import org.xml.sax.SAXException;
+
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.DeletePackage;
 import au.com.foxtel.cf.mam.pms.Package;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
+
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.queue.PickupPackage;
@@ -13,16 +26,6 @@ import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.xml.sax.SAXException;
-
-import javax.xml.bind.JAXBException;
-import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class DeletePackageTest extends PlaceHolderMessageShortTest {
 

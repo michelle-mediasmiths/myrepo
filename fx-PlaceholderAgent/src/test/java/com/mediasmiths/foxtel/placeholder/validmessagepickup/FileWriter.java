@@ -1,17 +1,19 @@
 package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
-import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
-import org.apache.commons.io.FilenameUtils;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
+import java.io.File;
+import java.io.FileOutputStream;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import java.io.File;
-import java.io.FileOutputStream;
+
+import org.apache.commons.io.FilenameUtils;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+
+import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 public class FileWriter
 {

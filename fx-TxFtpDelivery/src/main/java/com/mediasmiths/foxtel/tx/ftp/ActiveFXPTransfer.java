@@ -1,9 +1,9 @@
 package com.mediasmiths.foxtel.tx.ftp;
 
+import java.io.IOException;
+
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
-
-import java.io.IOException;
 
 public class ActiveFXPTransfer implements Runnable
 {

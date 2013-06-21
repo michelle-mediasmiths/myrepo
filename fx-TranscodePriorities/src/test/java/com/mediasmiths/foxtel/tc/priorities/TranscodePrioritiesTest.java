@@ -1,21 +1,22 @@
 package com.mediasmiths.foxtel.tc.priorities;
 
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mediasmiths.foxtel.tc.priorities.guice.TranscodePrioritiesModule;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.io.PropertyFile;
-import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 public class TranscodePrioritiesTest
 {

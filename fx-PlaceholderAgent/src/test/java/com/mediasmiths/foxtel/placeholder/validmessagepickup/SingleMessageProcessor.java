@@ -1,5 +1,10 @@
 package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.queue.IFilePickup;
@@ -8,10 +13,6 @@ import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.mayam.MayamClient;
-import org.apache.log4j.Logger;
-
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 
 /**

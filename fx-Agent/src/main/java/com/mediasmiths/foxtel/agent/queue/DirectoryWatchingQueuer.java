@@ -1,16 +1,7 @@
 package com.mediasmiths.foxtel.agent.queue;
 
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mediasmiths.FileWatcher.DirectoryWatcher;
-import com.mediasmiths.foxtel.agent.WatchFolder;
-import com.mediasmiths.foxtel.agent.WatchFolders;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.FalseFileFilter;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.log4j.Logger;
+import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +15,17 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.FalseFileFilter;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.log4j.Logger;
+
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mediasmiths.FileWatcher.DirectoryWatcher;
+import com.mediasmiths.foxtel.agent.WatchFolder;
+import com.mediasmiths.foxtel.agent.WatchFolders;
 
 @Deprecated
 public class DirectoryWatchingQueuer extends DirectoryWatcher implements

@@ -1,22 +1,30 @@
 package com.mediasmiths.foxtel.placeholder.guice;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
-import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.agent.queue.IFilePickup;
-import com.mediasmiths.foxtel.agent.queue.SingleFilePickUp;
-import com.mediasmiths.foxtel.placeholder.PlaceholderAgent;
-import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
-import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+
+import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
+
+import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
+import com.google.inject.TypeLiteral;
+import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.IFilePickup;
+import com.mediasmiths.foxtel.agent.queue.SingleFilePickUp;
+import com.mediasmiths.foxtel.placeholder.PlaceholderAgent;
+import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
 public class PlaceholderAgentModule extends AbstractModule {
 

@@ -1,26 +1,6 @@
 package com.mediasmiths.foxtel.wf.adapter.service;
 
-import com.mediasmiths.foxtel.wf.adapter.model.AbortFxpTransferRequest;
-import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
-import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
-import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
-import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
-import com.mediasmiths.foxtel.wf.adapter.model.AutoQCPassNotification;
-import com.mediasmiths.foxtel.wf.adapter.model.ExportFailedRequest;
-import com.mediasmiths.foxtel.wf.adapter.model.GetPriorityRequest;
-import com.mediasmiths.foxtel.wf.adapter.model.GetPriorityResponse;
-import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
-import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
-import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
-import com.mediasmiths.foxtel.wf.adapter.model.RemoveTransferRequest;
-import com.mediasmiths.foxtel.wf.adapter.model.StartFxpTransferRequest;
-import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
-import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
-import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
-import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
-import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFinished;
-import com.mediasmiths.foxtel.wf.adapter.model.WriteExportCompanions;
-import com.mediasmiths.mayam.MayamClientException;
+import java.io.IOException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -32,7 +12,30 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
-import java.io.IOException;
+
+import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
+import com.mediasmiths.foxtel.wf.adapter.model.AbortFxpTransferRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.AutoQCPassNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.ExportFailedRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.GetPriorityRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.GetPriorityResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.InvokeIntalioTXFlow;
+import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.RemoveTransferRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.StartFxpTransferRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
+import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
+import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFinished;
+import com.mediasmiths.foxtel.wf.adapter.model.WriteExportCompanions;
+import com.mediasmiths.mayam.MayamClientException;
 
 @Path("/wf")
 public interface WFAdapterRestService

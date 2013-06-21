@@ -1,5 +1,16 @@
 package com.mediasmiths.foxtel.tc.priorities.guice;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
+
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.inject.AbstractModule;
@@ -13,16 +24,6 @@ import com.mediasmiths.foxtel.tc.priorities.PriortyRuleDescThresholdComparator;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.std.io.PropertyFile;
 import com.mediasmiths.std.util.ListUtility;
-import org.apache.log4j.Logger;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 public class TranscodePrioritiesModule extends AbstractModule
 {

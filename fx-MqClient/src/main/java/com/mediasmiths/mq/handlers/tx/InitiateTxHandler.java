@@ -1,34 +1,46 @@
 package com.mediasmiths.mq.handlers.tx;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
+
+import javax.xml.bind.JAXBException;
+
+import org.apache.activemq.thread.Task;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+import org.mule.api.MuleException;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.DateUtil;
+import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.MediaStatus;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.foxtel.tc.priorities.TranscodePriorities;
+import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 import com.mediasmiths.foxtel.transcode.TranscodeRules;
+import com.mediasmiths.foxtel.tx.ftp.TxFtpDelivery;
 import com.mediasmiths.foxtel.wf.adapter.model.InvokeIntalioTXFlow;
 import com.mediasmiths.foxtel.wf.adapter.util.TxUtil;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.PackageNotFoundException;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
-import org.apache.log4j.Logger;
-import org.mule.api.MuleException;
-
-import javax.xml.bind.JAXBException;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Date;
 
 public class InitiateTxHandler extends TaskStateChangeHandler
 {

@@ -1,21 +1,20 @@
 package com.mediasmiths.mule;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
 import org.mule.api.MuleMessageCollection;
 import org.mule.module.client.MuleClient;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class MuleClientImplTest {
 	MuleClientImpl client;

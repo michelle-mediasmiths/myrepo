@@ -55,7 +55,8 @@ public class MayamClientTest
 			@Override
 			public void injectorCreated(Injector injector)
 			{
-
+				// TODO Auto-generated method stub
+				
 			}
 		});
 		

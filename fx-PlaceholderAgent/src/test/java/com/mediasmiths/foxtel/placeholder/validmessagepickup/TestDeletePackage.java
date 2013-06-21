@@ -1,19 +1,21 @@
 package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import javax.xml.bind.JAXBException;
+
+import org.apache.commons.lang.RandomStringUtils;
+import org.xml.sax.SAXException;
+
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.DeletePackage;
 import au.com.foxtel.cf.mam.pms.Package;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
+
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
 import com.mediasmiths.mayam.MayamClientErrorCode;
-import org.apache.commons.lang.RandomStringUtils;
-import org.xml.sax.SAXException;
-
-import javax.xml.bind.JAXBException;
-
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class TestDeletePackage extends ValidMessagePickTest {
 

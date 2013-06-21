@@ -1,5 +1,7 @@
 package com.mediasmiths.stdEvents.coreEntity.db.entity;
 
+import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
@@ -7,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.List;
 
 @Entity
 @Table(name="Title")

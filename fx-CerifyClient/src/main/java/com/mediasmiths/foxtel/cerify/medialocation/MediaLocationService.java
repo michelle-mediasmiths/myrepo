@@ -1,5 +1,17 @@
 package com.mediasmiths.foxtel.cerify.medialocation;
 
+import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATIONS_NAMES;
+import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATIONS_PATHS;
+
+import java.rmi.RemoteException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.axis.types.URI;
+import org.apache.axis.types.URI.MalformedURIException;
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
@@ -8,17 +20,6 @@ import com.tektronix.www.cerify.soap.client.CeriTalk_PortType;
 import com.tektronix.www.cerify.soap.client.GetMediaLocations;
 import com.tektronix.www.cerify.soap.client.GetMediaLocationsResponse;
 import com.tektronix.www.cerify.soap.client.GetMediaLocationsResponseMedialocation;
-import org.apache.axis.types.URI;
-import org.apache.axis.types.URI.MalformedURIException;
-import org.apache.log4j.Logger;
-
-import java.rmi.RemoteException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
-import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATIONS_NAMES;
-import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATIONS_PATHS;
 
 @Singleton
 public class MediaLocationService extends HashMap<String,MediaLocation>

@@ -1,12 +1,13 @@
 package com.mediasmiths.mq.handlers.button;
 
+import org.apache.log4j.Logger;
+
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mq.handlers.AttributeHandler;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
-import org.apache.log4j.Logger;
 
 public abstract class ButtonClickHandler extends AttributeHandler
 {

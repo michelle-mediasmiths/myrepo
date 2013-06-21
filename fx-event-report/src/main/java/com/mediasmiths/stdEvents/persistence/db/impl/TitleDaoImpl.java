@@ -1,5 +1,11 @@
 package com.mediasmiths.stdEvents.persistence.db.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
 import com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.hibernate.dao.HibernateDao;
@@ -7,11 +13,6 @@ import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import com.mediasmiths.stdEvents.persistence.db.dao.TitleDao;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class TitleDaoImpl extends HibernateDao<Title, String> implements TitleDao
 {

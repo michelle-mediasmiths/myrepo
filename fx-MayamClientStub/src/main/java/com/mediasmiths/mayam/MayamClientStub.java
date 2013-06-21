@@ -418,6 +418,8 @@ public class MayamClientStub implements MayamClient
 	@Override
 	public String pathToMaterial(String materialID, boolean acceptNonPreffered) throws MayamClientException
 	{
+		// TODO implement!
+		
 		return "/storage/mam/hires01/mediasmithstemp/input/TestMedia.mxf";
 	}
 
@@ -454,6 +456,7 @@ public class MayamClientStub implements MayamClient
 	@Override
 	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException
 	{
+		// TODO Auto-generated method stub
 		return 0;
 	}
 

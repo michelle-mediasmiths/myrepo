@@ -1,9 +1,9 @@
 package com.mediasmiths.foxtel.ibmshelper.ibmsfunction;
 
-import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 public class CompileMaterialFunction
 {
