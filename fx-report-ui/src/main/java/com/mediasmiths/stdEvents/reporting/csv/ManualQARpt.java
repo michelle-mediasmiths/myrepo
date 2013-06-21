@@ -196,7 +196,7 @@ public class ManualQARpt extends ReportUtils
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			logger.error("error writing report",e);
 		}
 		finally
 		{

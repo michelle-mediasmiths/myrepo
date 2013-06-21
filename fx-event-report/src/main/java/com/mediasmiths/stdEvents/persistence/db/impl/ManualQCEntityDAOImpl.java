@@ -24,6 +24,7 @@ public class ManualQCEntityDAOImpl extends HibernateDao<ManualQAEntity, String> 
 	private final JAXBSerialiser serialiser = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 	private final static Logger log = Logger.getLogger(ManualQCEntityDAOImpl.class);
 
+
 	@Inject
 	private OrderDao orderDao;
 

@@ -2,176 +2,217 @@ package com.mediasmiths.stdEvents.reporting.csv;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.ip.common.events.EventNames;
-import com.mediasmiths.foxtel.ip.common.events.TcEvent;
-import com.mediasmiths.foxtel.ip.common.events.report.Export;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.ExtendedPublishing;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
-import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.io.CsvMapWriter;
+import org.supercsv.io.ICsvMapWriter;
 import org.supercsv.prefs.CsvPreference;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ExportRpt extends ReportUtils
 {
 	public static final transient Logger logger = Logger.getLogger(ExportRpt.class);
-	
+
 	@Inject
 	@Named("reportLoc")
 	public String REPORT_LOC;
-	
+
 	@Inject
 	private QueryAPIImpl queryApi;
-	
-	public void writeExport(List<EventEntity> events, DateTime startDate, DateTime endDate, String reportName)
+
+
+	public void writeExport(List<ExtendedPublishing> events, DateTime startDate, DateTime endDate, String reportName)
 	{
-		List<Export> exports = getReportList(events, startDate , endDate);
-		
-		int compliance=0;
-		int captioning=0;
-		int publicity=0;
-		
-		for (Export export : exports)
+//		List<Export> exports = getReportList(events, startDate , endDate);
+//
+//		int compliance=0;
+//		int captioning=0;
+//		int publicity=0;
+//
+//		for (Export export : exports)
+//		{
+//			if (export.getExportType().equals("compliance"))
+//			{
+//				compliance ++;
+//			}
+//			else if (export.getExportType().equals("caption"))
+//			{
+//				captioning ++;
+//			}
+//			else if (export.getExportType().equals("classification"))
+//			{
+//				publicity ++;
+//			}
+//		}
+//
+//		exports.add(addStats("No. of Compliance", Integer.toString(compliance)));
+//		exports.add(addStats("No. of Captioning", Integer.toString(captioning)));
+//		exports.add(addStats("No. of Publicity", Integer.toString(publicity)));
+//
+
+		ExtendedPublishingStats stats = getStats(events);
+		createCsv(events, stats, reportName, startDate, endDate);
+	}
+
+
+	private ExtendedPublishingStats getStats(final List<ExtendedPublishing> events)
+	{
+		ExtendedPublishingStats ret = new ExtendedPublishingStats();
+		for (ExtendedPublishing task : events)
 		{
-			if (export.getExportType().equals("compliance"))
+
+			final String exportType = task.getExportType();
+
+			if ("Compliance Proxy".equals(exportType))
 			{
-				compliance ++;
+				ret.compliance++;
 			}
-			else if (export.getExportType().equals("caption"))
+			else if ("Publicity Proxy".equals(exportType))
 			{
-				captioning ++;
+				ret.publicity++;
 			}
-			else if (export.getExportType().equals("classification"))
+			else if ("Caption Proxy".equals(exportType))
 			{
-				publicity ++;
+				ret.captions++;
 			}
 		}
-		
-		exports.add(addStats("No. of Compliance", Integer.toString(compliance)));
-		exports.add(addStats("No. of Captioning", Integer.toString(captioning)));
-		exports.add(addStats("No. of Publicity", Integer.toString(publicity)));
-		
-		createCsv(exports, reportName);
+
+		return ret;
 	}
-	
-	public List<Export> getReportList(List<EventEntity> events, DateTime startDate, DateTime endDate)
+
+
+	class ExtendedPublishingStats
 	{
-		logger.debug(">>>getReportList");
-		
-		List<Export> exports = new ArrayList<Export>();
-		
-		String startF = startDate.toString(dateFormatter);
-		String endF = endDate.toString(dateFormatter);
-		
-		for (EventEntity event : events)
+		int compliance;
+		int captions;
+		int publicity;
+	}
+
+
+	private void createCsv(List<ExtendedPublishing> tasks,
+	                       ExtendedPublishingStats stats,
+	                       String reportName,
+	                       DateTime start,
+	                       DateTime end)
+	{
+		ICsvMapWriter csvwriter = null;
+
+		try
 		{
-			TcEvent tc = (TcEvent) unmarshallEvent(event);
-			Export export = new Export();
-			
-			export.setDateRange(new StringBuilder().append(startF).append(" - ").append(endF).toString());
-			
-			if (event.getEventName().equals(EventNames.CAPTION_PROXY_SUCCESS))
-			{
-				export.setMaterialID(tc.getPackageID());
-				export.setExportType("caption");
-			}
-			else if (event.getEventName().equals("ComplianceProxySuccess"))
-			{
-				export.setMaterialID(tc.getAssetID());
-				export.setExportType("compliance");
-			}
-			else if (event.getEventName().equals(EventNames.CLASSIFICATION_PROXY_SUCCESS))
-			{
-				export.setMaterialID(tc.getAssetID());
-				export.setExportType("classification");
-			}
-			
-			if (export.getMaterialID() != null)
-			{
-				OrderStatus order = queryApi.getOrderStatusById(export.getMaterialID());
-				if (order != null)
-				{
-					logger.debug("matching title found " + export.getMaterialID());
-					if (order.getTitle() != null)
-					{
-						export.setChannels(order.getTitle().getChannels().toString());
-						export.setTitle(order.getTitle().getTitle());
-					}
-				}
-			}
-			exports.add(export);
-		}
-		
-		logger.debug("<<<getReportList");
-		return exports;
-	}
-	
-	private void createCsv(List<Export> titles, String reportName)
-	{
-		ICsvBeanWriter beanWriter = null;
-		try {
 			logger.info("reportName: " + reportName);
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
+			FileWriter fileWriter = new FileWriter(REPORT_LOC + reportName + ".csv");
+			csvwriter = new CsvMapWriter(fileWriter, CsvPreference.STANDARD_PREFERENCE);
 			logger.info("Saving to: " + REPORT_LOC);
-			final String[] header = {"dateRange", "title", "materialID", "channels", "taskStatus", "exportType", "titleLength"};
+			final String[] header = {"dateRange",
+			                         "title",
+			                         "materialID",
+			                         "channels",
+			                         "taskStatus",
+			                         "exportType",
+			                         "titleLength",
+			                         "requestedBy"};
 			final CellProcessor[] processors = getProcessor();
-			beanWriter.writeHeader(header);
-				
-			
-			for (Export title : titles)
+			csvwriter.writeHeader(header);
+
+			final String startDate = start.toString(dateFormatter);
+			final String endDate = end.toString(dateFormatter);
+			final String dateRange = String.format("%s - %s", startDate, endDate);
+
+			for (ExtendedPublishing task : tasks)
 			{
-				beanWriter.write(title, header, processors);
+				final Map<String, Object> map = new HashMap<String, Object>();
+				map.put(header[0], dateRange);
+
+				final OrderStatus orderStatus = task.getOrderStatus();
+
+				Title title = null;
+				if (orderStatus != null)
+				{
+					title = orderStatus.getTitle();
+				}
+
+				if (title != null)
+				{
+					map.put(header[1], title.getTitle());
+					putChannelListToCSVMap(header, 3, map, title.getChannels());
+				}
+				else
+				{
+					map.put(header[1], null);
+					map.put(header[3], null);
+				}
+
+				map.put(header[2], task.getMaterialID());
+				map.put(header[4], task.getTaskStatus());
+				map.put(header[5], task.getExportType());
+
+				if (orderStatus != null)
+				{
+					map.put(header[6], orderStatus.getTitleLengthReadableString());
+				}
+				else
+				{
+					map.put(header[6], null);
+				}
+
+				map.put(header[7], task.getRequestedBy());
+				csvwriter.write(map, header, processors);
 			}
+
+			StringBuilder statsString = new StringBuilder();
+			statsString.append(String.format("No. of Titles Exported Compliance %d\n", stats.compliance));
+			statsString.append(String.format("No. of Titles Exported Publicity %d\n", stats.publicity));
+			statsString.append(String.format("No. of Titles Exported Captioning %d\n", stats.captions));
+
+			csvwriter.flush();
+			IOUtils.write(statsString.toString(), fileWriter);
 		}
+
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			logger.error("error writing report", e);
 		}
-		finally {
-			if (beanWriter != null)
+		finally
+		{
+			if (csvwriter != null)
 			{
 				try
 				{
-					beanWriter.close();
+					csvwriter.close();
 				}
-				catch(IOException e)
+				catch (IOException e)
 				{
-					e.printStackTrace();
+					logger.error("IOException closing csv writer", e);
 				}
 			}
 		}
 	}
-	
+
+
 	private CellProcessor[] getProcessor()
 	{
-		final CellProcessor[] processors = new CellProcessor[] {
-				new Optional(),
-				new Optional(), 
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional()
-		};
+		final CellProcessor[] processors = new CellProcessor[]{new Optional(),
+		                                                       new Optional(),
+		                                                       new Optional(),
+		                                                       new Optional(),
+		                                                       new Optional(),
+		                                                       new Optional(),
+		                                                       new Optional(),
+		                                                       new Optional()};
 		return processors;
-	}
-	
-	private Export addStats (String name, String value)
-	{
-		Export export = new Export();
-		export.setTitle(name);
-		export.setMaterialID(value);
-		return export;
 	}
 }
 

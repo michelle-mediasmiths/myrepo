@@ -133,56 +133,7 @@
                 </xs:extension>
             </xs:complexContent>
     </xs:complexType>
-                            
-                            
-   <xs:complexType name="extendedPublishingDetails">
-            <xs:complexContent>
-                <xs:annotation>
-                    <xs:documentation>The definition an extended publishing delivery (successful or not)
-                    </xs:documentation>
-                </xs:annotation>
-                <xs:extension base="fns:IPEvent">
-                    <xs:sequence>
-                        <xs:element name="materialID" type="xs:string"/>
-                        <xs:element name="packageID" type="xs:string"/>
-                        <xs:element name="assetID" type="xs:string"/>
-                        <xs:element name="title" type="xs:string"/>
-                        <xs:element name="fileLocation" type="xs:string"/>
-                        <xs:element name="channels" type="xs:string"/>
-                        <xs:element name="exportType" type="xs:string"/>
-                        <xs:element name="titleLength" type="xs:string"/>
-                        <xs:element name="delivered" type="xs:boolean"/>
-                        <xs:element name="emailaddresses" type="emailaddresses"/>
-                    </xs:sequence>
-                </xs:extension>
-            </xs:complexContent>
-    </xs:complexType>
-    
-    <xs:complexType name="deliveryDetails">
-            <xs:complexContent>
-                <xs:annotation>
-                    <xs:documentation>The definition a delivery (successful or not)
-                    </xs:documentation>
-                </xs:annotation>
-                <xs:extension base="fns:IPEvent">
-                    <xs:sequence>
-                        <xs:element name="materialID" type="xs:string"/>
-                        <xs:element name="packageID" type="xs:string"/>
-                        <xs:element name="assetID" type="xs:string"/>
-                        <xs:element name="stage" type="xs:string"/>
-                        <xs:element name="jobName" type="xs:string"/>
-                        <xs:element name="title" type="xs:string"/>
-                        <xs:element name="fileLocation" type="xs:string"/>
-                        <xs:element name="channels" type="xs:string"/>
-                        <xs:element name="taskStatus" type="xs:string"/>
-                        <xs:element name="exportType" type="xs:string"/>
-                        <xs:element name="titleLength" type="xs:string"/>
-                        <xs:element name="delivered" type="xs:boolean"/>
-                        
-                    </xs:sequence>
-                </xs:extension>
-            </xs:complexContent>
-    </xs:complexType>
+
 
     <xs:element name="PreviewEventDetail">
         <xs:complexType>
@@ -879,6 +830,27 @@
 						<xs:element name="purgeCandidateCreated" type="xs:dateTime" />
 						<xs:element name="purgeCandidateUpdated" type="xs:dateTime" />
 						<xs:element name="expires" type="xs:dateTime" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="ExtendedPublishingTaskEvent">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation>Used to track extended publishing events for reporting</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="IPEvent">
+					<xs:sequence>
+						<xs:element name="taskID" type="xs:long"></xs:element>
+						<xs:element name="materialID" type="xs:string"></xs:element>
+						<xs:element name="taskStatus" type="xs:string"></xs:element>
+						<xs:element name="exportType" type="xs:string"></xs:element>
+						<xs:element name="requestedBy" type="xs:string"></xs:element>
+						<xs:element name="taskCreated" type="xs:dateTime"></xs:element>
+						<xs:element name="taskUpdated" type="xs:dateTime"></xs:element>
 					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>

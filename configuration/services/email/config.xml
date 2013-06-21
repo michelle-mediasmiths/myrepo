@@ -392,34 +392,6 @@
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
-	<!-- Delivery -->
-<!-- OUT OF SCOPE
-	<MailData>
-		<namespace>http://www.foxtel.com.au/ip/delivery</namespace>
-		<eventname>DeliveryFailed</eventname>
-		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.delivery.DeliveryDetailsEmailTemplate">
-			<subject>PackageId(%s) TaskId(%s). Delivery Failed</subject>
-			<body>Item has failed the transcode, therefore has not been created or sent to external location.</body>
-			<emailaddresses> 
-				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
-			</emailaddresses>
-		</MailTemplate>
-	</MailData>
--->
-<!-- OUT OF SCOPE
-	<MailData>
-		<namespace>http://www.foxtel.com.au/ip/delivery</namespace>
-		<eventname>Delivered</eventname>
-		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.delivery.DeliveryDetailsEmailTemplate">
-			<subject>PackageId(%s) TaskId(%s). Delivered
-			</subject>
-			<body>Item is located here: %s.</body>
-			<emailaddresses> 
-				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
-			</emailaddresses>
-		</MailTemplate>
-	</MailData>
--->
 	<!-- System -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/system</namespace>

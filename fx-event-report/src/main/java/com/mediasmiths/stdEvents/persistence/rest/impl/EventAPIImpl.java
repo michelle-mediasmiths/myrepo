@@ -10,6 +10,7 @@ import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import com.mediasmiths.stdEvents.persistence.db.dao.AutoQCDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventingDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.ExtendedPublishingDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.ManualQAEntityDAO;
 import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.PurgeDao;
@@ -47,6 +48,9 @@ public class EventAPIImpl implements EventAPI
 
 	@Inject
 	protected PurgeDao purgeDao;
+
+	@Inject
+	protected ExtendedPublishingDao extendedPublishingDao;
 
 	private final EventingDao eventingDao;
 
@@ -117,16 +121,18 @@ public class EventAPIImpl implements EventAPI
 			purgeEventNotification(event);
 		}
 
-
-//		if ((event.getEventName().equals(EventNames.CREATEOR_UPDATE_TITLE)) || (event.getEventName().equals(EventNames.ADD_OR_UPDATE_MATERIAL)) ||(event.getEventName().equals(EventNames.ADD_OR_UPDATE_PACKAGE))) {
-//			logger.info("BMS message detected");
-//			bmsDao.updateBMS(event);
-//		}
-//
+		if ((event.getEventName().equals(EventNames.EXTENDED_PUBLISHING_TASK_EVENT)))
+		{
+			extendedPublishingEvent(event);
+		}
 
 		logger.info("Event saved");
 	}
 
+	private void extendedPublishingEvent(final EventEntity event)
+	{
+		extendedPublishingDao.extendedPublishingEvent(event);
+	}
 
 	private void purgeEventNotification(final EventEntity event)
 	{

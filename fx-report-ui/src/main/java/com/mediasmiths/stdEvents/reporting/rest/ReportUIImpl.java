@@ -11,6 +11,7 @@ import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
 import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.ExtendedPublishing;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Purge;
@@ -240,10 +241,8 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly = true)
 	private void getExportCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		List<EventEntity> events = queryApi.getByEventNameWindowDateRange(EventNames.CAPTION_PROXY_SUCCESS, MAX, start, end);
-		events.addAll(queryApi.getByEventNameWindowDateRange("ComplianceProxySuccess", MAX, start, end));
-		events.addAll(queryApi.getByEventNameWindowDateRange(EventNames.CLASSIFICATION_PROXY_SUCCESS, MAX, start, end));
-		export.writeExport(events, start, end, reportName);
+		List<ExtendedPublishing> tasks = queryApi.getExtendedPublishingByDate(start,end);
+		export.writeExport(tasks, start, end, reportName);
 	}
 
 	@Transactional(readOnly = true)

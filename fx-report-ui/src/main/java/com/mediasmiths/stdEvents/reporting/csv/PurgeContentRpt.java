@@ -177,7 +177,7 @@ public class PurgeContentRpt extends ReportUtils
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			logger.error("error writing report",e);
 		}
 		finally
 		{

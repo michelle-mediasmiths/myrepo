@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.ExtendedPublishing;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Purge;
@@ -12,10 +13,11 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.persistence.db.dao.AutoQCDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.ExtendedPublishingDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.ManualQAEntityDAO;
 import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.PurgeDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.TitleDao;
-import com.mediasmiths.stdEvents.persistence.db.impl.PurgeDaoImpl;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
@@ -45,7 +47,10 @@ public class QueryAPIImpl implements QueryAPI
 	protected ManualQAEntityDAO manualQADao;
 
 	@Inject
-	protected PurgeDaoImpl purgeDao;
+	protected PurgeDao purgeDao;
+
+	@Inject
+	protected ExtendedPublishingDao extendedPublishingDao;
 	
 	private static final transient Logger logger = Logger.getLogger(QueryAPIImpl.class);
 
@@ -180,5 +185,14 @@ public class QueryAPIImpl implements QueryAPI
 	public List<AutoQC> getAutoQcInDateRange(DateTime start, DateTime end)
 	{
 		return autoQcDao.getAutoQcInDateRange(start,end);
-	}	
+	}
+
+
+	@Override
+	@GET
+	@Path("ExtendedPublishingByDate")
+	public List<ExtendedPublishing> getExtendedPublishingByDate(DateTime start, DateTime end)
+	{
+		return extendedPublishingDao.getExtendedPublishingInDateRange(start, end);
+	}
 }

@@ -2,6 +2,7 @@ package com.mediasmiths.stdEvents.events.rest.api;
 
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.ExtendedPublishing;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Purge;
@@ -82,4 +83,8 @@ public interface QueryAPI
 	@GET
 	@Path("PurgeEventsByDate")
 	List<Purge> getPurgeEventsInDateRange(DateTime start, DateTime end);
+
+	@GET
+	@Path("ExtendedPublishingByDate")
+	List<ExtendedPublishing> getExtendedPublishingByDate(DateTime start, DateTime end);
 }

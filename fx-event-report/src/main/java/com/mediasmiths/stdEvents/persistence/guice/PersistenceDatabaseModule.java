@@ -3,6 +3,7 @@ package com.mediasmiths.stdEvents.persistence.guice;
 import com.mediasmiths.std.guice.hibernate.module.HibernateModule;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.ExtendedPublishing;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Purge;
@@ -32,6 +33,9 @@ public class PersistenceDatabaseModule extends HibernateModule
 		config.addAnnotatedClass(ManualQAEntity.class);
 
 		config.addAnnotatedClass(Purge.class);
+
+		config.addAnnotatedClass(ExtendedPublishing.class);
+
 	}
 
 }
