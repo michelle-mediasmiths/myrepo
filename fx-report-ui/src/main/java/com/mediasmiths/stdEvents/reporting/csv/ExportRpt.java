@@ -36,33 +36,6 @@ public class ExportRpt extends ReportUtils
 
 	public void writeExport(List<ExtendedPublishing> events, DateTime startDate, DateTime endDate, String reportName)
 	{
-//		List<Export> exports = getReportList(events, startDate , endDate);
-//
-//		int compliance=0;
-//		int captioning=0;
-//		int publicity=0;
-//
-//		for (Export export : exports)
-//		{
-//			if (export.getExportType().equals("compliance"))
-//			{
-//				compliance ++;
-//			}
-//			else if (export.getExportType().equals("caption"))
-//			{
-//				captioning ++;
-//			}
-//			else if (export.getExportType().equals("classification"))
-//			{
-//				publicity ++;
-//			}
-//		}
-//
-//		exports.add(addStats("No. of Compliance", Integer.toString(compliance)));
-//		exports.add(addStats("No. of Captioning", Integer.toString(captioning)));
-//		exports.add(addStats("No. of Publicity", Integer.toString(publicity)));
-//
-
 		ExtendedPublishingStats stats = getStats(events);
 		createCsv(events, stats, reportName, startDate, endDate);
 	}
@@ -87,6 +60,10 @@ public class ExportRpt extends ReportUtils
 			else if ("Caption Proxy".equals(exportType))
 			{
 				ret.captions++;
+			}
+			else
+			{
+				logger.warn("Empty or unknown export type " + exportType);
 			}
 		}
 
