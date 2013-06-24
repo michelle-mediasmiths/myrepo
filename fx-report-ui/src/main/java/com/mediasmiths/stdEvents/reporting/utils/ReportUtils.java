@@ -2,6 +2,7 @@ package com.mediasmiths.stdEvents.reporting.utils;
 
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.format.DateTimeFormat;
@@ -49,6 +50,23 @@ public abstract class ReportUtils
 		}
 	}
 
+	protected void putTitleAndChannels(final String[] header,
+	                                   final Map<String, Object> map,
+	                                   final Title title,
+	                                   int titleIndex,
+	                                   int channelIndex)
+	{
+		if (title != null)
+		{
+			map.put(header[titleIndex], title.getTitle());
+			putChannelListToCSVMap(header, channelIndex, map, title.getChannels());
+		}
+		else
+		{
+			map.put(header[titleIndex], null);
+			map.put(header[channelIndex], null);
+		}
+	}
 
 	protected void putChannelListToCSVMap(final String[] header, int index, final Map<String, Object> map, List<String> channels)
 	{

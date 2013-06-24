@@ -8,6 +8,7 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.db.entity.EventingEntity;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import com.mediasmiths.stdEvents.persistence.db.dao.AutoQCDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.ComplianceLoggingDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventingDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.ExtendedPublishingDao;
@@ -22,9 +23,8 @@ import javax.ws.rs.PathParam;
 
 /**
  * An implementation of the EventAPI as a rest service that stored incoming events within a (hibernate fronted) database
- *
+ * <p/>
  * Author: Alison Boal.
- *
  */
 public class EventAPIImpl implements EventAPI
 {
@@ -33,13 +33,13 @@ public class EventAPIImpl implements EventAPI
 
 	@Inject
 	protected EventEntityDao eventDao;
-	
+
 	@Inject
 	protected TitleDao titleDao;
-	
+
 	@Inject
 	protected OrderDao orderDao;
-	
+
 	@Inject
 	protected AutoQCDao autoQcDao;
 
@@ -52,28 +52,31 @@ public class EventAPIImpl implements EventAPI
 	@Inject
 	protected ExtendedPublishingDao extendedPublishingDao;
 
+	@Inject
+	protected ComplianceLoggingDao complianceLoggingDao;
+
 	private final EventingDao eventingDao;
+
 
 	@Inject
 	public EventAPIImpl(EventingDao eventingDao)
 	{
 		this.eventingDao = eventingDao;
-
 	}
-	
+
+
 	private static final transient Logger logger = Logger.getLogger(EventAPIImpl.class);
 
 	public boolean EVENTING_SWITCH = true;
 
 	EventTypeMapper storageTypeMapper = new EventTypeMapper();
-	
-	
+
 
 	/**
 	 * Takes in event details and saves them in the database
 	 *
-	 * @param event the details of the namespace/event name and payload
-	 *
+	 * @param event
+	 * 		the details of the namespace/event name and payload
 	 */
 	@Transactional
 	public void saveReport(EventEntity event)
@@ -81,19 +84,19 @@ public class EventAPIImpl implements EventAPI
 		if (logger.isTraceEnabled())
 			logger.trace("Saving event...");
 
-			// Save event to the all events table.
+		// Save event to the all events table.
 		logger.info("Saving to Event table EVENT_NAME: " + event.getEventName() + " NAMESPACE: " + event.getNamespace());
-		
-		
+
+
 		eventDao.saveOrUpdate(event);
-		
+
 		EventingEntity eventingEntity = new EventingEntity();
 		logger.info("Created correctly");
 
 		eventingEntity.setEventId(event.id);
 		logger.info("Saving to Eventing table");
 		eventingDao.save(eventingEntity);
-		
+
 		logger.info("Saving event information for reporting");
 
 		if ((event.getEventName().equals(EventNames.CREATEOR_UPDATE_TITLE)))
@@ -126,38 +129,56 @@ public class EventAPIImpl implements EventAPI
 			extendedPublishingEvent(event);
 		}
 
+		if ((event.getEventName().equals(EventNames.COMPLIANCE_LOGGING_TASK_EVENT)))
+		{
+			complianceTaskEvent(event);
+		}
+
 		logger.info("Event saved");
 	}
+
+
+	private void complianceTaskEvent(final EventEntity event)
+	{
+		complianceLoggingDao.complianceEvent(event);
+	}
+
 
 	private void extendedPublishingEvent(final EventEntity event)
 	{
 		extendedPublishingDao.extendedPublishingEvent(event);
 	}
 
+
 	private void purgeEventNotification(final EventEntity event)
 	{
 		purgeDao.purgeMessage(event);
 	}
+
 
 	private void manualQaEvent(final EventEntity event)
 	{
 		manualQaDao.manualQCMessage(event);
 	}
 
+
 	private void autoQcReport(EventEntity event)
 	{
 		autoQcDao.autoQCMessage(event);
 	}
 
+
 	private void addOrUpdateMaterial(EventEntity event)
 	{
-		orderDao.addOrUpdateMaterial(event);	
+		orderDao.addOrUpdateMaterial(event);
 	}
+
 
 	private void createOrUpdateTitle(EventEntity event)
 	{
 		titleDao.createOrUpdateTitle(event);
 	}
+
 
 	@Transactional
 	public EventEntity getById(@PathParam("id") Long id)
@@ -167,11 +188,13 @@ public class EventAPIImpl implements EventAPI
 		return event;
 	}
 
+
 	@Transactional
 	public void setEventingSwitch(boolean value)
 	{
 		EVENTING_SWITCH = value;
 	}
+
 
 	@Transactional
 	public boolean getEventingSwitch()
@@ -179,10 +202,10 @@ public class EventAPIImpl implements EventAPI
 		return EVENTING_SWITCH;
 	}
 
+
 	@Transactional
 	public void deleteEventing()
 	{
 		// eventDao.deleteEventing(new Long(370));
 	}
-
 }

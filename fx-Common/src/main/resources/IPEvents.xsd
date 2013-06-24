@@ -857,6 +857,28 @@
 		</xs:complexType>
 	</xs:element>
 
+
+	<xs:element name="CompianceLoggingTaskEvent">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation>Used to track compliance logging tasks for reporting</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="IPEvent">
+					<xs:sequence>
+						<xs:element name="taskID" type="xs:long"></xs:element>
+						<xs:element name="titleID" type="xs:string"></xs:element>
+						<xs:element name="materialID" type="xs:string"></xs:element>
+						<xs:element name="sourceMaterialID" type="xs:string"></xs:element>
+						<xs:element name="taskStatus" type="xs:string"></xs:element>
+						<xs:element name="taskCreated" type="xs:dateTime"></xs:element>
+						<xs:element name="taskUpdated" type="xs:dateTime"></xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
 	<xs:element name="CreationComplete">
 		<xs:complexType>
 			<xs:complexContent>

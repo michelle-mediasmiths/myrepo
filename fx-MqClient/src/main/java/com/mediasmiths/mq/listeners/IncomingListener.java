@@ -38,6 +38,7 @@ import com.mediasmiths.mq.handlers.button.export.ComplianceProxy;
 import com.mediasmiths.mq.handlers.button.export.PublicityProxy;
 import com.mediasmiths.mq.handlers.compliance.ComplianceEditingHandler;
 import com.mediasmiths.mq.handlers.compliance.ComplianceLoggingHandler;
+import com.mediasmiths.mq.handlers.compliance.ComplianceLoggingStateChangeHandler;
 import com.mediasmiths.mq.handlers.export.ExportTaskStateChangeHandler;
 import com.mediasmiths.mq.handlers.export.InitiateExportHandler;
 import com.mediasmiths.mq.handlers.fixstitch.ConformJobHandler;
@@ -191,6 +192,8 @@ public class IncomingListener extends MqClientListener
 	PurgeCandidateCreateHandler purgeCandidateCreateHandler;
 	@Inject
 	ExportTaskStateChangeHandler exportTaskStateChangeHandler;
+	@Inject
+	ComplianceLoggingStateChangeHandler complianceLoggingStateChangeHandler;
 
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -275,6 +278,7 @@ public class IncomingListener extends MqClientListener
 		passEventToHandler(unmatchedTaskCreate, messageAttributes);
 		passEventToHandler(purgeCandidateCreateHandler, messageAttributes);
 		passEventToHandler(exportTaskStateChangeHandler, messageAttributes);
+		passEventToHandler(complianceLoggingStateChangeHandler,messageAttributes);
 
 	}
 
@@ -325,6 +329,7 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(initiateQcHandler, currentAttributes);
 				passEventToHandler(purgeCandidateCreateHandler, currentAttributes);
 				passEventToHandler(exportTaskStateChangeHandler, currentAttributes);
+				passEventToHandler(complianceLoggingStateChangeHandler,currentAttributes);
 			}
 		}
 		catch (Exception e)

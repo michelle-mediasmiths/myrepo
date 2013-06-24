@@ -2,139 +2,183 @@ package com.mediasmiths.stdEvents.reporting.csv;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
-import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.ComplianceLogging;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
-import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.io.CsvMapWriter;
+import org.supercsv.io.ICsvMapWriter;
 import org.supercsv.prefs.CsvPreference;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ComplianceRpt extends ReportUtils
 {
 	public static final transient Logger logger = Logger.getLogger(ComplianceRpt.class);
-	
+
+	private static final String formatString = "dd-MM-yyyy hh:mm:ss";
+	private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern(formatString);
+	private static final DateFormat df = new SimpleDateFormat(formatString);
+
 	@Inject
 	@Named("reportLoc")
 	public String REPORT_LOC;
-	
-	@Inject
-	private QueryAPIImpl queryApi;
-	
-	public void writeCompliance(List<EventEntity> events, DateTime startDate, DateTime endDate, String reportName)
+
+
+	public void writeCompliance(List<ComplianceLogging> tasks, DateTime startDate, DateTime endDate, String reportName)
 	{
-		List<ComplianceLoggingMarker> comps = getReportList(events, startDate, endDate);
-		
+		ComplianceLoggingStats stats = getStats(tasks);
+		createCsv(tasks, stats, reportName, startDate, endDate);
+	}
+
+
+	class ComplianceLoggingStats
+	{
+
 		int total = 0;
-		
-		for (ComplianceLoggingMarker clm : comps)
-		{
-			total ++;
-		}
-		
-		comps.add(addStats("No of Titles", Integer.toString(total)));
-		
-		createCsv(comps, reportName);
+		Duration averageTime = new Duration(0);
 	}
-	
-	public List<ComplianceLoggingMarker> getReportList(List<EventEntity> events, DateTime startDate, DateTime endDate)
+
+
+	private ComplianceLoggingStats getStats(List<ComplianceLogging> tasks)
 	{
-		logger.debug(">>>getReportList");
-		
-		List<ComplianceLoggingMarker> clms = new ArrayList<ComplianceLoggingMarker>();
-				
-		String startF = startDate.toString(dateFormatter);
-		String endF = endDate.toString(dateFormatter);
-		
-		for (EventEntity event : events) 
+
+		ComplianceLoggingStats ret = new ComplianceLoggingStats();
+		ret.total = tasks.size();
+		int numfinished = 0;
+
+		Duration totalduration = new Duration(0);
+
+		for (ComplianceLogging task : tasks)
 		{
-			ComplianceLoggingMarker clm = (ComplianceLoggingMarker) unmarshallEvent(event);
-			
-			clm.setDateRange(new StringBuilder().append(startF).append(" - ").append(endF).toString());
-			
-			clm.setMaterialId(clm.getTitleField());
-			clm.setTaskStart(new DateTime(event.getTime()).toString());
-			
-			Title title = queryApi.getTitleById(clm.getMaterialId());
-			if (title != null)
+			if ("FINISHED".equals(task.getTaskStatus()))
 			{
-				logger.info("Title found: " + title.getTitleId());
-				clm.setTitle(title.getTitle());
-				clm.setChannels(title.getChannels().toString());
+				DateTime start = new DateTime(task.getTaskCreated());
+				DateTime finished = new DateTime(task.getDateCompleted());
+
+				totalduration.withDurationAdded(new Duration(start, finished), 1);
+				numfinished++;
 			}
-			clms.add(clm);
 		}
-		
-		logger.debug("<<<getReportList");
-		return clms;
+
+		if (numfinished != 0)
+		{
+
+			long totaltimeMillis = totalduration.getMillis();
+			long averageTimeMillis = totaltimeMillis / numfinished;
+			ret.averageTime = new Duration(averageTimeMillis);
+		}
+
+		return ret;
 	}
-	
-	private void createCsv(List<ComplianceLoggingMarker> titles, String reportName)
+
+
+	private void createCsv(List<ComplianceLogging> tasks,
+	                       ComplianceLoggingStats stats,
+	                       String reportName,
+	                       DateTime start,
+	                       DateTime end)
 	{
-		ICsvBeanWriter beanWriter = null;
-		try {
+		ICsvMapWriter csvwriter = null;
+		try
+		{
 			logger.info("reportName: " + reportName);
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
+			FileWriter fileWriter = new FileWriter(REPORT_LOC + reportName + ".csv");
+			csvwriter = new CsvMapWriter(fileWriter, CsvPreference.STANDARD_PREFERENCE);
 			logger.info("Saving to: " + REPORT_LOC);
-			final String[] header = {"dateRange", "title", "materialId", "channels", "taskStatus", "taskStart", "taskFinish", "externalCompliance"};
+			final String[] header = {"dateRange",
+			                         "title",
+			                         "materialId",
+			                         "channels",
+			                         "taskStatus",
+			                         "taskStart",
+			                         "taskFinish",
+			                         "externalCompliance"};
 			final CellProcessor[] processors = getProcessor();
-			beanWriter.writeHeader(header);
-				
-			
-			for (ComplianceLoggingMarker title : titles)
+			csvwriter.writeHeader(header);
+
+			final String startDate = start.toString(dateFormatter);
+			final String endDate = end.toString(dateFormatter);
+			final String dateRange = String.format("%s - %s", startDate, endDate);
+
+			for (ComplianceLogging task : tasks)
 			{
-				beanWriter.write(title, header, processors);
+				final Map<String, Object> map = new HashMap<String, Object>();
+				map.put(header[0], dateRange);
+
+				putTitleAndChannels(header, map, task.getTitle(), 1, 3);
+
+				map.put(header[2], task.getMaterialID());
+				map.put(header[4], task.getTaskStatus());
+
+				putFormattedDateInCSVMap(header, 5, map, task.getTaskCreated(), df);
+
+				if (task.getComplete() != null && task.getComplete())
+				{
+					putFormattedDateInCSVMap(header, 6, map, task.getDateCompleted(), df);
+				}
+				else
+				{
+					map.put(header[6], null);
+				}
+
+				putPossibleNullBooleanInCSVMap(header, 7, map, task.getExternalCompliance());
+
+				csvwriter.write(map, header, processors);
 			}
+
+
+			StringBuilder statsString = new StringBuilder();
+			statsString.append(String.format("No. of titles %d\n", stats.total));
+			statsString.append(String.format("Average logging completion time %s\n", stats.averageTime.toString()));
+
+
+			csvwriter.flush();
+			IOUtils.write(statsString.toString(), fileWriter);
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			logger.error("error writing report", e);
 		}
-		finally {
-			if (beanWriter != null)
+		finally
+		{
+			if (csvwriter != null)
 			{
 				try
 				{
-					beanWriter.close();
+					csvwriter.close();
 				}
-				catch(IOException e)
+				catch (IOException e)
 				{
-					e.printStackTrace();
+					logger.error("IOException closing csv writer", e);
 				}
 			}
 		}
 	}
-	
+
+
 	private CellProcessor[] getProcessor()
 	{
-		final CellProcessor[] processors = new CellProcessor[] {
-				new Optional(),
-				new Optional(), 
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional()
-		};
+		final CellProcessor[] processors = new CellProcessor[]{new Optional(),
+		                                                       new Optional(),
+		                                                       new Optional(),
+		                                                       new Optional(),
+		                                                       new Optional(),
+		                                                       new Optional(),
+		                                                       new Optional(),
+		                                                       new Optional()};
 		return processors;
-	}
-	
-	private ComplianceLoggingMarker addStats(String name, String value)
-	{
-		ComplianceLoggingMarker clm = new ComplianceLoggingMarker();
-		clm.setTitle(name);
-		clm.setMaterialId(value);
-		return clm;
 	}
 }

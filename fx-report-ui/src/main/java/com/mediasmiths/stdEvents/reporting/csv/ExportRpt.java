@@ -122,16 +122,7 @@ public class ExportRpt extends ReportUtils
 					title = orderStatus.getTitle();
 				}
 
-				if (title != null)
-				{
-					map.put(header[1], title.getTitle());
-					putChannelListToCSVMap(header, 3, map, title.getChannels());
-				}
-				else
-				{
-					map.put(header[1], null);
-					map.put(header[3], null);
-				}
+				putTitleAndChannels(header, map, title, 1, 3);
 
 				map.put(header[2], task.getMaterialID());
 				map.put(header[4], task.getTaskStatus());
@@ -151,7 +142,7 @@ public class ExportRpt extends ReportUtils
 			}
 
 			StringBuilder statsString = new StringBuilder();
-			statsString.append(String.format("No. of Titles Exported Compliance %d\n", stats.compliance));
+			statsString.append(String.format("No. of Titles Exported ComplianceLogging %d\n", stats.compliance));
 			statsString.append(String.format("No. of Titles Exported Publicity %d\n", stats.publicity));
 			statsString.append(String.format("No. of Titles Exported Captioning %d\n", stats.captions));
 
@@ -178,7 +169,6 @@ public class ExportRpt extends ReportUtils
 			}
 		}
 	}
-
 
 	private CellProcessor[] getProcessor()
 	{

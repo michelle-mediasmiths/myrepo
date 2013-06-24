@@ -10,6 +10,7 @@ import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
 import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.ComplianceLogging;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ExtendedPublishing;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
@@ -234,8 +235,8 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly = true)
 	private void getComplianceEditCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		List<EventEntity> events = queryApi.getByEventNameWindowDateRange(EventNames.COMPLIANCE_LOGGING_MARKER, MAX, start, end);
-		compliance.writeCompliance(events, start, end, reportName);
+		List<ComplianceLogging> complianceLoggingTasks = queryApi.getComplianceByDate(start,end);
+		compliance.writeCompliance(complianceLoggingTasks, start, end, reportName);
 	}
 
 	@Transactional(readOnly = true)

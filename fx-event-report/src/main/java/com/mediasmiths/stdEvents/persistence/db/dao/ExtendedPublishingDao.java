@@ -1,6 +1,7 @@
 package com.mediasmiths.stdEvents.persistence.db.dao;
 
 import com.google.inject.ImplementedBy;
+import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.std.guice.database.dao.Dao;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ExtendedPublishing;
@@ -14,4 +15,5 @@ public interface ExtendedPublishingDao extends Dao<ExtendedPublishing, Long>
 {
 	void extendedPublishingEvent(EventEntity event);
 	List<ExtendedPublishing> getExtendedPublishingInDateRange(DateTime start, DateTime end);
+	List<ExtendedPublishing> getByMaterialIDAndType(String materialID, TranscodeJobType jobType);
 }

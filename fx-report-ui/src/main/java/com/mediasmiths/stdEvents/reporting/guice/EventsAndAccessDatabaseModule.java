@@ -2,6 +2,7 @@ package com.mediasmiths.stdEvents.reporting.guice;
 
 import com.mediasmiths.std.guice.hibernate.module.HibernateModule;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.ComplianceLogging;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ExtendedPublishing;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
@@ -38,6 +39,8 @@ public class EventsAndAccessDatabaseModule extends HibernateModule
 		config.addAnnotatedClass(MayamAccessRights.class);
 
 		config.addAnnotatedClass(ExtendedPublishing.class);
+
+		config.addAnnotatedClass(ComplianceLogging.class);
 	}
 
 }

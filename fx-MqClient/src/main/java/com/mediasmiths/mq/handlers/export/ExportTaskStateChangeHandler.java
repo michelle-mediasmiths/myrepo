@@ -33,7 +33,7 @@ public class ExportTaskStateChangeHandler extends TaskStateChangeHandler
 	@Override
 	protected void stateChanged(final AttributeMap messageAttributes)
 	{
-
+		log.info("Building event for extended publishing reporting");
 		final String houseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 		final AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 		final Long taskID = (Long) messageAttributes.getAttribute(Attribute.TASK_ID);

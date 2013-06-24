@@ -2,6 +2,7 @@ package com.mediasmiths.stdEvents.persistence.db.impl;
 
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.ip.common.events.ExtendedPublishingTaskEvent;
+import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.hibernate.dao.HibernateDao;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
@@ -26,6 +27,8 @@ public class ExtendedPublishingDaoImpl extends HibernateDao<ExtendedPublishing, 
 	@Inject
 	private OrderDao orderDao;
 
+	@Inject
+	private ExtendedPublishingDao extendedPublishingDao;
 
 	public ExtendedPublishingDaoImpl()
 	{
@@ -101,6 +104,17 @@ public class ExtendedPublishingDaoImpl extends HibernateDao<ExtendedPublishing, 
 		criteria.add(Restrictions.or(Restrictions.between("taskCreated", start.toDate(), end.plusDays(1).toDate()),
 		                             Restrictions.between("taskUpdated", start.toDate(), end.plusDays(1).toDate())));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+		return getList(criteria);
+	}
+
+
+	@Override
+	@Transactional
+	public List<ExtendedPublishing> getByMaterialIDAndType(final String materialID, final TranscodeJobType jobType)
+	{
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("materialID", materialID)).add(Restrictions.eq("exportType", jobType.getText()));
 
 		return getList(criteria);
 	}
