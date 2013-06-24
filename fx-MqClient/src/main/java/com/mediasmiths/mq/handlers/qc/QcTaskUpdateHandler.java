@@ -52,6 +52,10 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 	private int defaultPurgeTime;
 
 	@Inject
+	@Named("purge.qc.file.format.verification.failed.default")
+	private int qcDefaultPurgeTime;
+
+	@Inject
 	private QcEvent qcEvent;
 		
 	@Override
@@ -221,7 +225,9 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		}
 		else if (fileFormat.equals(QcStatus.FAIL))
 		{
-			finishWithWarning(currentAttributes);
+			finishWithFail(currentAttributes, fileFormat);
+			AssetType assetType = currentAttributes.getAttribute(Attribute.ASSET_TYPE);
+			taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.fromAssetType(assetType), currentAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID), qcDefaultPurgeTime);
 		}
 	}
 
@@ -398,6 +404,14 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
 		taskController.saveTask(updateMap);
 		sendQcFailedReorderEvent(currentAttributes);
+	}
+
+	private void finishWithFail(AttributeMap currentAttributes, QcStatus failStatus) throws MayamClientException
+	{
+		log.info("QC : About to try to update qc task state to FAILED");
+		AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
+		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED_FAILED);
+		taskController.saveTask(updateMap);
 	}
 
 	private void initiateAutoQc(AttributeMap messageAttributes)

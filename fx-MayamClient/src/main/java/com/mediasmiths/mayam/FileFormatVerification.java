@@ -1,16 +1,15 @@
 package com.mediasmiths.mayam;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.FileFormatInfo;
+import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FileFormatVerification
 {
@@ -118,14 +117,14 @@ public class FileFormatVerification
 
 		String reqfmt = materialAttributes.getAttribute(Attribute.REQ_FMT);
 		boolean requiredFormatKnown = false;
-		boolean sd = false;
+		boolean requiredFormatSD = false;
 
 		if (reqfmt != null)
 		{
 			requiredFormatKnown = true;
 			if (reqfmt.toLowerCase().equals("sd"))
 			{
-				sd = true;
+				requiredFormatSD = true;
 			}
 		}
 
@@ -202,63 +201,65 @@ public class FileFormatVerification
 		sdTests.add(new FileFormatTest(sdWrapperFormat, wrapperFormat, "Wrapper format"));
 		sdTests.add(new FileFormatTest(sdWrapperMime, wrapperMime, "Wrapper format mime type"));
 
-		if (requiredFormatKnown)
+		// Finding the format type been delivered
+
+		log.debug("Performing file format verification tests against both SD and HD requirements");
+
+		Boolean sdTestsPass = performTests(sb,sdTests,"SD Requirements");
+		Boolean hdTestsPass = performTests(sb, hdTests, "HD Requirements");
+		Boolean eitherPass = sdTestsPass || hdTestsPass;
+
+		if (sdTestsPass)
 		{
-			log.debug("Asset format is known");
-			if (sd)
-			{
-				log.debug("Format is sd asset");
-				boolean pass = performTests(sb, sdTests);
-				String detail = sb.toString();
-				log.info(detail);
-				return new FileFormatVerificationResult(pass, detail);
-			}
-			else
-			{
-				log.debug("Format is hd asset");
-				boolean pass = performTests(sb, hdTests);
-				String detail = sb.toString();
-				log.info(detail);
-				return new FileFormatVerificationResult(pass, detail);
-			}
+			//Delivered format is SD
+			log.debug("format validated as sd");
+			String detail = sb.toString();
+			log.info(detail);
 		}
 		else
 		{
-			// try sd first
-			log.debug("required format unknown, testing as both");
+			log.debug("sd test format failed");
+		}
 
-			if (performTests(sb, sdTests))
-			{
-				log.debug("format validated as sd");
-				String detail = sb.toString();
-				log.info(detail);
-				return new FileFormatVerificationResult(true, detail);
-			}
-			else
-			{
-				log.debug("sd test format failed");
-			}
+		if (hdTestsPass)
+		{
+			//Delivered Format is HD
+			log.debug("format validated as hd");
+			String detail = sb.toString();
+			log.info(detail);
+		}
+		else
+		{
+			log.debug("hd test format failed");
+		}
 
-			if (performTests(sb, hdTests))
-			{
-				log.debug("format validated as hd");
-				String detail = sb.toString();
-				log.info(detail);
-				return new FileFormatVerificationResult(true, detail);
-			}
-			else
-			{
-				log.debug("hd test format failed");
-			}
-
+		if (!eitherPass)
+		{
+			//file format verification failed
 			log.debug("Tests failed for both asset as both hd and sd");
 			return new FileFormatVerificationResult(false, sb.toString());
 		}
+		else
+		{
+			if ((!requiredFormatSD) && sdTestsPass)
+			{
+				log.info("Required format is HD and SD is arrived. So failing the file format verification");
+				return new FileFormatVerificationResult(false, sb.toString());
+			}
+			else
+			{
+				log.debug("File format verification passed");
+				return new FileFormatVerificationResult(true,sb.toString());
+			}
+		}
+
 	}
 
-	private boolean performTests(StringBuilder sb, List<FileFormatTest> tests)
+	private boolean performTests(StringBuilder sb, List<FileFormatTest> tests, String testListName)
 	{
 		boolean allPass = true;
+
+		sb.append(testListName+"\n");
 
 		for (FileFormatTest fileFormatTest : tests)
 		{

@@ -1253,6 +1253,8 @@ public class MayamMaterialController extends MayamController
 			update.setAttribute(Attribute.QC_SUBSTATUS3, QcStatus.TBD);
 			update.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
 			update.setAttribute(Attribute.QC_SUBSTATUS1_NOTES, ffvResult.getDetail());
+
+
 		}
 
 		taskController.saveTask(update);
