@@ -203,10 +203,10 @@ public class FileFormatVerification
 
 		// Finding the format type been delivered
 
-		log.debug("required format unknown, testing as both");
+		log.debug("Performing file format verification tests against both SD and HD requirements");
 
-		Boolean sdTestsPass = performTests(sb,sdTests,"SD tests");
-		Boolean hdTestsPass = performTests(sb, hdTests, "HD tests");
+		Boolean sdTestsPass = performTests(sb,sdTests,"SD Requirements");
+		Boolean hdTestsPass = performTests(sb, hdTests, "HD Requirements");
 		Boolean eitherPass = sdTestsPass || hdTestsPass;
 
 		if (sdTestsPass)
@@ -259,6 +259,7 @@ public class FileFormatVerification
 	{
 		boolean allPass = true;
 
+		sb.append(testListName+"\n");
 
 		for (FileFormatTest fileFormatTest : tests)
 		{
