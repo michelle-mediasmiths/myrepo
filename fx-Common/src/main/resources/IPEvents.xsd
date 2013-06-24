@@ -858,7 +858,7 @@
 	</xs:element>
 
 
-	<xs:element name="CompianceLoggingTaskEvent">
+	<xs:element name="ComplianceLoggingTaskEvent">
 		<xs:complexType>
 			<xs:annotation>
 				<xs:documentation>Used to track compliance logging tasks for reporting</xs:documentation>

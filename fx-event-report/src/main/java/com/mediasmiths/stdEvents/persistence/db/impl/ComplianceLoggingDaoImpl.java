@@ -1,7 +1,7 @@
 package com.mediasmiths.stdEvents.persistence.db.impl;
 
 import com.google.inject.Inject;
-import com.mediasmiths.foxtel.ip.common.events.CompianceLoggingTaskEvent;
+import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingTaskEvent;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.std.guice.hibernate.dao.HibernateDao;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
@@ -44,7 +44,7 @@ public class ComplianceLoggingDaoImpl extends HibernateDao<ComplianceLogging, Lo
 	public void complianceEvent(final EventEntity event)
 	{
 
-		CompianceLoggingTaskEvent evt = (CompianceLoggingTaskEvent) serializer.deserialise(event.getPayload());
+		ComplianceLoggingTaskEvent evt = (ComplianceLoggingTaskEvent) serializer.deserialise(event.getPayload());
 
 		final Long taskID = evt.getTaskID();
 		final String materialID = evt.getMaterialID();
