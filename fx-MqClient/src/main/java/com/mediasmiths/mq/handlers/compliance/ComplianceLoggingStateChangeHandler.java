@@ -5,7 +5,7 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mediasmiths.foxtel.ip.common.events.CompianceLoggingTaskEvent;
+import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingTaskEvent;
 import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -38,7 +38,7 @@ public class ComplianceLoggingStateChangeHandler extends TaskStateChangeHandler
 
 		String materialID = houseID;
 
-		CompianceLoggingTaskEvent ep = new CompianceLoggingTaskEvent();
+		ComplianceLoggingTaskEvent ep = new ComplianceLoggingTaskEvent();
 		ep.setMaterialID(materialID);
 		ep.setTaskID(taskID);
 		ep.setSourceMaterialID(sourceID);
