@@ -117,10 +117,10 @@ public class ReportUIImpl implements ReportUI
 			logger.info("Generating PurgeContent Report");
 			getPurgeContentCSV(startDate, endDate, reportName);
 		}
-		else if (rptType.equals("ComplianceEdits"))
+		else if (rptType.equals("ComplianceLogging"))
 		{
-			logger.info("Generating ComplianceEdits Report");
-			getComplianceEditCSV(startDate, endDate, reportName);
+			logger.info("Generating ComplianceLogging Report");
+			getComplianceLoggingCSV(startDate, endDate, reportName);
 		}
 		else if (rptType.equals("Export"))
 		{
@@ -233,7 +233,7 @@ public class ReportUIImpl implements ReportUI
 	}
 
 	@Transactional(readOnly = true)
-	private void getComplianceEditCSV(final DateTime start, final DateTime end, final String reportName)
+	private void getComplianceLoggingCSV(final DateTime start, final DateTime end, final String reportName)
 	{
 		List<ComplianceLogging> complianceLoggingTasks = queryApi.getComplianceByDate(start,end);
 		compliance.writeCompliance(complianceLoggingTasks, start, end, reportName);
@@ -242,7 +242,7 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly = true)
 	private void getExportCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		List<ExtendedPublishing> tasks = queryApi.getExtendedPublishingByDate(start,end);
+		List<ExtendedPublishing> tasks = queryApi.getExtendedPublishingByDate(start, end);
 		export.writeExport(tasks, start, end, reportName);
 	}
 
