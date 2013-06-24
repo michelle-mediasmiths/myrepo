@@ -241,7 +241,7 @@ public class FileFormatVerification
 		}
 		else
 		{
-			if ((!requiredFormatSD) && sdTestsPass)
+			if (requiredFormatKnown && ((!requiredFormatSD) && sdTestsPass)) //require format is known to not be sd but sd content has arrived
 			{
 				log.info("Required format is HD and SD is arrived. So failing the file format verification");
 				return new FileFormatVerificationResult(false, sb.toString());
