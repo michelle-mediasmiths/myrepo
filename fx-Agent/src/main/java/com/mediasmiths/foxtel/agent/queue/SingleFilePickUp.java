@@ -464,7 +464,7 @@ public class SingleFilePickUp implements IFilePickup
 			 pickUpStats.getDetails().add(pd);
 		}
 
-		pickUpEventTimer.saveEvent("http://www.foxtel.com.au/ip/infrastructure", EventNames.FILE_PICK_UP,pickUpStats);
+		pickUpEventTimer.saveEvent("http://www.foxtel.com.au/ip/infrastructure", EventNames.FILE_PICK_UP_NOTIFICATION,pickUpStats);
 	}
 
 	public File[] getWatchedDirectories()

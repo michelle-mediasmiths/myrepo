@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FoxtelEmailConfiguration xmlns="http://com.mediasmiths.foxtel.ip.common.email/001/000">
 	<!-- QC -->
-<!-- SEEMS TO BE DUPLICATE OF QCFailedReorder ??	
-	<MailData>
-		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
-		<eventname>AutoQCFailed</eventname>
-		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.AutoQcEmailTemplate">
-			<subject>Auto QC Fail in MAM: TaskId(%s), TitleId(%s), Title(%s)</subject>
-			<body><![CDATA[Item has been given a warning state on the QC tasklist. Asset(%s).<p/>Please resolve this matter within 90 days otherwise the item will be purged without further notification.]]></body>
-			<emailaddresses>
-				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="LS">GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="FC">GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="GE">GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="ME">GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="OD">GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="MV">GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
-			</emailaddresses>
-		</MailTemplate>
-	</MailData>
--->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 		<eventname>CerifyQCError</eventname>
@@ -68,62 +48,6 @@
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
-<!-- NOT IN EMAIL SPEC DOC
-		<MailData>
-			<namespace>http://www.foxtel.com.au/ip/qc</namespace>
-			<eventname>ChannelConditionsFoundDuringQC</eventname>
-			<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.channelconditions.ChannelConditionEmailTemplater">
-				<subject>Channel conditions found during qc for material %s</subject>
-				<body>Channel conditions were reported for this material during QC, it will be sent to Cerify</body>
-				<emailaddresses> 
-					<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-					<emailaddress channelGroup="LS">GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
-					<emailaddress channelGroup="FC">GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
-					<emailaddress channelGroup="GE">GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-					<emailaddress channelGroup="ME">GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
-					<emailaddress channelGroup="OD">GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-					<emailaddress channelGroup="MV">GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
-				</emailaddresses>
-			</MailTemplate>
-	</MailData>
--->
-<!-- NOT IN EMAIL SPEC DOC
-	<MailData>
-			<namespace>http://www.foxtel.com.au/ip/qc</namespace>
-			<eventname>ChannelConditionsFoundInRuzzXml</eventname>
-			<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.channelconditions.ChannelConditionEmailTemplater">
-				<subject>Channel conditions found in companion XML for material %s</subject>
-				<body>Channel conditions were present in this material's Ruzz companion XML, it has been marked as requiring auto QC once ingest completes</body>
-				<emailaddresses> -->
-					<!-- AO not used currently for Ruzz <emailaddress>GS-MAM_AO@foxtel.com.au</emailaddress> -->
-			<!--	<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
-				</emailaddresses>
-			</MailTemplate>
-	</MailData>
--->	
-<!-- DUPE OF CerifyQCError ??
-	<MailData>
-			<namespace>http://www.foxtel.com.au/ip/qc</namespace>
-			<eventname>QcServerFail</eventname>
-			<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.QcServerFailEmailTemplate">
-				<subject>QC Server Issue: Server failure while processing %s, %s</subject>
-				<body>Cerify has not processed this item. Please resolve the cause of issue.</body>
-				<emailaddresses> 
-					<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
-					<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
-				</emailaddresses>
-			</MailTemplate>
-	</MailData> 
--->
 	<!-- TC -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
@@ -561,76 +485,4 @@
             </emailaddresses>
         </MailTemplate>
     </MailData>
-<!-- NOT IN EMAIL SPEC DOC
-	<MailData>
-		<namespace>http://www.foxtel.com.au/ip/content</namespace>
-		<eventname>OutOfOrder</eventname>
-		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-			<subject>A material exchange message has arrived with an unexpected delivery version for material File(%s)</subject>
-			<body>A material exchange message has arrived with an unexpected delivery version for material %s </body>
-			<emailaddresses> 
-				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
-			</emailaddresses>
-		</MailTemplate>
-	</MailData>
--->
-<!-- NOT IN EMAIL SPEC DOC
-    <MailData>
-        <namespace>http://www.foxtel.com.au/ip/content</namespace>
-        <eventname>Quarantine</eventname>
-        <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-            <subject>A material exchange message has been quarantined File(%s)</subject>
-            <body>A material exchange has arrived to the wrong location: it has been quarantined to %s. </body>
-            <emailaddresses>
-                <emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
-		    	<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
-                <emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-            </emailaddresses>
-        </MailTemplate>
-    </MailData>
--->
-<!-- NOT IN EMAIL SPEC DOC
-    <MailData>
-        <namespace>"http://www.foxtel.com.au/ip/bms"</namespace>
-        <eventname>BMSFailure</eventname>
-        <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.system.BMSErrorEmailTemplate">
-            <subject>A BMS Message Fails because %s, during BMS(%s), Material ID(%s), Title(%s)</subject>
-            <body>BMS Message Failure.</body>
-            <emailaddresses> 
-                <emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
-		    <emailaddress>GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
-            </emailaddresses>
-        </MailTemplate>
-    </MailData>
--->
-<!-- NOT IN EMAIL SPEC DOC
-    <MailData>
-        <namespace>"http://www.foxtel.com.au/ip/bms"</namespace>
-        <eventname>IBMSRollBackDeleteMaterialFails</eventname>
-        <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.system.BMSErrorEmailTemplate">
-            <subject>IBMS Transaction could not delete material with Material ID(%s)</subject>
-            <body>IBMS Placeholder message rollback failure. It is URGENT this material is deleted manually as automated delete has failed.</body>
-            <emailaddresses>
-                <emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
-		    	<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
-            </emailaddresses>
-        </MailTemplate>
-    </MailData>
--->
-<!-- NOT IN EMAIL SPEC DOC
-    <MailData>
-        <namespace>"http://www.foxtel.com.au/ip/bms"</namespace>
-        <eventname>IBMSRollBackDeleteTitleFails</eventname>
-        <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.system.BMSErrorEmailTemplate">
-            <subject>IBMS Transaction could not delete title with ID titleId(%s)</subject>
-            <body>IBMS Placeholder message rollback failure. It is URGENT this title is deleted manually as automated delete has failed.</body>
-            <emailaddresses>
-                <emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
-		    	<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
-            </emailaddresses>
-        </MailTemplate>
-    </MailData>
--->
 </FoxtelEmailConfiguration>

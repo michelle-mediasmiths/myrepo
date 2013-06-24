@@ -13,7 +13,6 @@ import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
 import com.mediasmiths.foxtel.ip.common.events.EventAttachment;
 import com.mediasmiths.foxtel.ip.common.events.EventNames;
-import com.mediasmiths.foxtel.ip.common.events.QcServerFail;
 import com.mediasmiths.foxtel.ip.common.events.TcEvent;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
@@ -396,7 +395,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				String packageID = notification.getAssetId();
 				final Set<String> channelGroups = mayamClient.getChannelGroupsForPackage(packageID);
 				// auto qc was for tx delivery
-				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification,channelGroups);
 				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC ERROR");
 
 				TcEvent tce = new TcEvent();
@@ -406,6 +404,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 					tce.setAssetID(notification.getAssetId());
 					tce.setPackageID(task.getAttributeAsString(Attribute.HOUSE_ID));
 					tce.setTitle(notification.getTitle());
+					tce.withChannelGroup(channelGroups);
 					events.saveEvent(TC_EVENT_NAMESPACE, EventNames.QC_SERVER_FAILURE_DURING_TRANSCODE, tce);
 				}
 			}
@@ -418,17 +417,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				// auto qc was for qc task
 				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification,channelGroups);
 				mayamClient.autoQcErrorForMaterial(notification.getAssetId(), notification.getTaskID());
-
-				AttributeMap task = mayamClient.getTask(notification.getTaskID());
-				if (task != null)
-				{
-					QcServerFail qcsf = new QcServerFail();
-					String assetID = notification.getAssetId();
-					qcsf.setAssetID(assetID);
-					qcsf.setMaterialID(task.getAttributeAsString(Attribute.HOUSE_ID));
-					qcsf.setTitle(notification.getTitle());
-					events.saveEvent(QC_EVENT_NAMESPACE, EventNames.QC_SERVER_FAIL, qcsf);
-				}
 			}
 		}
 		catch (MayamClientException e)
