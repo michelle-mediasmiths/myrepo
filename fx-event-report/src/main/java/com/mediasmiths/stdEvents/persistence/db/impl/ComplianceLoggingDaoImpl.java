@@ -61,21 +61,9 @@ public class ComplianceLoggingDaoImpl extends HibernateDao<ComplianceLogging, Lo
 			log.info("New compliance task " + taskID);
 			c = new ComplianceLogging();
 			c.setTaskID(taskID);
-
-			if (titleID != null)
-			{
-				Title t = titleDao.getById(titleID);
-
-				if (t != null)
-				{
-					c.setTitle(t);
-				}
-				else
-				{
-					log.info("no title information for this compliance task");
-				}
-			}
 		}
+
+		attatchTitleIfAvailable(titleID, c);
 
 		c.setTaskStatus(taskStatus);
 		c.setMaterialID(materialID);
@@ -91,7 +79,10 @@ public class ComplianceLoggingDaoImpl extends HibernateDao<ComplianceLogging, Lo
 			c.setTaskUpdated(taskUpdated.toGregorianCalendar().getTime());
 		}
 
-		if ("FINISHED".equals(taskStatus) || "REMOVED".equals(taskStatus) || "REJECTED".equals(taskStatus))
+		if ("FINISHED".equals(taskStatus) ||
+		    "FINISHED_FAILED".equals(taskStatus) ||
+		    "REMOVED".equals(taskStatus) ||
+		    "REJECTED".equals(taskStatus))
 		{
 			c.setComplete(true);
 			if (taskUpdated != null)
@@ -113,6 +104,25 @@ public class ComplianceLoggingDaoImpl extends HibernateDao<ComplianceLogging, Lo
 
 		saveOrUpdate(c);
 	}
+
+
+	private void attatchTitleIfAvailable(final String titleID, final ComplianceLogging c)
+	{
+		if (c.getTitle() == null && titleID != null)
+		{
+			Title t = titleDao.getById(titleID);
+
+			if (t != null)
+			{
+				c.setTitle(t);
+			}
+			else
+			{
+				log.info("no title information for this compliance task");
+			}
+		}
+	}
+
 
 	@Override
 	public List<ComplianceLogging> getComplianceByDate(final DateTime start, final DateTime end)

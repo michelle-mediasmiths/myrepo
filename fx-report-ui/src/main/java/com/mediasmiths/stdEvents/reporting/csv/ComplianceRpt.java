@@ -63,7 +63,7 @@ public class ComplianceRpt extends ReportUtils
 
 		for (ComplianceLogging task : tasks)
 		{
-			if ("FINISHED".equals(task.getTaskStatus()))
+			if (task.getComplete() != null && task.getComplete())
 			{
 				DateTime start = new DateTime(task.getTaskCreated());
 				DateTime finished = new DateTime(task.getDateCompleted());
