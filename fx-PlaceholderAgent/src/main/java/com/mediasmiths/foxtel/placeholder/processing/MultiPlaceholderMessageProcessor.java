@@ -631,10 +631,6 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 
 			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", EventNames.PROTECTED_PURGE_FAIL, ppf);
 		}
-		else
-		{
-			eventService.saveEvent("failed", resultPackage.getMessage());
-		}
 	}
 
 	private void createErrorTask(final MessageValidationResultPackage<PlaceholderMessage> resultPackage)

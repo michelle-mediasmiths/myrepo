@@ -10,6 +10,9 @@ import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
+import com.mediasmiths.foxtel.ip.common.events.FilePickupDetails;
+import com.mediasmiths.foxtel.ip.common.events.PickupNotification;
 import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 import com.mediasmiths.std.threading.Daemon;
 import org.apache.commons.io.FileUtils;
@@ -99,8 +102,6 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 		catch (MessageProcessingFailedException e)
 		{
 			logger.error(String.format("Message processing failed for %s and reason %s", pp.getRootName(), e.getReason()), e);
-
-			eventService.saveEvent("Error", message);
 			throw e;
 		}
 		return getIDFromMessage(envelope);
@@ -351,6 +352,8 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 						logger.warn(String.format("%s still exists after processing!",f.getAbsolutePath()));
 					}
 				}
+
+				sendPickUpTimingEvent(pp);
 			}
 			catch (Exception e)
 			{
@@ -366,6 +369,47 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 		}
 
 	}
+
+	/**
+	 *
+	 * @param pp a pickup reference for an existing file that whose timings should be reported to the event system.
+	 */
+	private void sendPickUpTimingEvent(final PickupPackage pp)
+	{
+		try
+		{
+			long timeProcessed = System.currentTimeMillis();
+			PickupNotification pickUpStats = new PickupNotification();
+			for (String ext : pp.getFoundSuffixes())
+			{
+				File f = pp.getPickUp(ext);
+				FilePickupDetails pd = new FilePickupDetails();
+				pd.setFilename(f.getName());
+				pd.setFilePath(pp.getRootPath());
+				pd.setTimeDiscovered(pp.getLastModified(ext));
+				pd.setTimeProcessed(timeProcessed);
+				pd.setAggregator(watchedFolders.getNameForWatchFolder(pp.getRootPath()));
+
+				logger.debug(String.format("Adding file pickup details to event. filename %s path %s discovered %s processed %s aggregator %s",
+				                           pd.getFilename(),
+				                           pd.getFilePath(),
+				                           pd.getTimeDiscovered(),
+				                           pd.getTimeProcessed(),
+				                           pd.getAggregator()));
+
+				pickUpStats.getDetails().add(pd);
+			}
+
+			eventService.saveEvent("http://www.foxtel.com.au/ip/infrastructure",
+			                       EventNames.FILE_PICK_UP_NOTIFICATION,
+			                       pickUpStats);
+		}
+		catch (Throwable t)
+		{
+			logger.error("error sending file pickup notification");
+		}
+	}
+
 
 	protected abstract boolean shouldArchiveMessages();
 

@@ -529,10 +529,6 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", EventNames.PROTECTED_PURGE_FAIL,ppf);
 		}
-		else
-		{
-			eventService.saveEvent("failed", resultPackage.getMessage());
-		}
 	}
 
 	private ProtectedPurgeFail createPurgeFailedMessage ()

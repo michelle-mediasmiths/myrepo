@@ -9,8 +9,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvMapWriter;
@@ -19,8 +17,6 @@ import org.supercsv.prefs.CsvPreference;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,10 +35,6 @@ public class OrderStatusRpt extends ReportUtils
 	@Inject
 	@Named("windowMax")
 	public int MAX;
-	
-	private static final String formatString = "dd-MM-yyyy";
-	private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern(formatString);
-	private static final DateFormat df = new SimpleDateFormat(formatString);
 
 	public void writeOrderStatus(
 			final List<com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus> orders,
@@ -167,8 +159,8 @@ public class OrderStatusRpt extends ReportUtils
 			final CellProcessor[] processors = getProcessor();
 			csvwriter.writeHeader(header);
 
-			final String startDate = start.toString(dateFormatter);
-			final String endDate = end.toString(dateFormatter);
+			final String startDate = start.toString(dateOnlyFormatter);
+			final String endDate = end.toString(dateOnlyFormatter);
 			final String dateRange = String.format("%s - %s", startDate, endDate);
 
 			for (OrderStatus order : orderStatuses)
@@ -188,14 +180,14 @@ public class OrderStatusRpt extends ReportUtils
 				}
 				orderMap.put(header[2], order.getMaterialid());
 				orderMap.put(header[4], order.getOrderReference());
-				putFormattedDateInCSVMap(header,5,orderMap,order.getRequiredBy(),df);
+				putFormattedDateInCSVMap(header,5,orderMap,order.getRequiredBy(),dateOnlyFormat);
 
 				orderMap.put(header[6], order.getComplete());
 				orderMap.put(header[7], order.getOverdue());
 				orderMap.put(header[8], order.getAggregatorID());
 				orderMap.put(header[9], order.getTaskType());
 
-				putFormattedDateInCSVMap(header,10,orderMap,order.getCompleted(),df);
+				putFormattedDateInCSVMap(header,10,orderMap,order.getCompleted(),dateOnlyFormat);
 
 				csvwriter.write(orderMap, header, processors);
 			}

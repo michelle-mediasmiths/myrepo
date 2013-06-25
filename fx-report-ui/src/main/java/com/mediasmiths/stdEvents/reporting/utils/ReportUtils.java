@@ -5,20 +5,27 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public abstract class ReportUtils
 {
+	protected static final String dateAndTimeFormatString = "dd-MM-yyyy-hh:mm:ss";
+	protected static final DateTimeFormatter dateAndTimeFormatter = DateTimeFormat.forPattern(dateAndTimeFormatString);
+	protected static final DateFormat dateAndTimeFormat = new SimpleDateFormat(dateAndTimeFormatString);
 	private final static transient Logger logger = Logger.getLogger(ReportUtils.class);
-	
-	public static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd-MM-yyyy");
 
+	protected static final String dateOnlyFormatString = "dd-MM-yyyy";
+	protected static final DateTimeFormatter dateOnlyFormatter = DateTimeFormat.forPattern(dateOnlyFormatString);
+	protected static final DateFormat dateOnlyFormat = new SimpleDateFormat(dateOnlyFormatString);
 
 	protected String contentTypeToHumanString(String contentType)
 	{
@@ -100,6 +107,20 @@ public abstract class ReportUtils
 	protected void putFormattedDateInCSVMap(final String[] header,
 	                                        int index,
 	                                        final Map<String, Object> map,
+	                                        final Long dateInMillis,
+	                                        DateFormat format){
+		Date d = null;
+
+		if(dateInMillis != null){
+			d = new Date(dateInMillis);
+		}
+
+		putFormattedDateInCSVMap(header,index,map,d,format);
+	}
+
+	protected void putFormattedDateInCSVMap(final String[] header,
+	                                        int index,
+	                                        final Map<String, Object> map,
 	                                        final Date date,
 	                                        DateFormat format)
 	{
@@ -152,5 +173,17 @@ public abstract class ReportUtils
 		}
 		logger.debug("<<<unmarshallReport");
 		return obj;
+	}
+
+
+	protected String getDateRangeString(final DateTime start, final DateTime end)
+	{
+		final String startDate = start.toString(dateOnlyFormatter);
+		final String endDate = end.toString(dateOnlyFormatter);
+		return String.format("%s - %s", startDate, endDate);
+	}
+
+	protected String getHHMMSSmmm(Period period){
+		return String.format("%02d:%02d:%02d:%03d", period.getHours(), period.getMinutes(), period.getSeconds(),period.getMillis());
 	}
 }

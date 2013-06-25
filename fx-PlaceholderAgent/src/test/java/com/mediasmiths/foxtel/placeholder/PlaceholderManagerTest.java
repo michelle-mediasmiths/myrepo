@@ -1,26 +1,6 @@
 package com.mediasmiths.foxtel.placeholder;
 
-import static org.mockito.Mockito.mock;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.xml.sax.SAXException;
-
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
-
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Provides;
@@ -50,6 +30,23 @@ import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
 import com.mediasmiths.std.io.PropertyFile;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.xml.sax.SAXException;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+import static org.mockito.Mockito.mock;
 
 public abstract class PlaceholderManagerTest {
 
@@ -95,11 +92,6 @@ public abstract class PlaceholderManagerTest {
 		events = new EventService(){
 			@Override
 			public void saveEvent(String name, String payload){
-				logger.info("saving event "+name);
-			}
-			
-			@Override
-			public void saveEvent(String name, Object payload){
 				logger.info("saving event "+name);
 			}
 		};

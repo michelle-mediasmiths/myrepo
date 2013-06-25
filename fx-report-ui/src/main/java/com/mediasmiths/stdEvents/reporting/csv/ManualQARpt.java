@@ -125,8 +125,8 @@ public class ManualQARpt extends ReportUtils
 			final CellProcessor[] processors = getProcessor();
 			csvwriter.writeHeader(header);
 
-			final String startDate = start.toString(dateFormatter);
-			final String endDate = end.toString(dateFormatter);
+			final String startDate = start.toString(dateOnlyFormatString);
+			final String endDate = end.toString(dateOnlyFormatString);
 			final String dateRange = String.format("%s - %s", startDate, endDate);
 
 			for (ManualQAEntity m : manualqas)

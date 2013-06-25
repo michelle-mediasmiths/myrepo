@@ -16,8 +16,6 @@ import org.supercsv.prefs.CsvPreference;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +23,6 @@ import java.util.Map;
 public class AutoQCRpt extends ReportUtils
 {
 	public static final transient Logger logger = Logger.getLogger(AutoQCRpt.class);
-
-	private static final String formatString = "dd-MM-yyyy-HH:MM:SS";
-	private static final DateFormat df = new SimpleDateFormat(formatString);
 
 	// Edit this variable to change where your reports get saved to
 	@Inject
@@ -85,8 +80,8 @@ public class AutoQCRpt extends ReportUtils
 
 			csvwriter.writeHeader(header);
 
-			final String startDate = start.toString(dateFormatter);
-			final String endDate = end.toString(dateFormatter);
+			final String startDate = start.toString(dateOnlyFormatString);
+			final String endDate = end.toString(dateOnlyFormatString);
 			final String dateRange = String.format("%s - %s", startDate, endDate);
 
 			for (AutoQC a : events)
@@ -110,9 +105,9 @@ public class AutoQCRpt extends ReportUtils
 				aqcMap.put(header[6], a.getTaskStatus());
 				aqcMap.put(header[7], a.getQcStatus());
 
-				putFormattedDateInCSVMap(header,8,aqcMap, a.getCreatedTime(), df);
-				putFormattedDateInCSVMap(header,9,aqcMap, a.getTaskFinishedTime(), df);
-				putFormattedDateInCSVMap(header,10,aqcMap, a.getWarningTime(), df);
+				putFormattedDateInCSVMap(header,8,aqcMap, a.getCreatedTime(), dateAndTimeFormat);
+				putFormattedDateInCSVMap(header,9,aqcMap, a.getTaskFinishedTime(), dateAndTimeFormat);
+				putFormattedDateInCSVMap(header,10,aqcMap, a.getWarningTime(), dateAndTimeFormat);
 
 				if (a.getOverride() != null && a.getOverride().equals(Boolean.TRUE))
 				{

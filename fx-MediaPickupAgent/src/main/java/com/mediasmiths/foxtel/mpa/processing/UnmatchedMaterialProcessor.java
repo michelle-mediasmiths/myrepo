@@ -89,9 +89,6 @@ public class UnmatchedMaterialProcessor
 
 			logger.info(String.format("Trying to move file %s to %s", mxf.getAbsolutePath(), destination));
 			FileUtils.moveFile(mxf, dest);
-
-			// send event
-			events.saveEvent("UnmatchedContentAvailable", destination);
 		}
 		catch (IOException e)
 		{

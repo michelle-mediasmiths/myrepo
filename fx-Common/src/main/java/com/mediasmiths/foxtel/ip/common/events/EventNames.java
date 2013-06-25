@@ -5,12 +5,10 @@ public class EventNames
 	public static final String ARDOME_IMPORT_FAILURE_NON_AO = "ArdomeImportFailureNonAO";
 	public static final String ARDOME_IMPORT_FAILURE_AO = "ArdomeImportFailureAO";
 	public static final String COMPLIANCE_LOGGING_MARKER = "ComplianceLoggingMarker";
-	public static final String CREATION_COMPLETE = "CreationComplete";
 	public static final String QC_FAILED_RE_ORDER = "QcFailedReOrder";
 	public static final String CHANNEL_CONDITIONS_FOUND_DURING_QC = "ChannelConditionsFoundDuringQC";
 	public static final String COMM_ERROR = "CommError";
 	public static final String FILE_PICK_UP_NOTIFICATION = "FilePickUpNotification";
-	public static final String CONTENT_WITHOUT_COMPANION_XML = "ContentWithoutCompanionXML";
 	public static final String AO_MEDIA_IMPORT_TO_ARDOME_FAILURE = "AOMediaImportToArdomeFailure";
 	public static final String NON_AO_MEDIA_IMPORT_TO_ARDOME_FAILURE = "NonAOMediaImportToArdomeFailure";
 	public static final String AO_CONTENT_WITHOUT_MATERIAL_ID = "AOContentWithoutMaterialID";

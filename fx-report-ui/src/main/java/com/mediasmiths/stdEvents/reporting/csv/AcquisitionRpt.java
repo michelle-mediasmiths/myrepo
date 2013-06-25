@@ -87,8 +87,8 @@ public class AcquisitionRpt extends ReportUtils
 
 		List<Acquisition> acqs = new ArrayList<Acquisition>();
 
-		String startF = startDate.toString(dateFormatter);
-		String endF = endDate.toString(dateFormatter);
+		String startF = startDate.toString(dateOnlyFormatString);
+		String endF = endDate.toString(dateOnlyFormatString);
 
 		for (EventEntity event : events) 
 		{

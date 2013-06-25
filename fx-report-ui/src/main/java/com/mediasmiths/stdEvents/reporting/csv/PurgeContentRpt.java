@@ -9,8 +9,6 @@ import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvMapWriter;
@@ -19,8 +17,6 @@ import org.supercsv.prefs.CsvPreference;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,10 +25,6 @@ import java.util.Map;
 public class PurgeContentRpt extends ReportUtils
 {
 	public static final transient Logger logger = Logger.getLogger(PurgeContentRpt.class);
-
-	private static final String formatString = "dd-MM-yyyy hh:mm:ss";
-	private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern(formatString);
-	private static final DateFormat df = new SimpleDateFormat(formatString);
 
 	@Inject
 	@Named("reportLoc")
@@ -133,8 +125,8 @@ public class PurgeContentRpt extends ReportUtils
 			final CellProcessor[] processors = getProcessor();
 			csvwriter.writeHeader(header);
 
-			final String startDate = start.toString(dateFormatter);
-			final String endDate = end.toString(dateFormatter);
+			final String startDate = start.toString(dateOnlyFormatter);
+			final String endDate = end.toString(dateOnlyFormatter);
 			final String dateRange = String.format("%s - %s", startDate, endDate);
 
 			for (Purge record : purgeReportRecords)
@@ -160,7 +152,7 @@ public class PurgeContentRpt extends ReportUtils
 				putPossibleNullBooleanInCSVMap(header, 5, map, record.getProtected());
 				putPossibleNullBooleanInCSVMap(header, 6, map, record.getExtended());
 				putPossibleNullBooleanInCSVMap(header, 7, map, record.getPurged());
-				putFormattedDateInCSVMap(header,8,map, record.getDateExpires(), df);
+				putFormattedDateInCSVMap(header,8,map, record.getDateExpires(), dateAndTimeFormat);
 
 				csvwriter.write(map, header, processors);
 			}

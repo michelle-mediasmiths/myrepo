@@ -8,6 +8,7 @@ import com.mediasmiths.foxtel.agent.WatchFolder;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.validation.ConfigValidationFailureException;
 import com.mediasmiths.std.io.PropertyFile;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -83,7 +84,22 @@ public class WatchFolderLocationsModule extends AbstractModule {
 				long stabilityTime = Long.parseLong(stabilityTimestr);
 				watchFolder.setStabilityTime(stabilityTime);
 			}
-			
+
+			String nameParamName = "watchfolder.locations[" + i + "].name";
+			if (conf.containsKey(nameParamName))
+			{
+
+				String nameString = conf.get(stabilityTimeParamName);
+				logger.trace(String.format("%s=%s", nameParamName, nameString));
+				watchFolder.setName(nameString);
+			}
+			else
+			{
+				logger.info("No name set for " + val + " using basename");
+				watchFolder.setName(FilenameUtils.getBaseName(val));
+			}
+
+
 			locations.add(watchFolder);
 		}
 

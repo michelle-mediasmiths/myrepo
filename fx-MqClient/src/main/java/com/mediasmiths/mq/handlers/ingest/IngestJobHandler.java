@@ -11,7 +11,6 @@ import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.ip.common.events.ArdomeImportFailure;
-import com.mediasmiths.foxtel.ip.common.events.CreationComplete;
 import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
@@ -252,7 +251,6 @@ public class IngestJobHandler extends JobHandler
 			}
 			c.setTime(dateUpdated);
 			XMLGregorianCalendar eventUpdateTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-			sendImportCompleteEvent(task.getAttributeAsString(Attribute.HOUSE_ID), eventUpdateTime);
 		}
 		catch (DatatypeConfigurationException e)
 		{
@@ -322,19 +320,7 @@ public class IngestJobHandler extends JobHandler
 
 		eventsService.saveEvent(eventName, event, namespace);
 	}
-	
-	private void sendImportCompleteEvent(String mediaId, XMLGregorianCalendar completionDate)
-	{
-		CreationComplete cce = new CreationComplete();
-		cce.setMediaID(mediaId);
-		cce.setCompletionDate(completionDate);
-		
-		String event = fxcommonSerialiser.serialise(cce);
-		String eventName = EventNames.CREATION_COMPLETE;
-		String namespace = bmsEventsNamespace;
-		
-		eventsService.saveEvent(eventName, event, namespace);
-	}
+
 
 	@Override
 	public String getName() {

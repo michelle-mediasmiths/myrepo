@@ -44,7 +44,6 @@
                 </xs:annotation>
                 <xs:extension base="fns:IPEvent">
                     <xs:sequence>
-                    	<xs:element name="dateRange" type="xs:string"/>
                         <xs:element name="filePath" type="xs:string"/>
                         <xs:element name="filename" type="xs:string"/>
                         <xs:element name="timeDiscovered" type="xs:long"/>

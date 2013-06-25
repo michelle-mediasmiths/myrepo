@@ -10,7 +10,6 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
 import com.mediasmiths.foxtel.ip.common.events.EventNames;
-import com.mediasmiths.foxtel.ip.common.events.FilePickupDetails;
 import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
 import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.foxtel.ip.event.EventService;
@@ -101,11 +100,6 @@ public class Importer
 			                           dst.getAbsolutePath(),
 			                           attempt), e);
 
-			FilePickupDetails fpd = new FilePickupDetails();
-			fpd.setFilename(src.getName());
-			fpd.setTimeProcessed((new Date().getTime()));
-			eventService.saveEvent("http://www.foxtel.com.au/ip/content", EventNames.FILE_PICK_UP_NOTIFICATION, fpd);
-
 			// allows a configurable number of retries
 			if (attempt == deliveryAttemptsToMake)
 			{
@@ -152,11 +146,6 @@ public class Importer
 			sb.append(String.format("There has been a failure to archive companion xml for material %s though the material successfully moved to the Viz Ardome auto import location",
 			                        pi.getMaterialEnvelope().getMasterID()));
 			eventService.saveEvent("error", sb.toString());
-
-			MediaPickupNotification mpn = new MediaPickupNotification();
-			mpn.setFilelocation(src.getAbsolutePath());
-			mpn.setTime((new Date()).toString());
-			eventService.saveEvent("http://www.foxtel.com.au/ip/content", EventNames.CONTENT_WITHOUT_COMPANION_XML, mpn);
 
 			return;
 		}

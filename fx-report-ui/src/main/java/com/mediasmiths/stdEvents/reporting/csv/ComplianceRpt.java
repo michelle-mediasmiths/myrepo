@@ -9,8 +9,6 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Period;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvMapWriter;
@@ -19,8 +17,6 @@ import org.supercsv.prefs.CsvPreference;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,10 +24,6 @@ import java.util.Map;
 public class ComplianceRpt extends ReportUtils
 {
 	public static final transient Logger logger = Logger.getLogger(ComplianceRpt.class);
-
-	private static final String formatString = "dd-MM-yyyy hh:mm:ss";
-	private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern(formatString);
-	private static final DateFormat df = new SimpleDateFormat(formatString);
 
 	@Inject
 	@Named("reportLoc")
@@ -64,21 +56,29 @@ public class ComplianceRpt extends ReportUtils
 
 		for (ComplianceLogging task : tasks)
 		{
-			if (task.getComplete() != null && task.getComplete())
+			if (task.getComplete() != null && task.getComplete() && task.getDateCompleted() != null)
 			{
 				DateTime start = new DateTime(task.getTaskCreated());
 				DateTime finished = new DateTime(task.getDateCompleted());
 
-				totalduration.withDurationAdded(new Duration(start, finished), 1);
-				numfinished++;
+				if (finished.isAfter(start))
+				{
+					totalduration.withDurationAdded(new Duration(start, finished), 1);
+					numfinished++;
+				}
+				else
+				{
+					logger.warn(String.format("finished date not after start date for a task %s (material %s), ignoring for average calculation",task.getTaskID(),task.getMaterialID()));
+				}
 			}
 		}
 
 		if (numfinished != 0)
 		{
-
 			long totaltimeMillis = totalduration.getMillis();
 			long averageTimeMillis = totaltimeMillis / numfinished;
+			logger.info(String.format("Title time %d numfinished %d averagetime %d",totaltimeMillis,numfinished,averageTimeMillis));
+
 			ret.averageTime = new Duration(averageTimeMillis);
 		}
 
@@ -110,9 +110,7 @@ public class ComplianceRpt extends ReportUtils
 			final CellProcessor[] processors = getProcessor();
 			csvwriter.writeHeader(header);
 
-			final String startDate = start.toString(dateFormatter);
-			final String endDate = end.toString(dateFormatter);
-			final String dateRange = String.format("%s - %s", startDate, endDate);
+			final String dateRange = getDateRangeString(start, end);
 
 			for (ComplianceLogging task : tasks)
 			{
@@ -124,11 +122,11 @@ public class ComplianceRpt extends ReportUtils
 				map.put(header[2], task.getMaterialID());
 				map.put(header[4], task.getTaskStatus());
 
-				putFormattedDateInCSVMap(header, 5, map, task.getTaskCreated(), df);
+				putFormattedDateInCSVMap(header, 5, map, task.getTaskCreated(), dateAndTimeFormat);
 
 				if (task.getComplete() != null && task.getComplete())
 				{
-					putFormattedDateInCSVMap(header, 6, map, task.getDateCompleted(), df);
+					putFormattedDateInCSVMap(header, 6, map, task.getDateCompleted(), dateAndTimeFormat);
 				}
 				else
 				{
@@ -144,7 +142,11 @@ public class ComplianceRpt extends ReportUtils
 			StringBuilder statsString = new StringBuilder();
 			statsString.append(String.format("No. of titles %d\n", stats.total));
 			final Period averageTime = stats.averageTime.toPeriod();
-			statsString.append(String.format("Average logging completion time %02d:%02d:%02d:%02d\n",averageTime.getDays(), averageTime.getHours(), averageTime.getMinutes(), averageTime.getSeconds()));
+			statsString.append(String.format("Average logging completion time %02d:%02d:%02d:%02d\n",
+			                                 averageTime.getDays(),
+			                                 averageTime.getHours(),
+			                                 averageTime.getMinutes(),
+			                                 averageTime.getSeconds()));
 
 
 			csvwriter.flush();

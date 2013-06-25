@@ -95,11 +95,7 @@ public abstract class PlaceholderManagerTest {
 			public void saveEvent(String name, String payload){
 				logger.info("saving event "+name);
 			}
-			
-			@Override
-			public void saveEvent(String name, Object payload){
-				logger.info("saving event "+name);
-			}
+
 		};
 		receiptWriter = mock(ReceiptWriter.class);
 		channelValidator = new ChannelPropertiesImpl();

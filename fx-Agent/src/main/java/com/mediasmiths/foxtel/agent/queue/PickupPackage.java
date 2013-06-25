@@ -20,6 +20,7 @@ public class PickupPackage
 	 */
     public final Set<String> suffixes = new HashSet<String>();
 	private Map<String, File> files = new HashMap<String, File>();
+	private Map<String,Long> modifiedTimes= new HashMap<String, Long>();
 
 	private boolean isSuspectPickup = false;
 
@@ -27,6 +28,7 @@ public class PickupPackage
 
 	private String rootPath = null;
 	private String rootName = null;
+
 
 	public PickupPackage(String... suffixes)
 	{
@@ -157,6 +159,7 @@ public class PickupPackage
 				                                   + " trying to add " + cRootPath + ":" + cRootName);
 		}
 		this.files.put(ext.toLowerCase(), path);
+		this.modifiedTimes.put(ext.toLowerCase(), path.lastModified());
 
 	}
 
@@ -166,6 +169,13 @@ public class PickupPackage
 			throw new IllegalArgumentException("Empty extension");
 
 		return this.files.get(extension.toLowerCase());
+	}
+
+	public Long getLastModified(String extension){
+		if(extension == null)
+			throw new IllegalArgumentException("Empty extension");
+
+		return this.modifiedTimes.get(extension.toLowerCase());
 	}
 	
 	public Collection<File> getAllFiles(){

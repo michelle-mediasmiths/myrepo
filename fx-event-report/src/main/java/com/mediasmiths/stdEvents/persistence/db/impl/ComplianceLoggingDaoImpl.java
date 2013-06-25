@@ -118,7 +118,7 @@ public class ComplianceLoggingDaoImpl extends HibernateDao<ComplianceLogging, Lo
 			}
 			else
 			{
-				log.info("no title information for this compliance task");
+				log.info("no title information for this compliance task, titleID "+titleID);
 			}
 		}
 	}

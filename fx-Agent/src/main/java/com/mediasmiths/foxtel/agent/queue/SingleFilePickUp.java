@@ -2,10 +2,7 @@ package com.mediasmiths.foxtel.agent.queue;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.ip.common.events.EventNames;
 import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
-import com.mediasmiths.foxtel.ip.common.events.FilePickupDetails;
-import com.mediasmiths.foxtel.ip.common.events.PickupNotification;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.std.io.filter.FilenameExtensionFilter;
 import org.apache.log4j.Logger;
@@ -170,7 +167,6 @@ public class SingleFilePickUp implements IFilePickup
 					}
 					else
 					{
-						sendPickUpTimingEvent(candidate);
 						return candidate;
 					}
 				}
@@ -442,29 +438,6 @@ public class SingleFilePickUp implements IFilePickup
 	private boolean isStaleActivation()
 	{
 		return HEARTBEAT_ENABLED && (System.currentTimeMillis() - activationTime) > HEARTBEAT_WINDOW;
-	}
-
-
-	/**
-	 *
-	 * @param pp a pickup reference for an existing file that whose timings should be reported to the event system.
-	 */
-	private void sendPickUpTimingEvent(final PickupPackage pp)
-	{
-
-		PickupNotification pickUpStats = new PickupNotification();
-		for (String ext: pp.getFoundSuffixes())
-		{
-             File f = pp.getPickUp(ext);
-			 FilePickupDetails pd = new FilePickupDetails();
-			 pd.setFilename(f.getName());
-			 pd.setFilePath(pp.getRootPath());
-			 pd.setTimeDiscovered(f.lastModified());
-			 pd.setTimeProcessed(System.currentTimeMillis());
-			 pickUpStats.getDetails().add(pd);
-		}
-
-		pickUpEventTimer.saveEvent("http://www.foxtel.com.au/ip/infrastructure", EventNames.FILE_PICK_UP_NOTIFICATION,pickUpStats);
 	}
 
 	public File[] getWatchedDirectories()

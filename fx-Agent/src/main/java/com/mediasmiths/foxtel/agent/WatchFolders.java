@@ -1,13 +1,10 @@
 package com.mediasmiths.foxtel.agent;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
-import com.google.inject.name.Named;
+import java.util.HashMap;
+import java.util.List;
 
 public class WatchFolders extends HashMap<String, WatchFolder>
 {
@@ -49,6 +46,24 @@ public class WatchFolders extends HashMap<String, WatchFolder>
 		log.warn(String.format("non recognised source directory %s passed as argument to isAo()", src));
 		return false;
 
+	}
+
+	public String getNameForWatchFolder(String src){
+		for (WatchFolder f : this.values())
+		{
+			if (src.startsWith(f.getSource()))
+			{
+				log.trace(String.format("%s prefix of %s", f.getSource(), src));
+				return f.getName();
+			}
+			else
+			{
+				log.trace(String.format("%s not prefix of %s", f.getSource(), src));
+			}
+		}
+
+		log.warn(String.format("non recognised source directory %s passed as argument to getNameForWatchFolder()", src));
+		return FilenameUtils.getBaseName(src);
 	}
 
 	public boolean isRuzz(String src)
