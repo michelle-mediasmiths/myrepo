@@ -8,7 +8,6 @@ public class EventNames
 	public static final String CREATION_COMPLETE = "CreationComplete";
 	public static final String QC_FAILED_RE_ORDER = "QcFailedReOrder";
 	public static final String CHANNEL_CONDITIONS_FOUND_DURING_QC = "ChannelConditionsFoundDuringQC";
-	public static final String FILE_PICK_UP = "FilePickUp";
 	public static final String COMM_ERROR = "CommError";
 	public static final String FILE_PICK_UP_NOTIFICATION = "FilePickUpNotification";
 	public static final String CONTENT_WITHOUT_COMPANION_XML = "ContentWithoutCompanionXML";

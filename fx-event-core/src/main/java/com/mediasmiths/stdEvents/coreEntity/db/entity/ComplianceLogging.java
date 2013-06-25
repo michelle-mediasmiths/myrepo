@@ -35,7 +35,7 @@ public class ComplianceLogging
 	private Date taskCreated; //date extended compliance task created
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date taskUpdated; //date extended compliance task updated
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateCompleted; //date completed
 
 

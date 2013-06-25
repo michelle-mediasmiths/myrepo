@@ -64,7 +64,8 @@ public class ExportTaskStateChangeHandler extends TaskStateChangeHandler
 		}
 		else
 		{
-			log.warn("Null created date on export task " + taskID);
+			log.warn("Null created date on export task, using current date " + taskID);
+			ep.setTaskCreated(dateUtil.fromDate(new Date()));
 		}
 
 		if (updated != null)
