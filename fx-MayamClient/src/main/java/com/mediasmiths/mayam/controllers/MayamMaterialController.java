@@ -285,15 +285,14 @@ public class MayamMaterialController extends MayamController
 
 					attributesValid &= attributes.setAttribute(Attribute.SOURCE_HOUSE_ID, compile.getParentMaterialID());
 				}
+			}
 
-				// required by \ complete by date
-				if (material.getRequiredBy() != null)
-				{
-					Date requiredByDate = dateUtil.fromXMLGregorianCalendar(material.getRequiredBy());
-					log.debug("Setting required by date: " + requiredByDate);
-					attributesValid &= attributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
-				}
-
+			// required by \ complete by date
+			if (material.getRequiredBy() != null)
+			{
+				Date requiredByDate = dateUtil.fromXMLGregorianCalendar(material.getRequiredBy());
+				log.debug("Setting required by date: " + requiredByDate);
+				attributesValid &= attributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
 			}
 
 			if (!attributesValid)
@@ -939,16 +938,15 @@ public class MayamMaterialController extends MayamController
 					attributesValid &= attributes.setAttribute(Attribute.SOURCE_HOUSE_ID, compile.getParentMaterialID());
 				}
 
-				// required by \ complete by date
-				if (material.getRequiredBy() != null)
-				{
-					Date requiredByDate = dateUtil.fromXMLGregorianCalendar(material.getRequiredBy());
-					log.debug("Setting required by date: " + requiredByDate);
-					attributesValid &= attributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
-				}
-
 			}
 
+			// required by \ complete by date
+			if (material.getRequiredBy() != null)
+			{
+				Date requiredByDate = dateUtil.fromXMLGregorianCalendar(material.getRequiredBy());
+				log.debug("Setting required by date: " + requiredByDate);
+				attributesValid &= attributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
+			}
 			if (!attributesValid)
 			{
 				log.warn("Material updated but one or more attributes was invalid");
