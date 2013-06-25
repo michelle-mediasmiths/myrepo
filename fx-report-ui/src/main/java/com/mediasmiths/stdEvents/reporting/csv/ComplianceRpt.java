@@ -8,6 +8,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
+import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.supercsv.cellprocessor.Optional;
@@ -142,7 +143,8 @@ public class ComplianceRpt extends ReportUtils
 
 			StringBuilder statsString = new StringBuilder();
 			statsString.append(String.format("No. of titles %d\n", stats.total));
-			statsString.append(String.format("Average logging completion time %s\n", stats.averageTime.toString()));
+			final Period averageTime = stats.averageTime.toPeriod();
+			statsString.append(String.format("Average logging completion time %02d:%02d:%02d:%02d\n",averageTime.getDays(), averageTime.getHours(), averageTime.getMinutes(), averageTime.getSeconds()));
 
 
 			csvwriter.flush();
