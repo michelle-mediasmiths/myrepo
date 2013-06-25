@@ -89,7 +89,7 @@ public class WatchFolderLocationsModule extends AbstractModule {
 			if (conf.containsKey(nameParamName))
 			{
 
-				String nameString = conf.get(stabilityTimeParamName);
+				String nameString = conf.get(nameParamName);
 				logger.trace(String.format("%s=%s", nameParamName, nameString));
 				watchFolder.setName(nameString);
 			}

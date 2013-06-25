@@ -60,6 +60,11 @@ public class WatchFolderRpt extends ReportUtils
 			final Long start = f.getTimeDiscovered();
 			final Long end = f.getTimeProcessed();
 
+			if(aggregator==null){
+				logger.info("null aggregator in entry for file "+filename+" and path "+f.getFilePath());
+				continue;
+			}
+
 			if (end > start && !(end == 0 || start == 0))
 			{ //dont include entries that appeared processed before discovered or uninitialised
 
@@ -131,7 +136,7 @@ public class WatchFolderRpt extends ReportUtils
 		  .append(getHHMMSSmmm(new Period(low)))
 		  .append(" average: ")
 		  .append(getHHMMSSmmm(new Period(meanForExt)))
-		  .append("\n");
+		  .append("\r\n");
 	}
 
 
@@ -260,9 +265,9 @@ public class WatchFolderRpt extends ReportUtils
 					files.add(file);
 				}
 			}
-			catch (ClassCastException cce)
+			catch (Exception cce)
 			{
-				logger.warn("Event not a FilePickupDetails", cce);
+				logger.warn("Error unmarshalling event", cce);
 			}
 		}
 		

@@ -137,23 +137,18 @@ public abstract class ReportUtils
 
 	public Object unmarshallEvent(EventEntity event)
 	{
-		logger.debug(">>>unmarshallEvent");
+		logger.trace(">>>unmarshallEvent");
 		Object object = null;
 		String payload = event.getPayload();
 		logger.debug("Unmarshalling payload " + payload);
 		
-		try
-		{
-			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
-			object = JAXB_SERIALISER.deserialise(payload);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		logger.debug("<<<unmarshallEvent");
+		object = JAXB_SERIALISER.deserialise(payload);
+
+		logger.trace("<<<unmarshallEvent");
 		return object;
 	}
+
+	JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 	
 	public Object unmarshallReport(final EventEntity event)
 	{
