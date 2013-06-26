@@ -744,7 +744,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 			if (ao)
 			{
-				log.debug("no longer performing ftp transfer as part of writeSegmentXML");
+				// ftp xml file
+				return aoXMLFtp(segmentXmlFile);
+				//TODO MAM-669 dont do ao xml ftp
+//				log.debug("no longer performing ftp transfer as part of writeSegmentXML");
 			}
 
 			return true;
