@@ -52,7 +52,7 @@ public class DiskUsageRpt extends ReportUtils
 		List<DiskUsageBean> reports = new ArrayList <DiskUsageBean> ();
 		for (DateTime dateToFetch = startDate; dateToFetch.isBefore(endDate); dateToFetch.plusDays(1))
 		{
-			DiskUsageBean report = readDiskUsageBeans(dateToFetch);
+			DiskUsageBean report =null;
 			if (report != null)
 			{
 				reports.add(report);
