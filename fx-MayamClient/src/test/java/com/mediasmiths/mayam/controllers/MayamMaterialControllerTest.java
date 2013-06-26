@@ -1,44 +1,41 @@
 package com.mediasmiths.mayam.controllers;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doThrow;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.mockito.ArgumentMatcher;
-
 import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.QualityCheckEnumType;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeDescription;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.AttributeValidator;
 import com.mayam.wf.attributes.shared.type.AspectRatio;
 import com.mayam.wf.attributes.shared.type.AssetType;
-import com.mayam.wf.ws.client.AssetApi;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.veneer.AssetApiVeneer;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.mockito.ArgumentMatcher;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class MayamMaterialControllerTest {
 
@@ -76,11 +73,11 @@ public class MayamMaterialControllerTest {
 		taskController = mock(MayamTaskController.class);
 		when(client.assetApi()).thenReturn(assetApi);
 		controller = new MayamMaterialController(client, taskController);
-		
+		controller.setDateUtil(new DateUtil());
 		material = mock(MaterialType.class);
 		when(material.getMaterialID()).thenReturn("PLACEHOLDER_MATERIAL");
 		when(material.getQualityCheckTask()).thenReturn(QualityCheckEnumType.AUTOMATIC_ON_INGEST);
-		when(material.getRequiredBy()).thenReturn(mock(XMLGregorianCalendar.class));
+		when(material.getRequiredBy()).thenReturn(new DateUtil().fromDate(new Date()));
 		when(material.getRequiredFormat()).thenReturn("");
 		
 		programmeMaterial = mock(ProgrammeMaterialType.class);

@@ -1741,4 +1741,11 @@ public class MayamMaterialController extends MayamController
 		}
 	}
 
+
+	public void setDateUtil(final DateUtil dateUtil)
+	{
+		this.dateUtil = dateUtil;
+	}
+
+
 }
