@@ -1196,7 +1196,20 @@ public class MayamClientImpl implements MayamClient
 		{
 			AttributeMap title = titleController.getTitle(titleId);
 			StringList channels = title.getAttribute(Attribute.CHANNELS);
-
+			
+			if (channels == null || channels.isEmpty())
+			{		
+				boolean isAO = title.getAttribute(Attribute.CONT_RESTRICTED_ACCESS);
+				if (isAO)
+				{
+					if (channels == null)
+					{
+						channels = new StringList();
+					}
+					channels.add("AO");
+				}
+			}
+			
 			return channelProperties.groupsForChannels(channels);
 		}
 

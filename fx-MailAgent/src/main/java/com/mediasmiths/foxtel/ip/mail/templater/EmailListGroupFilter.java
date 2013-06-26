@@ -23,47 +23,39 @@ public class EmailListGroupFilter
 	 */
 	protected static Emailaddresses filterByGroups(final List<String> channelGroups, final Emailaddresses original){
 				
-		if (channelGroups.isEmpty())
-		{
-			log.debug("Event not associated with any channel groups");
-			return original; //if no channel groups then no filtering required
-		}
-		else
-		{
-			log.debug("Event channel groups: "+ StringUtils.join(channelGroups, ','));
-			
-			List<Emailaddress> emails = original.getEmailaddress();
-			Emailaddresses sendto = new Emailaddresses();
+		log.debug("Event channel groups: "+ StringUtils.join(channelGroups, ','));
+		
+		List<Emailaddress> emails = original.getEmailaddress();
+		Emailaddresses sendto = new Emailaddresses();
 
-			boolean hasAO = channelGroups.contains("AO");
+		boolean hasAO = channelGroups.contains("AO");
+		
+		log.debug("Has ao group: "+ hasAO);
+		
+		for (Emailaddress email : emails)
+		{
+			log.debug(String.format("Email {%s} group {%s}", email.getValue(), email.getChannelGroup()));
 			
-			log.debug("Has ao group: "+ hasAO);
-			
-			for (Emailaddress email : emails)
-			{
-				log.debug(String.format("Email {%s} group {%s}", email.getValue(), email.getChannelGroup()));
+			if (StringUtils.isEmpty(email.getChannelGroup()))
+			{ // if email address is not associated with a group then always use it, unless the AO group is present
 				
-				if (StringUtils.isEmpty(email.getChannelGroup()))
-				{ // if email address is not associated with a group then always use it, unless the AO group is present
-					
-					if(!hasAO)
-					{
-						log.debug("adding " + email.getValue());
-						sendto.getEmailaddress().add(email);
-					}
-					else
-					{
-						log.debug("not sending ao related email to " + email.getValue());
-					}
-				}
-				else if (channelGroups.contains(email.getChannelGroup()))
+				if(!hasAO)
 				{
-					log.debug("adding "+email.getValue());
-					sendto.getEmailaddress().add(email); // if email is associated with a channel group that the event is associated with then use it
+					log.debug("adding " + email.getValue());
+					sendto.getEmailaddress().add(email);
+				}
+				else
+				{
+					log.debug("not sending ao related email to " + email.getValue());
 				}
 			}
-
-			return sendto;
+			else if (channelGroups.contains(email.getChannelGroup()))
+			{
+				log.debug("adding "+email.getValue());
+				sendto.getEmailaddress().add(email); // if email is associated with a channel group that the event is associated with then use it
+			}
 		}
+
+		return sendto;
 	}
 }

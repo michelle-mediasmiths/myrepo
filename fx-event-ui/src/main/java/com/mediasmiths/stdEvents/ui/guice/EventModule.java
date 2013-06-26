@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.mediasmiths.std.guice.serviceregistry.rest.RestResourceRegistry;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.jobs.DiskUsageEventJobScheduler;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventingDao;
 import com.mediasmiths.stdEvents.persistence.db.impl.EventEntityDaoImpl;
@@ -32,5 +33,6 @@ public class EventModule extends AbstractModule
 		RestResourceRegistry.register(EventAPI.class);
 
 		bind(EventUIImpl.class).asEagerSingleton();
+		bind(DiskUsageEventJobScheduler.class).asEagerSingleton();
 	}
 }
