@@ -321,9 +321,9 @@
 		<namespace>http://www.foxtel.com.au/ip/system</namespace>
 		<eventname>CommError</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.system.CommErrorNotificationEmailTemplate">
-			<subject>URGENT: MAM COMMUNICATION FAILURE</subject>
-			<body>MAM is trying to communicate with an interfacing system. no response has been since %s period</body>
-			<emailaddresses> 
+			<subject>URGENT: WFE COMMUNICATION FAILURE</subject>
+			<body>WFE is trying to communicate with an interfacing system but has failed after multiple retries %s</body>
+			<emailaddresses>
 				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
 				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
@@ -443,20 +443,6 @@
 			<body>Item with Filename(%s) and JobId(%s) has failed to successfully auto-import into Ardome.</body>
 			<emailaddresses>
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
-			</emailaddresses>
-		</MailTemplate>
-	</MailData>
-	<MailData>
-		<namespace>http://www.foxtel.com.au/ip/system</namespace>
-		<eventname>CommError</eventname>
-		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.system.CommErrorNotificationEmailTemplate">
-			<subject>URGENT: WFE COMMUNICATION FAILURE</subject>
-			<body>WFE is trying to communicate with an interfacing system but has failed after multiple retries %s</body>
-			<emailaddresses> 
-				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
 				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
