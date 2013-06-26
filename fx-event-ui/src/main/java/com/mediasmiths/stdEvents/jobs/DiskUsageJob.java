@@ -60,7 +60,7 @@ public class DiskUsageJob implements Job
 		    {
 		    	logger.warn("File IO Exception while attempting to read " + filename);
 		    }
-		    return diskUsage;
+		    //return diskUsage;
 	}
 	
 	private static CellProcessor[] getProcessors() 
