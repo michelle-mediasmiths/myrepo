@@ -7,6 +7,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.ip.common.events.report.TaskList;
 import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
+import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.log4j.Logger;
 import org.jfree.util.Log;
 import org.joda.time.DateTime;
@@ -26,7 +27,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
-public class TaskListRpt
+public class TaskListRpt extends ReportUtils
 {
 	public static final transient Logger logger = Logger.getLogger(TaskListRpt.class);
 	
@@ -39,7 +40,7 @@ public class TaskListRpt
 	
 	@Inject
 	private ChannelProperties channelProperties;
-	
+
 	public void writeTaskList(List<AttributeMap> tasks, DateTime startDate, DateTime endDate, String reportName)
 	{
 		List<TaskList> taskList = getReportList(tasks, startDate, endDate);
@@ -49,10 +50,14 @@ public class TaskListRpt
 	public List<TaskList> getReportList(List<AttributeMap> mayamTasks, DateTime startDate, DateTime endDate)
 	{
 		List<TaskList> tasks = new ArrayList<TaskList>();
+
+		final String start = startDate.toString(dateOnlyFormatString);
+		final String end = endDate.toString(dateOnlyFormatString);
+
 		for (AttributeMap mayamTask : mayamTasks)
 		{
 			TaskList task = new TaskList();
-			task.setDateRange(startDate + " - " + endDate);	
+			task.setDateRange(start + " - " + end);
 				
 			task.setTaskType(mayamTask.getAttributeAsString(Attribute.TASK_LIST_ID));
 			task.setTaskStatus(mayamTask.getAttributeAsString(Attribute.TASK_STATE));

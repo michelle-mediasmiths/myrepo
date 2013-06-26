@@ -8,6 +8,7 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
@@ -102,7 +103,8 @@ public class AcquisitionRpt extends ReportUtils
 			{
 				log.debug("title: " + order.getTitle().getTitle());
 				log.debug("channels: " + order.getTitle().getChannels().toString());
-				acq.setChannels(order.getTitle().getChannels().toString());
+				acq.setChannels(StringUtils.join(order.getTitle().getChannels(), ';'));
+
 			}
 
 			if (order!= null && order.getFileSize() != null)
