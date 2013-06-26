@@ -21,6 +21,8 @@ public class AutoQcEmailTemplate extends MailTemplate implements EmailTemplateGe
 		MailTemplate t = new MailTemplate();
 
 		AutoQCResultNotification aqce = (AutoQCResultNotification) obj;
+		
+		List<String> channelGroups = aqce.getChannelGroup();
 		t.setEmailaddresses(EmailListTransform.buildRecipientsList(getEmailaddresses(), aqce.getChannelGroup()));
 		
 		t.setSubject(String.format(getSubject(), aqce.getAssetId(), aqce.getTitle()));
