@@ -21,6 +21,7 @@ import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.reporting.csv.AcquisitionRpt;
 import com.mediasmiths.stdEvents.reporting.csv.AutoQCRpt;
 import com.mediasmiths.stdEvents.reporting.csv.ComplianceRpt;
+import com.mediasmiths.stdEvents.reporting.csv.DiskUsageRpt;
 import com.mediasmiths.stdEvents.reporting.csv.ExportRpt;
 import com.mediasmiths.stdEvents.reporting.csv.ManualQARpt;
 import com.mediasmiths.stdEvents.reporting.csv.OrderStatusRpt;
@@ -63,6 +64,8 @@ public class ReportUIImpl implements ReportUI
 	private ExportRpt export;
 	@Inject
 	private WatchFolderRpt watchFolder;
+	@Inject
+	private DiskUsageRpt diskUsage;
 	@Inject
 	private TranscoderLoadRpt transcoderLoad;
 	@Inject
@@ -136,6 +139,11 @@ public class ReportUIImpl implements ReportUI
 		{
 			logger.info("Generating Task List Report");
 			getTaskListCSV(startDate, endDate, reportName);
+		}
+		else if (rptType.equals("DiskUsage"))
+		{
+			logger.info("Generating Disk Usage Report");
+			getDiskUsageCSV(startDate, endDate, reportName);
 		}
 		logger.debug("<<<chooseReport");
 	}
@@ -293,5 +301,26 @@ public class ReportUIImpl implements ReportUI
 		taskList.writeTaskList(mayamTasks, start, end, reportName);
 
 		logger.debug("<<<getTaskListCSV");
+	}
+	
+	@Transactional(readOnly = true)
+	private void getDiskUsageCSV(final DateTime start, final DateTime end, final String reportName)
+	{
+		logger.debug(">>>getDiskUsageCSV");
+
+
+		String startDate = start.toString(dateFormatter);
+		String endDate = end.toString(dateFormatter);
+		logger.info("dates readable start: " + startDate + " end: " + endDate);
+		
+		logger.debug(String.format(
+				"Requesting disk usage report for date range: %s to %s; report name will be: %s ",
+				start.toString(),
+				end.toString(),
+				reportName));
+		
+		diskUsage.writeDiskUsage(start, end, reportName);
+
+		logger.debug("<<<getDiskUsageCSV");
 	}
 }
