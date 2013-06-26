@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:segmentxmlftptransfer="http://ns.mediasmithsforge.com/foxtel/wfAdapter/segmentxmlftptransfer.rest" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/segmentxmlftptransfer.rest">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/segmentxmlftptransfer.rest">
+      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+      <xs:element type="xs:string" name="packageID_urlType"/>
+      <xs:element type="xs:anyType" name="response_ftpTransferForAoSegmentXML_outputType"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="ftpTransferForAoSegmentXML_input">
+    <wsdl:part name="packageID" element="segmentxmlftptransfer:packageID_urlType"/>
+  </wsdl:message>
+  <wsdl:message name="ftpTransferForAoSegmentXML_output">
+    <wsdl:part name="response" element="segmentxmlftptransfer:response_ftpTransferForAoSegmentXML_outputType"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="ftpTransferForAoSegmentXML">
+      <wsdl:input message="segmentxmlftptransfer:ftpTransferForAoSegmentXML_input"/>
+      <wsdl:output message="segmentxmlftptransfer:ftpTransferForAoSegmentXML_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="segmentxmlftptransfer:restInterface">
+    <wsdl:operation name="ftpTransferForAoSegmentXML">
+      <ode:binding verb="GET"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/plain" part="response"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="segmentxmlftptransfer:restBinding">
+      <http:address location="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tx/delivery/writeSegmentXML?packageID={packageID}"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

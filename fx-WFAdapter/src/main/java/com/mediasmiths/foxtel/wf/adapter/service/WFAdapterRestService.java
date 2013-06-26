@@ -317,6 +317,21 @@ public interface WFAdapterRestService
 	@GET
 	@Path("/export/previewMetadata")
 	public String previewExportMetadata(@QueryParam("taskID") Long taskID) throws MayamClientException;
-	
+
+
+	/**
+	 *
+	 * Part of ao tx delivery, transfers companion xml from the tx delivery location to the configured ftp server	 *
+	 *
+	 * @param packageID
+	 * @return
+	 * @throws MayamClientException
+	 * @throws JAXBException
+	 * @throws IOException
+	 */
+	@GET
+	@Path("/tx/delivery/ftpAoSegmentXML")
+	@Produces("text/plain")
+	void ftpTransferForAoSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, IOException;
 }
 

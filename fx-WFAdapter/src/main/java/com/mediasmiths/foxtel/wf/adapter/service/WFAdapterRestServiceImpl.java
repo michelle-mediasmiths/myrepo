@@ -744,8 +744,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 			if (ao)
 			{
-				// ftp xml file
-				return aoXMLFtp(segmentXmlFile);
+				log.debug("no longer performing ftp transfer as part of writeSegmentXML");
 			}
 
 			return true;
@@ -757,6 +756,15 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			throw e;
 		}
 
+	}
+
+	@Override
+	public void ftpTransferForAoSegmentXML(final String packageID) throws MayamClientException, IOException
+	{
+		log.info("Performing ftp transfer of segmentation information for ao package "+packageID);
+		String deliveryLocation = deliveryLocationForPackage(packageID);
+		File segmentXmlFile = new File(String.format("%s/%s.xml", deliveryLocation, packageID));
+		aoXMLFtp(segmentXmlFile);
 	}
 
 	private boolean aoXMLFtp(File segmentXmlFile) throws IOException
