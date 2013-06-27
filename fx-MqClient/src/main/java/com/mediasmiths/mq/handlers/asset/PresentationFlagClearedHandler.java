@@ -11,6 +11,8 @@ import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mq.handlers.UpdateAttributeHandler;
 import org.apache.log4j.Logger;
 
+import javax.ws.rs.HEAD;
+
 
 public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 {
