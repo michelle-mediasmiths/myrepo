@@ -890,6 +890,27 @@
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
+	
+	<xs:element name="DiskUsageEvent">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation>Used to store daily disk usage report</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="IPEvent">
+					<xs:sequence>
+						<xs:element name="channel" type="xs:string"></xs:element>
+						<xs:element name="hrSize" type="xs:string"></xs:element>
+						<xs:element name="tsmSize" type="xs:string"></xs:element>
+						<xs:element name="lrSize" type="xs:string"></xs:element>
+						<xs:element name="othersSize" type="xs:string"></xs:element>
+						<xs:element name="totalSize" type="xs:string"></xs:element>
+						<xs:element name="date" type="xs:dateTime"></xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
     
 
 	<xs:simpleType name="smpteTimecode" final="restriction">
