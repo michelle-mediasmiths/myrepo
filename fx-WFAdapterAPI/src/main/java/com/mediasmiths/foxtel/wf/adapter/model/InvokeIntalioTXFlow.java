@@ -1,11 +1,10 @@
 package com.mediasmiths.foxtel.wf.adapter.model;
 
-import java.util.Date;
+import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
+import java.util.Date;
 
 @XmlRootElement
 public class InvokeIntalioTXFlow
@@ -23,6 +22,10 @@ public class InvokeIntalioTXFlow
 	private String title;
 	
 	private Date created;
+
+	private String quarantineLocation;
+
+	private String deliveryLocation;
 
 	@XmlElement(required = true)
 	public String getPackageID()
@@ -99,4 +102,27 @@ public class InvokeIntalioTXFlow
 		this.created = created;
 	}
 
+	@XmlElement(required = true)
+	public String getQuarantineLocation()
+	{
+		return quarantineLocation;
+	}
+
+
+	public void setQuarantineLocation(final String quarantineLocation)
+	{
+		this.quarantineLocation = quarantineLocation;
+	}
+
+	@XmlElement(required = true)
+	public String getDeliveryLocation()
+	{
+		return deliveryLocation;
+	}
+
+
+	public void setDeliveryLocation(final String deliveryLocation)
+	{
+		this.deliveryLocation = deliveryLocation;
+	}
 }

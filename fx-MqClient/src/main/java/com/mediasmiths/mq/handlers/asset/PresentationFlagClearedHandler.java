@@ -67,7 +67,8 @@ public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 
 				Boolean previousPresentationFlag = before.getAttribute(Attribute.PRESENTATION_FLAG);
 
-				if(previousPresentationFlag==null){
+				if (previousPresentationFlag == null)
+				{
 					log.info("Presentation flag was previously null, will not consider this a change");
 					return;
 				}
@@ -92,7 +93,7 @@ public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 						log.debug("Publicity");
 						numberOfDays = publicityPurgeTime;
 					}
-					else
+					else if (! contentType.equals(MayamContentTypes.PROGRAMME))
 					{
 						log.debug("Content not one of associated, edit clips or publicity, using default purge time");
 						numberOfDays = defaultPurgeTime;
