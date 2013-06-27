@@ -78,6 +78,12 @@ public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 
 				if (contentType != null)
 				{
+					if (contentType.equals(MayamContentTypes.PROGRAMME))
+					{
+						log.info("Conent is programme content, taking no action");
+						return;
+					}
+
 					if (contentType.equals(MayamContentTypes.EPK))
 					{
 						log.debug("Associated content");
@@ -93,7 +99,7 @@ public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 						log.debug("Publicity");
 						numberOfDays = publicityPurgeTime;
 					}
-					else if (! contentType.equals(MayamContentTypes.PROGRAMME))
+					else
 					{
 						log.debug("Content not one of associated, edit clips or publicity, using default purge time");
 						numberOfDays = defaultPurgeTime;
