@@ -984,6 +984,11 @@ public class MayamClientImpl implements MayamClient
 					//associated material that has a parent title
 					ret.add(task);
 				}
+				else if(MayamMaterialController.PROGRAMME_MATERIAL_CONTENT_TYPE.equals(contentType))
+				{
+					//programme material
+					ret.add(task);
+				}
 			}
 
 			return ret;
