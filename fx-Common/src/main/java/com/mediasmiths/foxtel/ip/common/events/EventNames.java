@@ -44,7 +44,10 @@ public class EventNames
 	public static final String AUTO_QC_PASSED = "AutoQCPassed";
 	public static final String EXPORT_FAILURE = "ExportFailure";
 	public static final String TRANSCODE_DELIVERY_FAILED = "TranscodeDeliveryFailed";
+	public static final String TRANSCODE_DELIVERY_FAILED_FXP_TRANSFER = "TranscodeDeliveryFailedFXPTransfer";
 	public static final String FAILED_TO_GENERATE_XML = "FailedToGenerateXML";
+	public static final String FAILTED_TO_MOVE_TX_XML_TO_DELIVERY_LOCATION = "TxXmlDeliveryFailed";
+	public static final String FAILTED_TO_MOVE_TX_XML_TO_FTP_LOCATION = "TxXmlFTPDeliveryFailed";
 	public static final String CAPTION_PROXY_SUCCESS = "CaptionProxySuccess";
 	public static final String CLASSIFICATION_PROXY_SUCCESS = "ClassificationProxySuccess";
 	public static final String PUBLICITY_PROXY_SUCCESS = "PublicityProxySuccess";

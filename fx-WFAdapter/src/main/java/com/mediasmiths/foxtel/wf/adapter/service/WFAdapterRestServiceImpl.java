@@ -82,6 +82,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	private static final String TX_EVENT_NAMESPACE = "http://www.foxtel.com.au/ip/delivery";
 
 	private static final String SEGMENT_XML_WRITE = "Segment XML Write";
+	private static final String MEDIA_MOVE_TO_READY_FOLDER = "Moving media to ready folder";
+	private static final String XML_MOVE_TO_READY_FOLDER = "Moving xml to ready folder";
+	private static final String SEGMENT_XML_FTP_TRANSFER = "Segment XML FTP Transfer";
+	private static final String FXP_TRANSFER = "FXP Transfer";
 
 	private final static Logger log = Logger.getLogger(WFAdapterRestServiceImpl.class);
 
@@ -236,7 +240,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				final Set<String> channelGroups = mayamClient.getChannelGroupsForPackage(packageID);
 
 				saveAutoQCEvent(EventNames.QC_PROBLEM_WITH_TC_MEDIA, notification,channelGroups);
-				saveAutoQCEvent(EventNames.CERIFY_QC_ERROR, notification,channelGroups);
 				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC FAILED");
 				// attach qc report if qc is failed
 				attachQcReports(notification.getAssetId(), notification.getJobName());
@@ -687,7 +690,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		final Set<String> channelGroups = mayamClient.getChannelGroupsForPackage(notification.getPackageID());
 		String title = packageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
 
-
 		TcEvent tce = new TcEvent();
 		tce.setPackageID(notification.getPackageID());
 		tce.setTitle(title);
@@ -697,9 +699,21 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		{
 			events.saveEvent(TC_EVENT_NAMESPACE, EventNames.FAILED_TO_GENERATE_XML, tce);
 		}
-		else
+		else if (MEDIA_MOVE_TO_READY_FOLDER.equals(notification.getStage()))
 		{
 			events.saveEvent(TC_EVENT_NAMESPACE, EventNames.TRANSCODE_DELIVERY_FAILED, tce);
+		}
+		else if (XML_MOVE_TO_READY_FOLDER.equals(notification.getStage()))
+		{
+			events.saveEvent(TC_EVENT_NAMESPACE, EventNames.FAILTED_TO_MOVE_TX_XML_TO_DELIVERY_LOCATION, tce);
+		}
+		else if (FXP_TRANSFER.equals(notification.getStage()))
+		{
+			events.saveEvent(TX_EVENT_NAMESPACE, EventNames.TRANSCODE_DELIVERY_FAILED_FXP_TRANSFER, tce);
+		}
+		else if (SEGMENT_XML_FTP_TRANSFER.equals(notification.getStage()))
+		{
+			events.saveEvent(TX_EVENT_NAMESPACE, EventNames.FAILTED_TO_MOVE_TX_XML_TO_FTP_LOCATION, tce);
 		}
 	}
 
@@ -745,9 +759,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (ao)
 			{
 				// ftp xml file
-				return aoXMLFtp(segmentXmlFile);
-				//TODO MAM-669 dont do ao xml ftp
-//				log.debug("no longer performing ftp transfer as part of writeSegmentXML");
+				log.debug("no longer performing ftp transfer as part of writeSegmentXML");
 			}
 
 			return true;
