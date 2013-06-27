@@ -17,6 +17,9 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.DiskUsageEvent;
+import com.mediasmiths.foxtel.ip.common.events.EventNames;
+import com.mediasmiths.foxtel.ip.event.EventService;
 
 public class DiskUsageJob implements Job 
 {
@@ -24,14 +27,18 @@ public class DiskUsageJob implements Job
 	@Named("diskUsageLoc")
 	public String DISK_USAGE_LOC;
 	
+	@Inject
+	private EventService events;
+	
 	private static final transient Logger logger = Logger.getLogger(DiskUsageJob.class);
-
+	private static final String SYSTEM_NAMESPACE = "http://www.foxtel.com.au/ip/system";
+	
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException 
 	{
 		    ICsvBeanReader beanReader = null;
 		    String filename = DISK_USAGE_LOC;
-		    DiskUsageBean diskUsage = null;
+		    DiskUsageEvent diskUsage = null;
 		    try{
 			    try {
 			    	logger.info("Reading Disk Usage CSV : " + filename);
@@ -41,10 +48,10 @@ public class DiskUsageJob implements Job
 			        final String[] header = beanReader.getHeader(true);
 			        final CellProcessor[] processors = getProcessors();
 			            
-			        while( (diskUsage = beanReader.read(DiskUsageBean.class, header, processors)) != null ) {
+			        while( (diskUsage = beanReader.read(DiskUsageEvent.class, header, processors)) != null ) {
 			        	System.out.println(String.format("lineNo=%s, rowNo=%s, customer=%s", beanReader.getLineNumber(), beanReader.getRowNumber(), diskUsage));
+			        	events.saveEvent(SYSTEM_NAMESPACE, EventNames.DISK_USAGE_EVENT, diskUsage);
 			        }
-			            
 			    }
 			    catch(FileNotFoundException e)
 			    {
