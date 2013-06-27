@@ -23,6 +23,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,6 @@ public class DiskUsageRpt extends ReportUtils
 	{
 		logger.debug(">>>getReportList");
 		Map<String, DiskUsageEvent> reportMap = new HashMap <String, DiskUsageEvent> ();
-		Map<String, Integer> test = new HashMap <String, Integer> ();
 		for (EventEntity event: events)
 		{
 			DiskUsageEvent report = (DiskUsageEvent) unmarshallReport(event);
@@ -68,7 +68,8 @@ public class DiskUsageRpt extends ReportUtils
 			}
 		}
 		logger.debug("<<<getReportList");
-		return reportMap.values();
+
+		return new ArrayList<DiskUsageEvent>(reportMap.values());
 	}
 	
 	private String add(String cumulative, String newSize)
