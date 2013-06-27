@@ -80,10 +80,6 @@
         <bpel:to>$TranscodedFileLocation</bpel:to>
       </bpel:copy>
       <bpel:copy>
-        <bpel:from>concat(concat(concat(concat("/storage/mam/watch01/tx-exports/broadcast/failed/", $thisEventStartMessageRequest.body/tns:packageID/text()), "_"), $thisEventStartMessageRequest.body/tns:taskID/text()), ".gxf")</bpel:from>
-        <bpel:to>$QuarrentineFileLocation</bpel:to>
-      </bpel:copy>
-      <bpel:copy>
         <bpel:from>""</bpel:from>
         <bpel:to>$FxpTransferStatus</bpel:to>
       </bpel:copy>
@@ -102,6 +98,10 @@
       <bpel:copy>
         <bpel:from>false()</bpel:from>
         <bpel:to>$AOFTPSegmentXMLSuccess</bpel:to>
+      </bpel:copy>
+      <bpel:copy>
+        <bpel:from>$thisEventStartMessageRequest.body/tns:quarantineLocation/text()</bpel:from>
+        <bpel:to>$QuarrentineFileLocation</bpel:to>
       </bpel:copy>
     </bpel:assign>
     <bpel:scope bpmn:label="SubProcess" name="SubProcess" bpmn:id="_ENyd8LcbEeKdLrMPHFRfaw">
@@ -490,6 +490,10 @@
                           <ext:retryFor>10</ext:retryFor>
                           <ext:retryDelay>60</ext:retryDelay>
                         </ext:failureHandling>
+                        <bpel:variables>
+                          <bpel:variable name="moveMoveRequestMsg" messageType="move:move_input"/>
+                          <bpel:variable name="moveMoveResponseMsg" messageType="move:move_output"/>
+                        </bpel:variables>
                         <bpel:faultHandlers>
                           <bpel:catchAll>
                             <bpel:sequence>
@@ -572,7 +576,29 @@
                           </bpel:catchAll>
                         </bpel:faultHandlers>
                         <bpel:sequence>
-                          <bpel:empty bpmn:label="move xml to delivery location" name="move_xml_to_delivery_location" bpmn:id="_HAtIIN5EEeKlbMDJE2xwlg"/>
+                          <bpel:assign name="init-variables-SubProcess" bpmn:id="_HAklQN5EEeKlbMDJE2xwlg">
+                            <bpel:copy bpmn:label="$moveMoveRequestMsg">
+                              <bpel:from>
+                                <bpel:literal>
+<FSAdapter:moveRequest>
+  <FSAdapter:from></FSAdapter:from>
+  <FSAdapter:to></FSAdapter:to>
+</FSAdapter:moveRequest></bpel:literal>
+                              </bpel:from>
+                              <bpel:to>$moveMoveRequestMsg.body</bpel:to>
+                            </bpel:copy>
+                          </bpel:assign>
+                          <bpel:assign bpmn:label="move xml to delivery location" name="move_xml_to_delivery_location" bpmn:id="_HAtIIN5EEeKlbMDJE2xwlg">
+                            <bpel:copy>
+                              <bpel:from>concat(concat($thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFolder/text(), $thisEventStartMessageRequest.body/tns:packageID/text()), ".xml")</bpel:from>
+                              <bpel:to>$moveMoveRequestMsg.body/FSAdapter:from</bpel:to>
+                            </bpel:copy>
+                            <bpel:copy>
+                              <bpel:from>$DeliveryLocation</bpel:from>
+                              <bpel:to>$moveMoveRequestMsg.body/FSAdapter:to</bpel:to>
+                            </bpel:copy>
+                          </bpel:assign>
+                          <bpel:invoke partnerLink="fS_AdapterAndDeliveryForHttpPortPlk1Var" portType="move:restInterface" operation="move" inputVariable="moveMoveRequestMsg" outputVariable="moveMoveResponseMsg" bpmn:label="move xml to delivery location" name="move_xml_to_delivery_location-1" bpmn:id="_HAtIIN5EEeKlbMDJE2xwlg"></bpel:invoke>
                           <bpel:assign bpmn:label="record xml has moved" name="record_xml_has_moved" bpmn:id="_J_fNcN5EEeKlbMDJE2xwlg">
                             <bpel:copy>
                               <bpel:from>true()</bpel:from>
@@ -779,7 +805,7 @@
                                         </bpel:assign>
                                         <bpel:assign bpmn:label="Delete media" name="Delete_media" bpmn:id="_-jl80MFCEeK6DtOy-Yu5NA">
                                           <bpel:copy>
-                                            <bpel:from>$TranscodedFileLocation</bpel:from>
+                                            <bpel:from>$MediaFileDeliveryLocation</bpel:from>
                                             <bpel:to>$deleteDeleteRequestMsg.body/FSAdapter:path</bpel:to>
                                           </bpel:copy>
                                         </bpel:assign>

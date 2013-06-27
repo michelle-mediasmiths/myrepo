@@ -59,7 +59,9 @@
 <Auto_QC:EventStartMessageRequest>
   <wfAdapter:AO></wfAdapter:AO>
   <wfAdapter:created></wfAdapter:created>
+  <wfAdapter:deliveryLocation></wfAdapter:deliveryLocation>
   <wfAdapter:packageID></wfAdapter:packageID>
+  <wfAdapter:quarantineLocation></wfAdapter:quarantineLocation>
   <wfAdapter:requiredDate></wfAdapter:requiredDate>
   <wfAdapter:taskID></wfAdapter:taskID>
   <wfAdapter:tcParams>

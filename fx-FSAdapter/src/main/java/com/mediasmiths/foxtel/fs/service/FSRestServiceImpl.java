@@ -1,23 +1,21 @@
 package com.mediasmiths.foxtel.fs.service;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.fs.model.DeleteRequest;
 import com.mediasmiths.foxtel.fs.model.DeleteResponse;
 import com.mediasmiths.foxtel.fs.model.MoveRequest;
 import com.mediasmiths.foxtel.fs.model.MoveResponse;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import java.io.File;
+import java.io.IOException;
 
 public class FSRestServiceImpl implements FSRestService
 {
@@ -27,6 +25,7 @@ public class FSRestServiceImpl implements FSRestService
 	private String storageRoot;
 
 	private final static Logger log = Logger.getLogger(FSRestService.class);
+
 
 	@Override
 	@PUT
@@ -64,7 +63,6 @@ public class FSRestServiceImpl implements FSRestService
 						log.error(String.format("IOException deleting file %s", f.getAbsolutePath()), e);
 						return new DeleteResponse(false);
 					}
-
 				}
 				else
 				{
@@ -83,13 +81,13 @@ public class FSRestServiceImpl implements FSRestService
 					return new DeleteResponse(deleted);
 				}
 			}
-
 		}
 		else
 		{
 			throw new FSAdapterException(String.format("Not allowed to operate on specified path (%s)", dr.getPath()));
 		}
 	}
+
 
 	@Override
 	@GET
@@ -100,10 +98,12 @@ public class FSRestServiceImpl implements FSRestService
 		return "ping";
 	}
 
+
 	/**
 	 * checks if the specified path is under the configured storage root, as we dont want to act upon files not within it
-	 * 
+	 *
 	 * @param path
+	 *
 	 * @return
 	 */
 	private boolean pathAllowed(String path)
@@ -120,6 +120,7 @@ public class FSRestServiceImpl implements FSRestService
 		}
 	}
 
+
 	@Override
 	@PUT
 	@Path("/move")
@@ -133,11 +134,14 @@ public class FSRestServiceImpl implements FSRestService
 			File from = new File(mr.getFrom());
 			File to = new File(mr.getTo());
 
-			if(from.equals(to)){
-				log.info(String.format("Move from %s to %s not required, source and destination are equal", from.getAbsolutePath(), to.getAbsolutePath()));
+			if (from.equals(to))
+			{
+				log.info(String.format("Move from %s to %s not required, source and destination are equal",
+				                       from.getAbsolutePath(),
+				                       to.getAbsolutePath()));
 				return new MoveResponse(true);
 			}
-			
+
 			if (to.isFile() && to.exists())
 			{
 				log.error(String.format("Target file %s for move already exists", to.getAbsolutePath()));
@@ -146,69 +150,111 @@ public class FSRestServiceImpl implements FSRestService
 
 			if (from.isDirectory() && to.isFile())
 			{
-				log.error(String.format(
-						"Target file %s is a file but source was a folder %s",
-						to.getAbsolutePath(),
-						from.getAbsolutePath()));
-				throw new FSAdapterException("Target path of a directory move is a file");
+				return moveDirectoryToFile(from, to);
 			}
 
 			if (from.isDirectory())
 			{
-				try
-				{
-					FileUtils.moveDirectoryToDirectory(from, to, true);
-					log.info(String.format("Move from %s to %s complete", from.getAbsolutePath(), to.getAbsolutePath()));
-					return new MoveResponse(true);
-				}
-				catch (IOException e)
-				{
-					String message = String.format(
-							"Error moving directory %s to %s",
-							from.getAbsolutePath(),
-							to.getAbsolutePath());
-					log.error(message, e);
-					throw new FSAdapterException(message, e);
-				}
+				return moveDirectoryToDirectory(from, to);
 			}
 			else
 			{
 				String fromPath = from.getAbsolutePath();
 				String toPath = to.getAbsolutePath();
-				
-				if (to.isDirectory()
-						&& FilenameUtils.getFullPathNoEndSeparator(fromPath).equals(
-								FilenameUtils.getFullPathNoEndSeparator(toPath)))
+
+				if (to.isDirectory() &&
+				    FilenameUtils.getFullPathNoEndSeparator(fromPath).equals(FilenameUtils.getFullPathNoEndSeparator(toPath)))
 				{
-					log.info(String.format("Move from %s to %s is the same folder", fromPath, toPath));
-					return new MoveResponse(true);
+					return moveDirectoryToSelf(fromPath, toPath);
+				}
+				else if (to.isDirectory())
+				{
+
+					return moveFileToDirectory(from, to, fromPath, toPath);
 				}
 				else
 				{
 
-					try
-					{
-						FileUtils.moveFile(from, to);
-						log.info(String.format("Move from %s to %s complete", from.getAbsolutePath(), to.getAbsolutePath()));
-						return new MoveResponse(true);
-					}
-					catch (IOException e)
-					{
-						String message = String.format("Error moving file %s to %s", from.getAbsolutePath(), to.getAbsolutePath());
-						log.error(message, e);
-						throw new FSAdapterException(message, e);
-					}
+					return moveFileToFile(from, to);
 				}
 			}
-
 		}
 		else
 		{
-			throw new FSAdapterException(String.format(
-					"Not allowed to operate on one of the specified paths (%s %s)",
-					mr.getFrom(),
-					mr.getTo()));
+			throw new FSAdapterException(String.format("Not allowed to operate on one of the specified paths (%s %s)",
+			                                           mr.getFrom(),
+			                                           mr.getTo()));
 		}
 	}
 
+
+	private MoveResponse moveDirectoryToSelf(final String fromPath, final String toPath)
+	{
+		log.info(String.format("Move from %s to %s is the same folder", fromPath, toPath));
+		return new MoveResponse(true);
+	}
+
+
+	private MoveResponse moveFileToFile(final File from, final File to) throws FSAdapterException
+	{
+		try
+		{
+			FileUtils.moveFile(from, to);
+			log.info(String.format("Move from %s to %s complete", from.getAbsolutePath(), to.getAbsolutePath()));
+			return new MoveResponse(true);
+		}
+		catch (IOException e)
+		{
+			String message = String.format("Error moving file %s to %s", from.getAbsolutePath(), to.getAbsolutePath());
+			log.error(message, e);
+			throw new FSAdapterException(message, e);
+		}
+	}
+
+
+	private MoveResponse moveFileToDirectory(final File from,
+	                                         final File to,
+	                                         final String fromPath,
+	                                         final String toPath) throws FSAdapterException
+	{
+		log.debug(String.format("Moving file from %s to directory %s", fromPath, toPath));
+		try
+		{
+			FileUtils.moveFileToDirectory(from, to, true);
+			log.info(String.format("Move from %s to %s complete", from.getAbsolutePath(), to.getAbsolutePath()));
+			return new MoveResponse(true);
+		}
+		catch (IOException e)
+		{
+			String message = String.format("Error moving file %s to %s", from.getAbsolutePath(), to.getAbsolutePath());
+			log.error(message, e);
+			throw new FSAdapterException(message, e);
+		}
+	}
+
+
+	private MoveResponse moveDirectoryToDirectory(final File from, final File to) throws FSAdapterException
+	{
+		try
+		{
+			FileUtils.moveDirectoryToDirectory(from, to, true);
+			log.info(String.format("Move from %s to %s complete", from.getAbsolutePath(), to.getAbsolutePath()));
+			return new MoveResponse(true);
+		}
+		catch (IOException e)
+		{
+			String message = String.format("Error moving directory %s to %s", from.getAbsolutePath(), to.getAbsolutePath());
+			log.error(message, e);
+			throw new FSAdapterException(message, e);
+		}
+	}
+
+
+	private MoveResponse moveDirectoryToFile(final File from, final File to) throws FSAdapterException
+	{
+		log.error(String.format("Target file %s is a file but source was a folder %s",
+		                        to.getAbsolutePath(),
+		                        from.getAbsolutePath()));
+		throw new FSAdapterException("Target path of a directory move is a file");
+	}
 }

@@ -67,7 +67,8 @@ public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 
 				Boolean previousPresentationFlag = before.getAttribute(Attribute.PRESENTATION_FLAG);
 
-				if(previousPresentationFlag==null){
+				if (previousPresentationFlag == null)
+				{
 					log.info("Presentation flag was previously null, will not consider this a change");
 					return;
 				}
@@ -77,6 +78,12 @@ public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 
 				if (contentType != null)
 				{
+					if (contentType.equals(MayamContentTypes.PROGRAMME))
+					{
+						log.info("Conent is programme content, taking no action");
+						return;
+					}
+
 					if (contentType.equals(MayamContentTypes.EPK))
 					{
 						log.debug("Associated content");

@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" elementFormDefault="qualified" targetNamespace="http://ns.mediasmiths.com/foxtel/wf/adapter" version="1.0">
 
   <xs:import namespace="http://ns.mediasmiths.com/foxtel/tc/adapter" schemaLocation="../tcAdapter/tcAdapter.xsd"/>
-   
+
   <xs:element name="abortFxpTransferRequest" type="tns:abortFxpTransferRequest"/>
 
   <xs:element name="assetTransferForQCRequest" type="tns:assetTransferForQCRequest"/>
@@ -167,7 +167,9 @@
     <xs:sequence>
       <xs:element name="AO" type="xs:boolean"/>
       <xs:element minOccurs="0" name="created" type="xs:dateTime"/>
+      <xs:element name="deliveryLocation" type="xs:string"/>
       <xs:element name="packageID" type="xs:string"/>
+      <xs:element name="quarantineLocation" type="xs:string"/>
       <xs:element name="requiredDate" type="xs:dateTime"/>
       <xs:element name="taskID" type="xs:long"/>
       <xs:element name="tcParams" type="ns1:tcJobParameters"/>

@@ -34,7 +34,7 @@
 		<eventname>QcFailedReOrder</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.AutoQcEmailTemplate">
 			<subject>Auto QC Fail in MAM: Material ID (%s), Title(%s)</subject>
-			<body><![CDATA[Item called Title(%s), Material ID(%s) is on the QC tasklist with a warning state. Please resolve this matter within 90 days otherwise item will be purged without further notification.<br/>Dear Promo Producer, please check whether this failed item impacts your promo production work.]]>
+			<body><![CDATA[Item called Title(%s), Material ID(%s) is on the QC tasklist with a warning or failed state. Please resolve this matter within 90 days otherwise item will be purged without further notification.<br/>Dear Promo Producer, please check whether this failed item impacts your promo production work.]]>
 			</body>
 			<emailaddresses> 
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
@@ -79,6 +79,18 @@
 	</MailData>
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
+		<eventname>TxXmlFTPDeliveryFailed</eventname>
+		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcEventEmailTemplate">
+			<subject>URGENT ISSUE: TX transfer failed for ID (%s) and Title (%s)</subject>
+			<body>Item remains on the TX Delivery task list, but the metadata XML could not be written to the FTP location. Please resolve URGENTLY.</body>
+			<emailaddresses>
+				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>QcServerFailureDuringTranscode</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcEventEmailTemplate">
 			<subject>QC Server Issue: ID (%s) and Title (%s)</subject>
@@ -98,6 +110,32 @@
 			<subject>URGENT ISSUE: Quarantined TX item in MAM, ID (%s) and Title (%s)</subject>
 			<body>TX item has been quarantined but is OK for TX, but it has not been able to move to AMY.</body>
 			<emailaddresses> 
+				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
+		<eventname>TranscodeDeliveryFailedFXPTransfer</eventname>
+		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcEventEmailTemplate">
+			<subject>URGENT ISSUE: Quarantined TX item in MAM, ID (%s) and Title (%s)</subject>
+			<body>TX item has been quarantined but is OK for TX, FXP transfer failed.</body>
+			<emailaddresses>
+				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
+		<eventname>TxXmlDeliveryFailed</eventname>
+		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcEventEmailTemplate">
+			<subject>URGENT ISSUE: Quarantined TX item in MAM, ID (%s) and Title (%s)</subject>
+			<body>TX item has been quarantined but is OK for TX, but it has not been able to move to AMY. Media could move to tx delivery destination but the move for the companion xml failed</body>
+			<emailaddresses>
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
