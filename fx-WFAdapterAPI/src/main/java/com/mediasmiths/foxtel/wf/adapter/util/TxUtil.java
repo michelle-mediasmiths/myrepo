@@ -60,11 +60,23 @@ public class TxUtil
 	public static String quarrentineLocationForPackage(final String packageID,
 	                                                   final String txQuarantineLocation,
 	                                                   final String aoQuarantineLocation,
-	                                                   final boolean isAO)
+	                                                   final boolean isAO, Long taskID)
 	{
-		String ret = pickFolderAndNormalise(txQuarantineLocation, aoQuarantineLocation, isAO);
+		String base;
 
-		log.info(String.format("Returning qurrentine folder %s for package %s", ret, packageID));
+		if (isAO)
+		{
+			base = txQuarantineLocation;
+		}
+		else
+		{
+			base = aoQuarantineLocation;
+		}
+
+		String location = String.format("%s/%s_%s.gxf", base,packageID,taskID);
+		String ret = FilenameUtils.normalize(location);
+
+		log.info(String.format("Returning qurrentine location %s for package %s", ret, packageID));
 
 		return ret;
 	}
