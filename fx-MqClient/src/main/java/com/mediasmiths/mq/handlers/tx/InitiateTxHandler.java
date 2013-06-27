@@ -147,7 +147,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 				String quarantineLocationForPackage = TxUtil.quarrentineLocationForPackage(packageID,
 				                                                                           txQuarantineLocation,
 				                                                                           aoQuarantineLocation,
-				                                                                           isAO);
+				                                                                           isAO,taskID);
 
 				String transcodeOutputFolder = TxUtil.transcodeFolderForPackage(packageID,
 				                                                                txWaitingLocation,
