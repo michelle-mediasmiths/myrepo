@@ -51,19 +51,25 @@ public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 			                       assetID,
 			                       houseID));
 
-			Boolean presentationFlag = currentAttributes.getAttribute(Attribute.PRESENTATION_FLAG);
+			Boolean currentPresentationFlag = currentAttributes.getAttribute(Attribute.PRESENTATION_FLAG);
 
-			if (presentationFlag == null)
+			if (currentPresentationFlag == null)
 			{
 				log.warn("Presentation flag is null");
 			}
-			else if (presentationFlag)
+			else if (currentPresentationFlag)
 			{
 				log.debug("Presentation set to true/yes...doing nothing");
 			}
 			else
 			{
 				log.info("Presentation flag set to false");
+
+				Boolean previousPresentationFlag = before.getAttribute(Attribute.PRESENTATION_FLAG);
+
+				if(previousPresentationFlag==null){
+					log.info("Presentation flag was previously null, will not consider this a change")
+				}
 
 				int numberOfDays = defaultPurgeTime;
 				String contentType = currentAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
@@ -72,18 +78,22 @@ public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 				{
 					if (contentType.equals(MayamContentTypes.EPK))
 					{
+						log.debug("Associated content");
 						numberOfDays = associatedPurgeTime;
 					}
 					else if (contentType.equals(MayamContentTypes.EDIT_CLIPS))
 					{
+						log.debug("Edit clips");
 						numberOfDays = editClipsPurgeTime;
 					}
 					else if (contentType.equals(MayamContentTypes.PUBLICITY))
 					{
+						log.debug("Publicity");
 						numberOfDays = publicityPurgeTime;
 					}
 					else
 					{
+						log.debug("Content not one of associated, edit clips or publicity, using default purge time");
 						numberOfDays = defaultPurgeTime;
 					}
 
