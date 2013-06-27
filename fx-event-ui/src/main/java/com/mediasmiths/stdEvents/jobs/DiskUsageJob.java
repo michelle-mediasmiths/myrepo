@@ -17,12 +17,17 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.DiskUsageEvent;
+import com.mediasmiths.foxtel.ip.event.EventService;
 
 public class DiskUsageJob implements Job 
 {
 	@Inject
 	@Named("diskUsageLoc")
 	public String DISK_USAGE_LOC;
+	
+	@Inject
+	private EventService events;
 	
 	private static final transient Logger logger = Logger.getLogger(DiskUsageJob.class);
 
@@ -31,7 +36,7 @@ public class DiskUsageJob implements Job
 	{
 		    ICsvBeanReader beanReader = null;
 		    String filename = DISK_USAGE_LOC;
-		    DiskUsageBean diskUsage = null;
+		    DiskUsageEvent diskUsage = null;
 		    try{
 			    try {
 			    	logger.info("Reading Disk Usage CSV : " + filename);
@@ -41,8 +46,10 @@ public class DiskUsageJob implements Job
 			        final String[] header = beanReader.getHeader(true);
 			        final CellProcessor[] processors = getProcessors();
 			            
-			        while( (diskUsage = beanReader.read(DiskUsageBean.class, header, processors)) != null ) {
+			        while( (diskUsage = beanReader.read(DiskUsageEvent.class, header, processors)) != null ) {
 			        	System.out.println(String.format("lineNo=%s, rowNo=%s, customer=%s", beanReader.getLineNumber(), beanReader.getRowNumber(), diskUsage));
+	
+			        	
 			        }
 			            
 			    }
