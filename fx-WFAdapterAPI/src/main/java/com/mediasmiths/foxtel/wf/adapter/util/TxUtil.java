@@ -66,11 +66,11 @@ public class TxUtil
 
 		if (isAO)
 		{
-			base = txQuarantineLocation;
+			base = aoQuarantineLocation;
 		}
 		else
 		{
-			base = aoQuarantineLocation;
+			base = txQuarantineLocation;
 		}
 
 		String location = String.format("%s/%s_%s.gxf", base,packageID,taskID);
@@ -89,11 +89,11 @@ public class TxUtil
 
 		if (isAO)
 		{
-			base = nonaofolder;
+			base = aofolder;
 		}
 		else
 		{
-			base = aofolder;
+			base = nonaofolder;
 		}
 
 		String location = String.format("%s/", base);
