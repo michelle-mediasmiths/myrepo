@@ -44,14 +44,22 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 	@Inject
 	@Named("ao.tx.delivery.location")
 	private String aoDeliveryLocation;
-//
-//	@Inject
-//	@Named("tx.waiting.location")
-//	private String txWaitingLocation;
-//
-//	@Inject
-//	@Named("ao.tx.waiting.location")
-//	private String aoWaitingLocation;
+
+	@Inject
+	@Named("tx.waiting.location")
+	private String txWaitingLocation;
+
+	@Inject
+	@Named("ao.tx.waiting.location")
+	private String aoWaitingLocation;
+
+	@Inject
+	@Named("tx.quarantine.location")
+	private String txQuarantineLocation;
+
+	@Inject
+	@Named("ao.tx.quarantine.location")
+	private String aoQuarantineLocation;
 
 	@Inject
 	private TranscodePriorities transcodePriorities;
@@ -129,8 +137,23 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 					log.info("Using required date " + requiredDate);
 				}
 
-				String materialPath = mayamClient.pathToMaterial(materialID,false);				
-				String outputLocation = TxUtil.deliveryLocationForPackage(packageID, mayamClient, txDeliveryLocation, aoDeliveryLocation, isAO);
+				String materialPath = mayamClient.pathToMaterial(materialID,false);
+				String deliveryLocationForPackage = TxUtil.deliveryLocationForPackage(packageID,
+				                                                                      mayamClient,
+				                                                                      txDeliveryLocation,
+				                                                                      aoDeliveryLocation,
+				                                                                      isAO);
+
+				String quarantineLocationForPackage = TxUtil.quarrentineLocationForPackage(packageID,
+				                                                                           txQuarantineLocation,
+				                                                                           aoQuarantineLocation,
+				                                                                           isAO);
+
+				String transcodeOutputFolder = TxUtil.transcodeFolderForPackage(packageID,
+				                                                                txWaitingLocation,
+				                                                                aoWaitingLocation,
+				                                                                isAO);
+
 
 				TCJobParameters tcParams = createTCParamsForTxDelivery(
 						packageID,
@@ -139,37 +162,12 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 						isPackageSD,
 						requiredDate,
 						materialPath,
-						outputLocation);
+						transcodeOutputFolder);
 
-				String essenceFilePath = tcParams.outputFolder + "/" + tcParams.outputFileBasename + ".gxf";
-				String companionFilePath = tcParams.outputFolder + "/" + tcParams.outputFileBasename + ".xml";
-				File essenceFile = new File(essenceFilePath);
-				File companionFile = new File(companionFilePath);
-								
-				boolean fxpFileExists = false;
-				
-//				if (isAO)
-//				{
-//					try
-//					{
-//						fxpFileExists = ftpDelivery.fileExists(
-//								aoGXFFTPDestinationPath,
-//								packageID,
-//								aoGXFFTPDestinationHost,
-//								aoGXFFTPDestinationUser,
-//								aoGXFFTPDestinationPass);
-//					}
-//					catch (Exception e)
-//					{
-//						log.error("Error querying ao output ftp location", e);
-//						taskController.setTaskToErrorWithMessage(messageAttributes, "Error querying ao output ftp location");
-//						return;
-//					}
-//				}
 
-				if (fxpFileExists || essenceFile.exists() || companionFile.exists())
+				if (filesExistAtDeliveryOrTranscodeLocation(transcodeOutputFolder,packageID,deliveryLocationForPackage))
 				{
-					String errorMessage = "File already exists at tx delivery target, will not attempt tx delivery";
+					String errorMessage = "File already exists at tx delivery target or transcode location, will not attempt tx delivery";
 					log.error(errorMessage);
 
 					AttributeMap updateMap = taskController.updateMapForTask(messageAttributes);
@@ -179,7 +177,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 				}
 				else
 				{
-					startTXFlow(isAO, packageID, requiredDate, taskID, tcParams, title);
+					startTXFlow(isAO, packageID, requiredDate, taskID, tcParams, title,quarantineLocationForPackage,deliveryLocationForPackage);
 
 					AttributeMap updateMap = taskController.updateMapForTask(messageAttributes);
 					updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
@@ -290,13 +288,14 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 		return ret;
 	}
 
-	private void startTXFlow(
-			boolean isAO,
-			String packageID,
-			Date requiredDate,
-			Long taskID,
-			TCJobParameters tcParams,
-			String title) throws UnsupportedEncodingException, JAXBException, MuleException
+	private void startTXFlow(boolean isAO,
+	                         String packageID,
+	                         Date requiredDate,
+	                         Long taskID,
+	                         TCJobParameters tcParams,
+	                         String title,
+	                         final String quarantineLocationForPackage,
+	                         final String deliveryLocationForPackage) throws UnsupportedEncodingException, JAXBException, MuleException
 	{
 		InvokeIntalioTXFlow startMessage = new InvokeIntalioTXFlow();
 
@@ -307,10 +306,64 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 		startMessage.setTcParams(tcParams);
 		startMessage.setTitle(title);
 		startMessage.setCreated(new Date());
+		startMessage.setQuarantineLocation(quarantineLocationForPackage);
+		startMessage.setDeliveryLocation(deliveryLocationForPackage);
 
 		mule.initiateTxDeliveryWorkflow(startMessage);
 
 	}
+
+
+	private boolean filesExistAtDeliveryOrTranscodeLocation(final String transcodeOutputFolder,
+	                                                        final String packageID,
+	                                                        final String deliveryLocationForPackage)
+	{
+
+		String essenceFilePathAtWaitingFolder = transcodeOutputFolder + packageID + ".gxf";
+		String companionFilePathAtWaitingFolder = transcodeOutputFolder + packageID + ".xml";
+
+		File essenceFileAtWaitingFolder = new File(essenceFilePathAtWaitingFolder);
+		File companionFileAtWaitingfolder = new File(companionFilePathAtWaitingFolder);
+
+		String essenceFilePathAtDeliveryFolder = deliveryLocationForPackage + packageID + ".gxf";
+		String companionFilePathAtDeliveryFolder = deliveryLocationForPackage + packageID + ".xml";
+
+		File essenceFileAtDeliveryFolder = new File(essenceFilePathAtDeliveryFolder);
+		File companionFileAtDeliveryFolder = new File(companionFilePathAtDeliveryFolder);
+
+		boolean fxpFileExists = false;
+
+//				if (isAO)
+//				{
+//					try
+//					{
+//						fxpFileExists = ftpDelivery.fileExists(
+//								aoGXFFTPDestinationPath,
+//								packageID,
+//								aoGXFFTPDestinationHost,
+//								aoGXFFTPDestinationUser,
+//								aoGXFFTPDestinationPass);
+//					}
+//					catch (Exception e)
+//					{
+//						log.error("Error querying ao output ftp location", e);
+//						taskController.setTaskToErrorWithMessage(messageAttributes, "Error querying ao output ftp location");
+//						return;
+//					}
+//				}
+
+		if (fxpFileExists ||
+		    essenceFileAtWaitingFolder.exists() ||
+		    companionFileAtWaitingfolder.exists() ||
+		    essenceFileAtDeliveryFolder.exists() ||
+		    companionFileAtDeliveryFolder.exists())
+		{
+			return true;
+		}
+
+		return false;
+	}
+
 
 	@Override
 	public MayamTaskListType getTaskType()
