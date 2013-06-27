@@ -23,7 +23,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DiskUsageRpt extends ReportUtils
 {
@@ -38,28 +40,59 @@ public class DiskUsageRpt extends ReportUtils
 	
 	public void writeDiskUsage(List<EventEntity> events, DateTime startDate, DateTime endDate, String reportName)
 	{
-		List<DiskUsageEvent> reports = getReportList(events, startDate, endDate);
-		
+		List<DiskUsageEvent> reports = getReportList(events, startDate, endDate);		
 		createCsv(reports, reportName);	
 	}
 	
 	public List<DiskUsageEvent> getReportList(List<EventEntity> events, DateTime startDate, DateTime endDate)
 	{
 		logger.debug(">>>getReportList");
-		List<DiskUsageEvent> reports = new ArrayList <DiskUsageEvent> ();
-		for (DateTime dateToFetch = startDate; dateToFetch.isBefore(endDate); dateToFetch.plusDays(1))
+		Map<String, DiskUsageEvent> reportMap = new HashMap <String, DiskUsageEvent> ();
+		Map<String, Integer> test = new HashMap <String, Integer> ();
+		for (EventEntity event: events)
 		{
-			DiskUsageEvent report =null;
-			if (report != null)
+			DiskUsageEvent report = (DiskUsageEvent) unmarshallReport(event);
+	
+			DiskUsageEvent cumulativeUsage = reportMap.get(report.getChannel());
+			if (cumulativeUsage == null)
 			{
-				reports.add(report);
+				reportMap.put(report.getChannel(), report);
 			}
 			else {
-				logger.warn("No disk usage report used for date " + dateToFetch.toString());
+				cumulativeUsage.setHrSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+				cumulativeUsage.setTsmSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+				cumulativeUsage.setLrSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+				cumulativeUsage.setOthersSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+				cumulativeUsage.setTotalSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+				reportMap.put(report.getChannel(), cumulativeUsage);
 			}
 		}
 		logger.debug("<<<getReportList");
-		return reports;
+		return reportMap.values();
+	}
+	
+	private String add(String cumulative, String newSize)
+	{
+		String x = "10.5GB";
+		CharSequence trimmedTotal = cumulative.subSequence(0, cumulative.length() - 2);
+		double runningTotal = Double.parseDouble(trimmedTotal.toString());
+		
+		CharSequence trimmedNew = newSize.subSequence(0, newSize.length() - 2);
+		double newValue = Double.parseDouble(trimmedTotal.toString());
+		
+		if (newSize.substring(newSize.length() - 2).toLowerCase().equals("kb"))
+		{
+			newValue = newValue / 1024;
+		}
+		else if (newSize.substring(newSize.length() - 2).toLowerCase().equals("mb"))
+		{
+			newValue = newValue / (1024 * 1024);
+		}
+		
+		runningTotal += newValue;
+		cumulative = runningTotal + "GB";
+		
+		return cumulative;
 	}
 	
 	private void createCsv (List<DiskUsageEvent> enteries, String reportName)
