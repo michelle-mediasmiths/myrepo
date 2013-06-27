@@ -200,37 +200,6 @@ public class AcquisitionRpt extends ReportUtils
 		return processors;
 	}
 
-	private Acquisition newAcquisition(OrderStatus order)
-	{
-		Acquisition acq = new Acquisition();
-		acq.setAggregatorID(order.getAggregatorID());
-		if (order.getFileSize() != null)
-		{
-			acq.setFilesize(order.getFileSize().toString());
-		}
-		acq.setMaterialID(order.getMaterialid());
-		if (order.getTitle() != null)
-		{
-
-			acq.setTitle(order.getTitle().getTitle());
-			String channels = "";
-			for (String channel : order.getTitle().getChannels())
-			{
-				channels += (channel + ", ");
-			}
-
-			acq.setChannels(channels);
-		}
-
-		String orderTitleLength = order.getTitleLengthReadableString();
-
-		if (orderTitleLength!= null)
-		{
-			acq.setTitleLength(orderTitleLength);
-		}
-		return acq;
-	}
-
 	private Acquisition addStats(String name, String value)
 	{
 		Acquisition acq = new Acquisition();
