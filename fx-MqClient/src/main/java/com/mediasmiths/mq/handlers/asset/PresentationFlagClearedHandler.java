@@ -68,7 +68,7 @@ public class PresentationFlagClearedHandler extends UpdateAttributeHandler
 				Boolean previousPresentationFlag = before.getAttribute(Attribute.PRESENTATION_FLAG);
 
 				if(previousPresentationFlag==null){
-					log.info("Presentation flag was previously null, will not consider this a change")
+					log.info("Presentation flag was previously null, will not consider this a change");
 				}
 
 				int numberOfDays = defaultPurgeTime;
