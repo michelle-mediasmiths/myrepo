@@ -34,7 +34,7 @@
 		<eventname>QcFailedReOrder</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.AutoQcEmailTemplate">
 			<subject>Auto QC Fail in MAM: Material ID (%s), Title(%s)</subject>
-			<body><![CDATA[Item called Title(%s), Material ID(%s) is on the QC tasklist with a warning state. Please resolve this matter within 90 days otherwise item will be purged without further notification.<br/>Dear Promo Producer, please check whether this failed item impacts your promo production work.]]>
+			<body><![CDATA[Item called Title(%s), Material ID(%s) is on the QC tasklist with a warning or failed state. Please resolve this matter within 90 days otherwise item will be purged without further notification.<br/>Dear Promo Producer, please check whether this failed item impacts your promo production work.]]>
 			</body>
 			<emailaddresses> 
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
