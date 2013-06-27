@@ -313,13 +313,17 @@ public class ReportUIImpl implements ReportUI
 		String endDate = end.toString(dateFormatter);
 		logger.info("dates readable start: " + startDate + " end: " + endDate);
 		
+		List<EventEntity> events = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/system",
+                EventNames.DISK_USAGE_EVENT, MAX, start, end);
+
+		
 		logger.debug(String.format(
 				"Requesting disk usage report for date range: %s to %s; report name will be: %s ",
 				start.toString(),
 				end.toString(),
 				reportName));
 		
-		diskUsage.writeDiskUsage(start, end, reportName);
+		diskUsage.writeDiskUsage(events, start, end, reportName);
 
 		logger.debug("<<<getDiskUsageCSV");
 	}

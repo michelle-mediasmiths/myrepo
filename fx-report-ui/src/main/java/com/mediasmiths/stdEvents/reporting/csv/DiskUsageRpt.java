@@ -16,6 +16,7 @@ import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
+import com.mediasmiths.foxtel.ip.common.events.DiskUsageEvent;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -33,26 +34,22 @@ public class DiskUsageRpt extends ReportUtils
 	public String REPORT_LOC;
 	
 	@Inject
-	@Named("diskUsageLoc")
-	public String DISK_USAGE_LOC;
-	
-	@Inject
 	private QueryAPIImpl queryApi;
 	
-	public void writeDiskUsage(DateTime startDate, DateTime endDate, String reportName)
+	public void writeDiskUsage(List<EventEntity> events, DateTime startDate, DateTime endDate, String reportName)
 	{
-		List<DiskUsageBean> reports = getReportList(startDate, endDate);
+		List<DiskUsageEvent> reports = getReportList(events, startDate, endDate);
 		
 		createCsv(reports, reportName);	
 	}
 	
-	public List<DiskUsageBean> getReportList(DateTime startDate, DateTime endDate)
+	public List<DiskUsageEvent> getReportList(List<EventEntity> events, DateTime startDate, DateTime endDate)
 	{
 		logger.debug(">>>getReportList");
-		List<DiskUsageBean> reports = new ArrayList <DiskUsageBean> ();
+		List<DiskUsageEvent> reports = new ArrayList <DiskUsageEvent> ();
 		for (DateTime dateToFetch = startDate; dateToFetch.isBefore(endDate); dateToFetch.plusDays(1))
 		{
-			DiskUsageBean report =null;
+			DiskUsageEvent report =null;
 			if (report != null)
 			{
 				reports.add(report);
@@ -65,7 +62,7 @@ public class DiskUsageRpt extends ReportUtils
 		return reports;
 	}
 	
-	private void createCsv (List<DiskUsageBean> enteries, String reportName)
+	private void createCsv (List<DiskUsageEvent> enteries, String reportName)
 	{
 		ICsvBeanWriter beanWriter = null;
 		try { 
@@ -74,7 +71,7 @@ public class DiskUsageRpt extends ReportUtils
 			final CellProcessor[] processors = getProcessors();
 			beanWriter.writeHeader(header);
 			
-			for (DiskUsageBean entry : enteries) {
+			for (DiskUsageEvent entry : enteries) {
 				beanWriter.write(entry, header, processors);
 			}
 		}
