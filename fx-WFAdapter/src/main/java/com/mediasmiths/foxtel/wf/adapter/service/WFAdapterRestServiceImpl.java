@@ -173,6 +173,15 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Named("export.caption.write.associated.files")
 	private Boolean writeAssociatedFilesForCaptionExports;
 
+
+	@Inject
+	@Named("tx.waiting.location")
+	private String txWaitingLocation;
+
+	@Inject
+	@Named("ao.tx.waiting.location")
+	private String aoWaitingLocation;
+
 	@Override
 	public String ping()
 	{
@@ -744,12 +753,12 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			log.debug(String.format("Getting xml for packageId %s", packageID));
 			companion = getSegmentXML(packageID);
 		}
-		String deliveryLocation = deliveryLocationForPackage(packageID);
+		String waitingLocation = TxUtil.transcodeFolderForPackage(packageID,txWaitingLocation,aoWaitingLocation,ao);
 
-		File deliveryLocationFile = new File(deliveryLocation);
-		deliveryLocationFile.mkdirs();
+		File waitingLocationFile = new File(waitingLocation);
+		waitingLocationFile.mkdirs();
 
-		File segmentXmlFile = new File(String.format("%s/%s.xml", deliveryLocation, packageID));
+		File segmentXmlFile = new File(String.format("%s/%s.xml", waitingLocation, packageID));
 		try
 		{
 			log.debug("Writing segmentinfo to " + segmentXmlFile);
