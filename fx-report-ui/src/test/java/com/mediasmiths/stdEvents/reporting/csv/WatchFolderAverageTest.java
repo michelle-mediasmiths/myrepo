@@ -14,6 +14,14 @@ public class WatchFolderAverageTest
 	WatchFolderRpt toTest = new WatchFolderRpt();
 
 	@Test
+	public void testGetReportList()
+	{
+		List<AcquisitionRpt> acquisitionRptList = new ArrayList<AcquisitionRpt>();
+
+
+	}
+
+	@Test
 	public void testWatchFolderAverages(){
 		List<FilePickupDetails> files = new ArrayList<FilePickupDetails>();
 
