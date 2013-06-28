@@ -19,6 +19,7 @@ import org.supercsv.prefs.CsvPreference;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,9 +110,9 @@ public class AcquisitionRpt extends ReportUtils
 
 			if (order!= null && order.getFileSize() != null)
 			{
-				long filesize = Long.valueOf(acq.getFilesize()).longValue();
-				log.debug("filesize long: " + filesize);
-				acq.setFilesize(FileUtils.byteCountToDisplaySize(filesize));
+				long fileSize = Long.parseLong(acq.getFilesize());
+				acq.setFilesize(acquisitionReportFileSize(fileSize));
+
 			}
 
 			String aggregator = acq.getAggregatorID();
@@ -145,6 +146,34 @@ public class AcquisitionRpt extends ReportUtils
 		log.debug("<<<getReportList");
 		return acqs;
 	}
+
+
+	public static String acquisitionReportFileSize(long filesize)
+	{
+		String displaySize;
+
+		if (filesize >= FileUtils.ONE_GB)
+		{
+			displaySize = String.valueOf(filesize/ FileUtils.ONE_GB);
+
+			log.debug("filesize long : " + filesize);
+			log.debug("file size in GB : " + displaySize);
+		}
+		else
+		{
+			double file = (double) filesize;
+			DecimalFormat twoDForm = new DecimalFormat("#.####");
+
+			Double fileDisplaySize = file / ((double) FileUtils.ONE_GB);
+
+			log.debug("filesize long : " + filesize);
+			log.debug("file size in GB : " + Double.valueOf(twoDForm.format(fileDisplaySize)));
+
+			displaySize = Double.valueOf(twoDForm.format(fileDisplaySize)).toString();
+		}
+		return displaySize;
+	}
+
 
 	private void createCSV(final List<Acquisition> titles, final String reportName)
 	{
