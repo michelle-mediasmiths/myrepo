@@ -17,8 +17,9 @@ public class DiskUsageEventJobScheduler {
 	public void DiskUsageEventJobScheduleur()
 	{
 		try {
+			logger.info("Setting up daily disk usage job scheduler");
 			Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-	
+			
 		    JobDetail job = newJob(DiskUsageJob.class)
 		        .withIdentity("dailyDiskUsageJob", "diskUsageEvent")
 		        .build();
@@ -33,6 +34,7 @@ public class DiskUsageEventJobScheduler {
 
 			scheduler.scheduleJob(job, trigger);
 			scheduler.start();
+			logger.info("Scheduler Job Started");
 		} 
 	    catch (SchedulerException e) {
 	    	logger.warn("Scheduler Exception thrown while creating daily disk usage eventing job", e);
