@@ -108,12 +108,23 @@ public class AcquisitionRpt extends ReportUtils
 
 			}
 
+			//Retrieving file size in GB
+
+			long fileSize;
+
 			if (order!= null && order.getFileSize() != null)
 			{
-				long fileSize = Long.parseLong(acq.getFilesize());
-				acq.setFilesize(acquisitionReportFileSize(fileSize));
-
+				fileSize = order.getFileSize();
 			}
+			else
+			{
+				fileSize = Long.parseLong(acq.getFilesize());
+			}
+			if (fileSize!= 0)
+			{
+				acq.setFilesize(acquisitionReportFileSize(fileSize));
+			}
+
 
 			String aggregator = acq.getAggregatorID();
 			boolean isFromTape = false;
@@ -148,25 +159,25 @@ public class AcquisitionRpt extends ReportUtils
 	}
 
 
-	public static String acquisitionReportFileSize(long filesize)
+	public static String acquisitionReportFileSize(long fileSize)
 	{
 		String displaySize;
 
-		if (filesize >= FileUtils.ONE_GB)
+		if (fileSize >= FileUtils.ONE_GB)
 		{
-			displaySize = String.valueOf(filesize/ FileUtils.ONE_GB);
+			displaySize = String.valueOf(fileSize/ FileUtils.ONE_GB);
 
-			log.debug("filesize long : " + filesize);
+			log.debug("fileSize long : " + fileSize);
 			log.debug("file size in GB : " + displaySize);
 		}
 		else
 		{
-			double file = (double) filesize;
+			double file = (double) fileSize;
 			DecimalFormat twoDForm = new DecimalFormat("#.####");
 
 			Double fileDisplaySize = file / ((double) FileUtils.ONE_GB);
 
-			log.debug("filesize long : " + filesize);
+			log.debug("file size long : " + fileSize);
 			log.debug("file size in GB : " + Double.valueOf(twoDForm.format(fileDisplaySize)));
 
 			displaySize = Double.valueOf(twoDForm.format(fileDisplaySize)).toString();
