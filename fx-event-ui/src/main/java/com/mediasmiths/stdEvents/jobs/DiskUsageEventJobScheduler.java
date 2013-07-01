@@ -14,7 +14,7 @@ public class DiskUsageEventJobScheduler {
 
 	private static final transient Logger logger = Logger.getLogger(DiskUsageEventJobScheduler.class);
 	
-	public void DiskUsageEventJobScheduleur()
+	public DiskUsageEventJobScheduleur()
 	{
 		try {
 			logger.info("Setting up daily disk usage job scheduler");
