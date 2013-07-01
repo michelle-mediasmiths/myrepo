@@ -60,7 +60,7 @@ public class DiskUsageJob implements Job
 		        beanReader.read(DiskUsageEvent.class, header, processors);
 		        beanReader.read(DiskUsageEvent.class, header, processors);
 		        
-		        while( (diskUsage = beanReader.read(DiskUsageEvent.class, processors)) != null ) {
+		        while( (diskUsage = beanReader.read(DiskUsageEvent.class, header, processors)) != null ) {
 		        	logger.info(String.format("lineNo=%s, rowNo=%s, customer=%s", beanReader.getLineNumber(), beanReader.getRowNumber(), diskUsage));
 		        	events.saveEvent(SYSTEM_NAMESPACE, EventNames.DISK_USAGE_EVENT, diskUsage);
 		        }
