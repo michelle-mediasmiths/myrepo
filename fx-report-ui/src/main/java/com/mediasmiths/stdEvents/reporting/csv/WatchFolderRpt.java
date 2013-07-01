@@ -9,6 +9,7 @@ import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.math.stat.descriptive.moment.StandardDeviation;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
@@ -97,17 +98,19 @@ public class WatchFolderRpt extends ReportUtils
 		{
 			WatchFolderAverage wfa = averages.get(aggregator);
 			long meanforFolder = wfa.getMean();
-			buildWatchFolderStatsLine(sb, aggregator, "all", wfa.high, wfa.low, meanforFolder);
+			double sdForFolder = wfa.getStandardDeviation();
+			buildWatchFolderStatsLine(sb, aggregator, "all", wfa.high, wfa.low, meanforFolder,sdForFolder);
 
-			final SortedMap<String, WatchFolderAverage.ExtAverage> extensionAverages = wfa.getExtensionAverages();
+			final SortedMap<String, ExtAverage> extensionAverages = wfa.getExtensionAverages();
 			if (extensionAverages.keySet().size() > 1)
 			{
 
 				for (String ext : extensionAverages.keySet())
 				{
-					WatchFolderAverage.ExtAverage extAverage = extensionAverages.get(ext);
+					ExtAverage extAverage = extensionAverages.get(ext);
 					long meanForExt = extAverage.getMean();
-					buildWatchFolderStatsLine(sb, aggregator, ext, extAverage.exthigh, extAverage.extlow, meanForExt);
+					double sdForExt = extAverage.getStandardDeviation();
+					buildWatchFolderStatsLine(sb, aggregator, ext, extAverage.high, extAverage.low, meanForExt,sdForExt);
 				}
 			}
 		}
@@ -124,7 +127,8 @@ public class WatchFolderRpt extends ReportUtils
 	                                       final String ext,
 	                                       final long high,
 	                                       final long low,
-	                                       final long meanForExt)
+	                                       final long meanForExt,
+	                                       final double standardDeviationForExt)
 	{
 		sb.append("Folder: ")
 		  .append(aggregator)
@@ -136,19 +140,21 @@ public class WatchFolderRpt extends ReportUtils
 		  .append(getHHMMSSmmm(new Period(low)))
 		  .append(" average: ")
 		  .append(getHHMMSSmmm(new Period(meanForExt)))
+		  .append(" sd: ")
+		  .append(getHHMMSSmmm(new Period((long)standardDeviationForExt)))
 		  .append("\r\n");
 	}
 
 
-	private class WatchFolderAverage
+	private class FileAverage
 	{
+
 		long numberInFolder;
 		long totalTime;
 
-		long high=Long.MIN_VALUE;
-		long low=Long.MAX_VALUE;
-
-		private SortedMap<String, ExtAverage> extensionAverages = new TreeMap();
+		long high = Long.MIN_VALUE;
+		long low = Long.MAX_VALUE;
+		StandardDeviation standardDeviation = new StandardDeviation();
 
 
 		public void addEntry(String ext, long time)
@@ -157,28 +163,23 @@ public class WatchFolderRpt extends ReportUtils
 			numberInFolder++;
 			totalTime += time;
 
-			ExtAverage extAverage = getExtensionAverages().get(ext);
-
-			if (extAverage == null)
+			if (time < low)
 			{
-				extAverage = new ExtAverage();
-				getExtensionAverages().put(ext.toLowerCase(), extAverage);
-			}
-			extAverage.addEntry(time);
-
-			if(time < low){
-				low=time;
+				low = time;
 			}
 
-			if(time>high){
-				high=time;
+			if (time > high)
+			{
+				high = time;
 			}
+
+			standardDeviation.increment((double) time);
 		}
 
 
 		public long getMean()
 		{
-			logger.debug(String.format("numberForExt in folder %d totalTimeforExt time %s", numberInFolder, totalTime));
+			logger.debug(String.format("number %d totalTime %s", numberInFolder, totalTime));
 
 			if (numberInFolder != 0)
 			{
@@ -190,61 +191,50 @@ public class WatchFolderRpt extends ReportUtils
 			}
 		}
 
+		public double getStandardDeviation(){
+			return standardDeviation.getResult();
+		}
+	}
+
+
+	private class WatchFolderAverage extends FileAverage
+	{
+
+		private SortedMap<String, ExtAverage> extensionAverages = new TreeMap();
+
+
+		public void addEntry(String ext, long time)
+		{
+
+			ExtAverage extAverage = getExtensionAverages().get(ext);
+
+			if (extAverage == null)
+			{
+				extAverage = new ExtAverage();
+				getExtensionAverages().put(ext.toLowerCase(), extAverage);
+			}
+			extAverage.addEntry(ext, time);
+			super.addEntry(ext, time);
+		}
+
 
 		public SortedMap<String, ExtAverage> getExtensionAverages()
 		{
 			return extensionAverages;
 		}
-
-
-		public void setExtensionAverages(final SortedMap<String, ExtAverage> extensionAverages)
-		{
-			this.extensionAverages = extensionAverages;
-		}
-
-
-		private class ExtAverage
-		{
-			long numberForExt;
-			long totalTimeforExt;
-			long exthigh=Long.MIN_VALUE;
-			long extlow=Long.MAX_VALUE;
-
-			public void addEntry(long time)
-			{
-				numberForExt++;
-				totalTimeforExt += time;
-
-				if(time < extlow){
-					extlow=time;
-				}
-
-				if(time>exthigh){
-					exthigh=time;
-				}
-			}
-
-
-			public long getMean()
-			{
-				logger.debug(String.format("numberForExt in folder %d totalTimeforExt time %s", numberInFolder, totalTime));
-
-				if (numberForExt != 0)
-				{
-					return totalTimeforExt / numberForExt;
-				}
-				else
-				{
-					return 0;
-				}
-			}
-		}
 	}
 
-	class WatchFolderStats{
+	private class ExtAverage extends FileAverage
+	{
+
+	}
+
+	class WatchFolderStats
+	{
 		String statsString;
 	}
-	
+
+
 	public List<FilePickupDetails> getReportList(List<EventEntity> events, DateTime startDate, DateTime endDate)
 	{
 		logger.debug(">>>getReportList");

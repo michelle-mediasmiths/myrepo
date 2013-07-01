@@ -1,6 +1,7 @@
 package com.mediasmiths.foxtel.agent.queue;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.Collection;
@@ -15,11 +16,15 @@ import java.util.Set;
 public class PickupPackage
 {
 
+	private final static Logger log = Logger.getLogger(PickupPackage.class);
+
 	/*
 	  Internally - all suffixes are lower case.
 	 */
     public final Set<String> suffixes = new HashSet<String>();
 	private Map<String, File> files = new HashMap<String, File>();
+	//records when files were first added to pickup packages, must be removed later after processing or memory will leak!
+	private static Map<String,Long> discoveredTimes = new HashMap<String,Long>();
 	private Map<String,Long> modifiedTimes= new HashMap<String, Long>();
 
 	private boolean isSuspectPickup = false;
@@ -159,9 +164,10 @@ public class PickupPackage
 				                                   + " trying to add " + cRootPath + ":" + cRootName);
 		}
 		this.files.put(ext.toLowerCase(), path);
+		addDiscoveryTime(path.getAbsolutePath(), System.currentTimeMillis());
 		this.modifiedTimes.put(ext.toLowerCase(), path.lastModified());
-
 	}
+
 
 	public File getPickUp(String extension)
 	{
@@ -171,13 +177,16 @@ public class PickupPackage
 		return this.files.get(extension.toLowerCase());
 	}
 
-	public Long getLastModified(String extension){
-		if(extension == null)
+
+	public Long getLastModified(String extension)
+	{
+		if (extension == null)
 			throw new IllegalArgumentException("Empty extension");
 
 		return this.modifiedTimes.get(extension.toLowerCase());
 	}
-	
+
+
 	public Collection<File> getAllFiles(){
 		return this.files.values();
 	}
@@ -191,4 +200,59 @@ public class PickupPackage
 		return files.keySet();
 	}
 
+
+
+	/**
+	 * Records the time the file at a given path was 'discovered'/considered stable for processing. Used to report time from stability to process finishing
+	 * @param path
+	 * @param time
+	 */
+	private static void addDiscoveryTime(String path, Long time)
+	{
+
+		if (!discoveredTimes.containsKey(path))//first time this method has been called for this path
+		{
+			discoveredTimes.put(path, time);
+		}
+	}
+
+
+	/**
+	 * Returns the time that the path requested was discovered, also removes the record of discovery so this method should only be called once for a given file path
+	 * @param ext
+	 * @return
+	 */
+	public Long pullTimeDiscovered(String ext)
+	{
+
+		File f = getPickUp(ext);
+		String filePath = f.getAbsolutePath();
+
+		if (discoveredTimes.containsKey(filePath))
+		{
+			Long ret = discoveredTimes.get(filePath);
+			discoveredTimes.remove(filePath);
+			return ret;
+		}
+		else
+		{
+			log.error("No discovered time for " + filePath + " falling back to last modified time");
+			return getLastModified(ext);
+		}
+	}
+
+
+	/**
+	 * Clears the structure recording the times that files are discovered, as files appearing in drop folders and being deleted
+	 * before they were processed has the potential to cause memory leaks this method should be called when it is known that there
+	 * are no files waiting to be processed
+	 */
+	public static void clearDiscoveredTimes()
+	{
+		if (discoveredTimes.size() > 0)
+		{
+			log.debug(String.format("Clearing %d discovered times",discoveredTimes.size()));
+			discoveredTimes.clear();
+		}
+	}
 }

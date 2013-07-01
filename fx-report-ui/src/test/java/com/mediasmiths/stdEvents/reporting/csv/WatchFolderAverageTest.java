@@ -88,12 +88,12 @@ public class WatchFolderAverageTest
 
 		final WatchFolderRpt.WatchFolderStats stats = toTest.getStats(files);
 
-		assertEquals("Folder: AGGREGATOR 1 all high: 00:00:04:000 low: 00:00:01:000 average: 00:00:02:500\r\n" +
-		             "Folder: AGGREGATOR 1 mxf high: 00:00:04:000 low: 00:00:03:000 average: 00:00:03:500\r\n" +
-		             "Folder: AGGREGATOR 1 xml high: 00:00:02:000 low: 00:00:01:000 average: 00:00:01:500\r\n" +
-		             "Folder: AGGREGATOR 2 all high: 00:00:08:000 low: 00:00:02:000 average: 00:00:04:333\r\n" +
-		             "Folder: AGGREGATOR 2 mxf high: 00:00:08:000 low: 00:00:03:000 average: 00:00:05:500\r\n" +
-		             "Folder: AGGREGATOR 2 xml high: 00:00:02:000 low: 00:00:02:000 average: 00:00:02:000\r\n" +
-		             "Folder: AGGREGATOR 3 all high: 00:00:08:000 low: 00:00:08:000 average: 00:00:08:000\r\n", stats.statsString);
+		assertEquals("Folder: AGGREGATOR 1 all high: 00:00:04:000 low: 00:00:01:000 average: 00:00:02:500 sd: 00:00:01:290\r\n" +
+		             "Folder: AGGREGATOR 1 mxf high: 00:00:04:000 low: 00:00:03:000 average: 00:00:03:500 sd: 00:00:00:707\r\n" +
+		             "Folder: AGGREGATOR 1 xml high: 00:00:02:000 low: 00:00:01:000 average: 00:00:01:500 sd: 00:00:00:707\r\n" +
+		             "Folder: AGGREGATOR 2 all high: 00:00:08:000 low: 00:00:02:000 average: 00:00:04:333 sd: 00:00:03:214\r\n" +
+		             "Folder: AGGREGATOR 2 mxf high: 00:00:08:000 low: 00:00:03:000 average: 00:00:05:500 sd: 00:00:03:535\r\n" +
+		             "Folder: AGGREGATOR 2 xml high: 00:00:02:000 low: 00:00:02:000 average: 00:00:02:000 sd: 00:00:00:000\r\n" +
+		             "Folder: AGGREGATOR 3 all high: 00:00:08:000 low: 00:00:08:000 average: 00:00:08:000 sd: 00:00:00:000\r\n", stats.statsString);
 	}
 }

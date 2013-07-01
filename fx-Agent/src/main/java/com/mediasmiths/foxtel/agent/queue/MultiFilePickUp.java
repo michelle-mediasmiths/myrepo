@@ -239,8 +239,10 @@ public class MultiFilePickUp implements IFilePickup
 
 		File[] candidateFiles = getTimeOrderedPendingFiles();
 
-		if (candidateFiles == null || candidateFiles.length == 0)
+		if (candidateFiles == null || candidateFiles.length == 0){
+			PickupPackage.clearDiscoveredTimes(); //no files waiting to be processed so remove any existing discovery times
 			return null;
+		}
 
 		for (File f: candidateFiles)
 		{

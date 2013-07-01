@@ -386,7 +386,7 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 				FilePickupDetails pd = new FilePickupDetails();
 				pd.setFilename(f.getName());
 				pd.setFilePath(pp.getRootPath());
-				pd.setTimeDiscovered(pp.getLastModified(ext));
+				pd.setTimeDiscovered(pp.pullTimeDiscovered(ext));
 				pd.setTimeProcessed(timeProcessed);
 				pd.setAggregator(watchedFolders.getNameForWatchFolder(pp.getRootPath()));
 
