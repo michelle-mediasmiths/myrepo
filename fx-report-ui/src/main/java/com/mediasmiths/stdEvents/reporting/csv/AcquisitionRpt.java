@@ -197,9 +197,13 @@ public class AcquisitionRpt extends ReportUtils
 					new FileWriter(new StringBuilder(REPORT_LOC).append(reportName).append(".csv").toString()),
 					CsvPreference.STANDARD_PREFERENCE);
 
+			final String[] displayHeader = { "dateRange", "title", "materialID", "channels", "aggregatorID", "tapeDel", "fileDel",
+					"format", "FileSize (GB)", "titleLength" };
+
 			final String[] header = { "dateRange", "title", "materialID", "channels", "aggregatorID", "tapeDel", "fileDel",
-					"format", "Filesize (GB)", "titleLength" };
-			beanWriter.writeHeader(header);
+			                                 "format", "filesize", "titleLength" };
+
+			beanWriter.writeHeader(displayHeader);
 
 			final CellProcessor[] processors = getProcessor();
 			for (Acquisition title : titles)
