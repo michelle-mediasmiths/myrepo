@@ -13,15 +13,17 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
-import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.io.CsvMapWriter;
+import org.supercsv.io.ICsvMapWriter;
 import org.supercsv.prefs.CsvPreference;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AcquisitionRpt extends ReportUtils
 {
@@ -188,49 +190,61 @@ public class AcquisitionRpt extends ReportUtils
 
 	private void createCSV(final List<Acquisition> titles, final String reportName)
 	{
-		log.debug(">>>createCSV");
-		ICsvBeanWriter beanWriter = null;
+		ICsvMapWriter csvwriter = null;
 		try
 		{
-			log.info(String.format("Writing Report Name: %s to %s", reportName, REPORT_LOC));
-			beanWriter = new CsvBeanWriter(
-					new FileWriter(new StringBuilder(REPORT_LOC).append(reportName).append(".csv").toString()),
-					CsvPreference.STANDARD_PREFERENCE);
+			log.info("reportName: " + reportName);
+			FileWriter fileWriter = new FileWriter(REPORT_LOC + reportName + ".csv");
+			csvwriter = new CsvMapWriter(fileWriter, CsvPreference.STANDARD_PREFERENCE);
+			log.info("Saving to: " + REPORT_LOC);
 
-			final String[] displayHeader = { "dateRange", "title", "materialID", "channels", "aggregatorID", "tapeDel", "fileDel",
-					"format", "Filesize (GB)", "titleLength" };
-
-			final String[] header = { "dateRange", "title", "materialID", "channels", "aggregatorID", "tapeDel", "fileDel",
-			                                 "format", "filesize", "titleLength" };
-
-			beanWriter.writeHeader(displayHeader);
+			final String[] header = {"dateRange",
+			                         "title",
+			                         "materialID",
+			                         "channels",
+			                         "aggregatorID",
+			                         "tapeDel",
+			                         "fileDel",
+			                         "format",
+			                         "Filesize (GB)",
+			                         "titleLength"};
 
 			final CellProcessor[] processors = getProcessor();
+			csvwriter.writeHeader(header);
+
 			for (Acquisition title : titles)
 			{
-				beanWriter.write(title, header, processors);
+				final Map<String, Object> map = new HashMap<String, Object>();
+
+				map.put(header[0], title.getDateRange());
+				map.put(header[1], title.getTitle());
+				map.put(header[2], title.getMaterialID());
+				map.put(header[3], title.getChannels());
+				map.put(header[4], title.getAggregatorID());
+				map.put(header[5], title.getTapeDel());
+				map.put(header[6], title.getFileDel());
+				map.put(header[7], title.getFormat());
+				map.put(header[8], title.getFilesize());
+				map.put(header[9], title.getTitleLength());
+
+				csvwriter.write(map, header, processors);
 			}
 		}
 		catch (IOException e)
 		{
-			log.error(String.format(
-					"An exception was caught whilst writing Acquisition Report %s for the following reason: %s",
-					reportName,
-					e.getMessage()));
+			log.error("error writing report",e);
 		}
 		finally
 		{
-			if (beanWriter != null)
+			if (csvwriter != null)
 			{
 				try
 				{
-					beanWriter.close();
+					csvwriter.close();
 				}
 				catch (IOException e)
 				{
-					log.error(String.format(
-							"An exception was caught whilst closing the report writer for the following reason: %s",
-							e.getMessage()));
+					log.error("IOException closing csv writer", e);
 				}
 			}
 		}
