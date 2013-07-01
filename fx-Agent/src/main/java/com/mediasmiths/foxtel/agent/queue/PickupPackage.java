@@ -24,7 +24,8 @@ public class PickupPackage
     public final Set<String> suffixes = new HashSet<String>();
 	private Map<String, File> files = new HashMap<String, File>();
 	//records when files were first added to pickup packages, must be removed later after processing or memory will leak!
-	private static Map<String,Long> discoveredTimes = new HashMap<String,Long>();
+	//a reference to this map may also be held in the IFilePickup that creates pickupPackages
+	private Map<String,Long> discoveredTimes;
 	private Map<String,Long> modifiedTimes= new HashMap<String, Long>();
 
 	private boolean isSuspectPickup = false;
@@ -34,8 +35,13 @@ public class PickupPackage
 	private String rootPath = null;
 	private String rootName = null;
 
-
 	public PickupPackage(String... suffixes)
+	{
+		this(new HashMap<String,Long>(), suffixes);
+		log.error("Calling constructor for PickupPackage that is only intended for test classes");
+	}
+
+	public PickupPackage(Map<String,Long> discoveredTimes, String... suffixes)
 	{
 		 if (suffixes == null || suffixes.length == 0)
 			 throw new IllegalArgumentException("No suffixes designated for a pickup collection.");
@@ -47,7 +53,7 @@ public class PickupPackage
 
 			 this.suffixes.add(e.toLowerCase());
 		 }
-
+		this.discoveredTimes=discoveredTimes;
 	}
 
 	/**
@@ -207,7 +213,7 @@ public class PickupPackage
 	 * @param path
 	 * @param time
 	 */
-	private static void addDiscoveryTime(String path, Long time)
+	private void addDiscoveryTime(String path, Long time)
 	{
 
 		if (!discoveredTimes.containsKey(path))//first time this method has been called for this path
@@ -241,18 +247,4 @@ public class PickupPackage
 		}
 	}
 
-
-	/**
-	 * Clears the structure recording the times that files are discovered, as files appearing in drop folders and being deleted
-	 * before they were processed has the potential to cause memory leaks this method should be called when it is known that there
-	 * are no files waiting to be processed
-	 */
-	public static void clearDiscoveredTimes()
-	{
-		if (discoveredTimes.size() > 0)
-		{
-			log.debug(String.format("Clearing %d discovered times",discoveredTimes.size()));
-			discoveredTimes.clear();
-		}
-	}
 }

@@ -13,6 +13,7 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -115,6 +116,10 @@ public class MultiFilePickUp implements IFilePickup
 
 	/** the valid extension in a multi file pick up */
 	private final String[] fileExtensions;
+
+	/** the times that files were first discovered to be stable **/
+	/** passed into created pickupPackages **/
+	private Map<String,Long> discoveredTimes = new HashMap<String,Long>();
 
 
     @Inject
@@ -240,7 +245,7 @@ public class MultiFilePickUp implements IFilePickup
 		File[] candidateFiles = getTimeOrderedPendingFiles();
 
 		if (candidateFiles == null || candidateFiles.length == 0){
-			PickupPackage.clearDiscoveredTimes(); //no files waiting to be processed so remove any existing discovery times
+			clearDiscoveredTimes(); //no files waiting to be processed so remove any existing discovery times
 			return null;
 		}
 
@@ -272,7 +277,7 @@ public class MultiFilePickUp implements IFilePickup
 	private PickupPackage getPickUpPackageForFile(final File f)
 	{
 
-		PickupPackage pickUp = new PickupPackage(fileExtensions);
+		PickupPackage pickUp = new PickupPackage(discoveredTimes,fileExtensions);
 
 		pickUp.addPickUp(f);
 
@@ -584,6 +589,20 @@ public class MultiFilePickUp implements IFilePickup
 	public void setStabilityTimes(Map<File, Long> stabilityTimes)
 	{
 		this.stabilityTimes = stabilityTimes;
+	}
+
+	/**
+	 * Clears the structure recording the times that files are discovered, as files appearing in drop folders and being deleted
+	 * before they were processed has the potential to cause memory leaks this method should be called when it is known that there
+	 * are no files waiting to be processed
+	 */
+	public void clearDiscoveredTimes()
+	{
+		if (discoveredTimes.size() > 0)
+		{
+			logger.debug(String.format("Clearing %d discovered times",discoveredTimes.size()));
+			discoveredTimes.clear();
+		}
 	}
 
 }
