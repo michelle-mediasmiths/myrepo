@@ -36,38 +36,37 @@ public class DiskUsageJob implements Job
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException 
 	{
-		    ICsvBeanReader beanReader = null;
-		    String filename = DISK_USAGE_LOC;
-		    DiskUsageEvent diskUsage = null;
-		    try{
-			    try {
-			    	logger.info("Reading Disk Usage CSV : " + filename);
-			    	beanReader = new CsvBeanReader(new FileReader(filename), CsvPreference.STANDARD_PREFERENCE);
-			            
-			        // the header elements are used to map the values to the bean (names must match)
-			        final String[] header = beanReader.getHeader(true);
-			        final CellProcessor[] processors = getProcessors();
-			            
-			        while( (diskUsage = beanReader.read(DiskUsageEvent.class, header, processors)) != null ) {
-			        	System.out.println(String.format("lineNo=%s, rowNo=%s, customer=%s", beanReader.getLineNumber(), beanReader.getRowNumber(), diskUsage));
-			        	events.saveEvent(SYSTEM_NAMESPACE, EventNames.DISK_USAGE_EVENT, diskUsage);
-			        }
-			    }
-			    catch(FileNotFoundException e)
-			    {
-			    	logger.warn("File Not Found Exception while attempting to read " + filename);
-			    }
-			    finally {
-			    	if( beanReader != null ) {
-			    		beanReader.close();
-			        }
-			    }
-			}
-		    catch(IOException ioe)
-		    {
-		    	logger.warn("File IO Exception while attempting to read " + filename);
+	    ICsvBeanReader beanReader = null;
+	    String filename = DISK_USAGE_LOC;
+	    DiskUsageEvent diskUsage = null;
+	    try{
+		    try {
+		    	logger.info("Reading Disk Usage CSV : " + filename);
+		    	beanReader = new CsvBeanReader(new FileReader(filename), CsvPreference.STANDARD_PREFERENCE);
+		            
+		        // the header elements are used to map the values to the bean (names must match)
+		        final String[] header = beanReader.getHeader(true);
+		        final CellProcessor[] processors = getProcessors();
+		            
+		        while( (diskUsage = beanReader.read(DiskUsageEvent.class, header, processors)) != null ) {
+		        	System.out.println(String.format("lineNo=%s, rowNo=%s, customer=%s", beanReader.getLineNumber(), beanReader.getRowNumber(), diskUsage));
+		        	events.saveEvent(SYSTEM_NAMESPACE, EventNames.DISK_USAGE_EVENT, diskUsage);
+		        }
 		    }
-		    //return diskUsage;
+		    catch(FileNotFoundException e)
+		    {
+		    	logger.warn("File Not Found Exception while attempting to read " + filename);
+		    }
+		    finally {
+		    	if( beanReader != null ) {
+		    		beanReader.close();
+		        }
+		    }
+		}
+	    catch(IOException ioe)
+	    {
+	    	logger.warn("File IO Exception while attempting to read " + filename);
+	    }
 	}
 	
 	private static CellProcessor[] getProcessors() 
