@@ -23,12 +23,8 @@ import com.mediasmiths.foxtel.ip.event.EventService;
 
 public class DiskUsageJob implements Job 
 {
-	@Inject
-	@Named("diskUsageLoc")
-	public String DISK_USAGE_LOC;
-	
-	@Inject
-	private EventService events;
+	private static String diskUsageLoc;
+	private static EventService events;
 	
 	private static final transient Logger logger = Logger.getLogger(DiskUsageJob.class);
 	private static final String SYSTEM_NAMESPACE = "http://www.foxtel.com.au/ip/system";
@@ -37,7 +33,7 @@ public class DiskUsageJob implements Job
 	public void execute(JobExecutionContext arg0) throws JobExecutionException 
 	{
 	    ICsvBeanReader beanReader = null;
-	    String filename = DISK_USAGE_LOC;
+	    String filename = diskUsageLoc;
 	    DiskUsageEvent diskUsage = null;
 	    try{
 		    try {
@@ -69,6 +65,16 @@ public class DiskUsageJob implements Job
 	    }
 	}
 	
+	public static void setEvents(EventService events)
+	{
+		DiskUsageJob.events = events;
+	}
+	
+	public static void setLocation(String location)
+	{
+		DiskUsageJob.diskUsageLoc = location;
+	}
+
 	private static CellProcessor[] getProcessors() 
 	{  
 		final CellProcessor[] processors = new CellProcessor[] { 
