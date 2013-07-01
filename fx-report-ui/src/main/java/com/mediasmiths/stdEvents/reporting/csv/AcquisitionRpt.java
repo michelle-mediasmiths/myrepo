@@ -198,7 +198,7 @@ public class AcquisitionRpt extends ReportUtils
 					CsvPreference.STANDARD_PREFERENCE);
 
 			final String[] header = { "dateRange", "title", "materialID", "channels", "aggregatorID", "tapeDel", "fileDel",
-					"format", "filesize", "titleLength" };
+					"format", "Filesize (GB)", "titleLength" };
 			beanWriter.writeHeader(header);
 
 			final CellProcessor[] processors = getProcessor();
