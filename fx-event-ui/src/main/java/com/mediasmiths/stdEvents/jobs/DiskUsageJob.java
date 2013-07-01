@@ -51,7 +51,7 @@ public class DiskUsageJob implements Job
 		        String headerDesc = "";
 		        for (String col: header)
 		        {
-		        	headerDesc += "col, ";
+		        	headerDesc +=  col + ", ";
 		        }
 		        logger.info("CSV header is : " + headerDesc);
 		        
