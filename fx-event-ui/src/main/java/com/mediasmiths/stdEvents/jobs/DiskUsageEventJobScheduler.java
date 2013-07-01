@@ -35,6 +35,8 @@ public class DiskUsageEventJobScheduler {
 			DiskUsageJob.setEvents(events);
 			DiskUsageJob.setLocation(DISK_USAGE_LOC);
 			
+			logger.info("CSV file from properties file: " + DISK_USAGE_LOC);
+			
 		    JobDetail job = newJob(DiskUsageJob.class)
 		        .withIdentity("dailyDiskUsageJob", "diskUsageEvent")
 		        .build();
