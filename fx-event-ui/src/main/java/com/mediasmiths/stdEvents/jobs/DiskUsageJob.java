@@ -45,7 +45,8 @@ public class DiskUsageJob implements Job
 		    	beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
 		            
 		        // the header elements are used to map the values to the bean (names must match)
-		        final String[] header = beanReader.getHeader(true);
+		    	beanReader.getHeader(false);
+		        final String[] header = {"channel", "hrSize", "tsmSize", "lrSize", "othersSize", "totalSize"};
 		        final CellProcessor[] processors = getProcessors();
 		        
 		        String headerDesc = "";
@@ -55,10 +56,11 @@ public class DiskUsageJob implements Job
 		        }
 		        logger.info("CSV header is : " + headerDesc);
 		        
-		        //Discard first row
+		        //Discard first 2 rows
+		        beanReader.read(DiskUsageEvent.class, header, processors);
 		        beanReader.read(DiskUsageEvent.class, header, processors);
 		        
-		        while( (diskUsage = beanReader.read(DiskUsageEvent.class, header, processors)) != null ) {
+		        while( (diskUsage = beanReader.read(DiskUsageEvent.class, processors)) != null ) {
 		        	logger.info(String.format("lineNo=%s, rowNo=%s, customer=%s", beanReader.getLineNumber(), beanReader.getRowNumber(), diskUsage));
 		        	events.saveEvent(SYSTEM_NAMESPACE, EventNames.DISK_USAGE_EVENT, diskUsage);
 		        }
