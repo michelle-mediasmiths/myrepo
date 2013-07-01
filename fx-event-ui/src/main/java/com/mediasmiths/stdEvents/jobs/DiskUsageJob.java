@@ -1,5 +1,6 @@
 package com.mediasmiths.stdEvents.jobs;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -40,7 +41,8 @@ public class DiskUsageJob implements Job
 	    try{
 		    try {
 		    	logger.info("Reading Disk Usage CSV : " + filename);
-		    	beanReader = new CsvBeanReader(new InputStreamReader(new URL(filename).openStream()), CsvPreference.STANDARD_PREFERENCE);
+		    	BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(filename).openStream()));
+		    	beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
 		            
 		        // the header elements are used to map the values to the bean (names must match)
 		        final String[] header = beanReader.getHeader(true);
