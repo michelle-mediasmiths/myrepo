@@ -19,7 +19,8 @@ public class UningestButton extends ButtonClickHandler
 	{
 		String houseID = (String) messageAttributes.getAttribute(Attribute.HOUSE_ID);
 		AssetType type = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-		log.info(String.format("Uningest Requested for asset %s",houseID));
+		String requestedBy = messageAttributes.getAttributeAsString(Attribute.TASK_CREATED_BY);
+		log.info(String.format("Uningest Requested for asset %s by user %s",houseID, requestedBy));
 		
 		if(type==MayamAssetType.MATERIAL.getAssetType()){
 			try
