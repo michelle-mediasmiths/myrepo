@@ -39,16 +39,21 @@
 			<artifactId>fx-CarbonWFSClient</artifactId>
 			<version>3.0-SNAPSHOT</version>
 		</dependency>
-			<dependency>
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-TcReporting</artifactId>
+			<version>3.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-TcAdapterAPI</artifactId>
 			<version>3.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.mediasmiths.foxtel</groupId>
-			<artifactId>fx-PathResolver</artifactId>
-			<version>3.0-SNAPSHOT</version>
-		</dependency>
+		<groupId>com.mediasmiths.foxtel</groupId>
+		<artifactId>fx-PathResolver</artifactId>
+		<version>3.0-SNAPSHOT</version>
+	</dependency>
 
 		<!-- end foxtel solution dependencies -->
 

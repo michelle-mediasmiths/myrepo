@@ -8,6 +8,7 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Purge;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.TranscodeJob;
 import org.joda.time.DateTime;
 
 import javax.ws.rs.DELETE;
@@ -92,4 +93,8 @@ public interface QueryAPI
 	@GET
 	@Path("ComplianceByDate")
 	List<ComplianceLogging> getComplianceByDate(DateTime start, DateTime end);
+
+	@GET
+	@Path("TranscodeJobsByDate")
+	List<TranscodeJob> getTranscodeJobsByDate(DateTime start, DateTime end);
 }

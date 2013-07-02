@@ -16,6 +16,7 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.ExtendedPublishing;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Purge;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.TranscodeJob;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.reporting.csv.AcquisitionRpt;
@@ -145,6 +146,11 @@ public class ReportUIImpl implements ReportUI
 			logger.info("Generating Disk Usage Report");
 			getDiskUsageCSV(startDate, endDate, reportName);
 		}
+		else if(rptType.equals("Transcode")){
+			logger.info("Generating transcode report");
+			getTranscoderLoadCSV(startDate,endDate,reportName);
+		}
+
 		logger.debug("<<<chooseReport");
 	}
 
@@ -264,16 +270,8 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly = true)
 	private void getTranscoderLoadCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		//TODO - IMPLEMENT
-		/*List<EventEntity> events = queryApi.getByNamespaceWindow("http:www.foxtel.com.au/ip/tc", MAX);
-		List<EventEntity> valid = new ArrayList<EventEntity>();
-		for (EventEntity event : events)
-		{
-			boolean within = checkDate(event.getTime());
-			if (within)
-				valid.add(event);
-		}
-		transcoderLoad.writeTranscoderLoad(valid, startDate, endDate, REPORT_NAME);*/
+		List<TranscodeJob> jobs = queryApi.getTranscodeJobsByDate(start,end);
+		transcoderLoad.writeTranscoderLoad(jobs, start, end, reportName);
 	}
 	
 	@Transactional(readOnly = true)

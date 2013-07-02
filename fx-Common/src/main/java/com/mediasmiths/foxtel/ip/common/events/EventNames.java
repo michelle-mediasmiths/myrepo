@@ -63,4 +63,5 @@ public class EventNames
 	public static final String EXTENDED_PUBLISHING_TASK_EVENT = "ExtendedPublishingTask";
 	public static final String COMPLIANCE_LOGGING_TASK_EVENT = "ComplianceLoggingTaskEvent";
 	public static final String DISK_USAGE_EVENT = "DiskUsageEvent";
+	public static final String TRANSCODE_REPORT_DATA = "TranscodeReportData";
 }

@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.tc.guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mediasmiths.foxtel.carbonwfs.guice.WfsClientModule;
+import com.mediasmiths.foxtel.ip.event.guice.EventServiceModule;
 import com.mediasmiths.std.guice.thymeleaf.ThymeleafModule;
 import com.mediasmiths.std.guice.web.rest.setup.AbstractRESTGuiceSetup;
 import com.mediasmiths.std.io.PropertyFile;
@@ -24,6 +25,7 @@ public class TCAdapterSetup extends AbstractRESTGuiceSetup
 		modules.add(new TCAdapterModule());
 		modules.add(new WfsClientModule());
 		modules.add(new ThymeleafModule());
+		modules.add(new EventServiceModule());
 
 	}
 

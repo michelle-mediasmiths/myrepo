@@ -1,11 +1,5 @@
 package com.mediasmiths.foxtel.tc.rest.impl;
 
-import java.net.URI;
-import java.sql.Time;
-
-import org.apache.cxf.binding.soap.tcp.TCPConduit;
-import org.junit.Test;
-
 import com.google.inject.Injector;
 import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
 import com.mediasmiths.foxtel.tc.rest.api.TCBugOptions;
@@ -24,11 +18,13 @@ import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
 import com.mediasmiths.std.guice.web.rest.CoreRestServicesModule;
 import com.mediasmiths.std.io.PropertyFile;
 
+import java.net.URI;
+
 public class PreviewExportJobs
 {
 
-	static String inputFileLocation = "/Volumes/foxtel/tcinput/input.mxf";
-	static String transcodeBaseOutputLocation = "/Volumes/foxtel/tcoutput/";
+	static String inputFileLocation = "/tmp/input.mxf";
+	static String transcodeBaseOutputLocation = "/tmp/tcoutput/";
 	
 	static TCRestService svc;
 	
@@ -40,7 +36,7 @@ public class PreviewExportJobs
 
 		svc = injector.getInstance(JAXRSProxyClientFactory.class).createClient(
 				TCRestService.class,
-				URI.create("http://192.168.2.22:8080/fx-TcAdapter"));
+				URI.create("http://127.0.0.1:8080/fx-TcAdapter"));
 	
 		String complianceJob = generateComplianceJob(TCOutputPurpose.MPG4);
 		System.out.println("***************************");
@@ -105,15 +101,15 @@ public class PreviewExportJobs
 
 		jobParams.priority = 1;
 
-		jobParams.ftpupload = getBaseFtpUploadParameters();
-		if(p==TCOutputPurpose.MPG4){
-			jobParams.ftpupload.filename =  jobParams.outputFileBasename + ".mpg";
-		}
-			
-		jobParams.ftpupload.folder = "exports/Exports/Lifestyle/Publicity";
+//		jobParams.ftpupload = getBaseFtpUploadParameters();
+//		if(p==TCOutputPurpose.MPG4){
+//			jobParams.ftpupload.filename =  jobParams.outputFileBasename + ".mpg";
+//		}
+//
+//		jobParams.ftpupload.folder = "exports/Exports/Lifestyle/Publicity";
 
-		return svc.createPCPXML(jobParams);
-//		return svc.createJob(jobParams);
+//		return svc.createPCPXML(jobParams);
+		return svc.createJob(jobParams);
 	}
 
 	private static String generateCaptionJob() throws Exception
@@ -139,7 +135,8 @@ public class PreviewExportJobs
 		jobParams.ftpupload.filename = jobParams.outputFileBasename + ".mpg";
 		jobParams.ftpupload.folder = "captions/CaptionFTP/Unassigned";
 
-		return svc.createPCPXML(jobParams);
+//		return svc.createPCPXML(jobParams);
+		return svc.createJob(jobParams);
 
 	}
 
@@ -175,7 +172,8 @@ public class PreviewExportJobs
 		
 		jobParams.ftpupload.folder = "exports/Exports/Lifestyle/Compliance";
 
-		return svc.createPCPXML(jobParams);
+//		return svc.createPCPXML(jobParams);
+		return svc.createJob(jobParams);
 
 	}
 
