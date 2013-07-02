@@ -68,20 +68,14 @@ public class DiskUsageJob implements Job
 		        
 		        
 		        
-		        ICsvListReader listReader = new CsvListReader(new BufferedReader(new InputStreamReader(new URL(filename).openStream())), new CsvPreference.Builder('"', '\t', "\r\n").build());
+		        ICsvListReader listReader = new CsvListReader(new BufferedReader(new InputStreamReader(new URL(filename).openStream())), new CsvPreference.Builder(',', '\t', "\r\n").build());
 		            List<String> row = null;
 		            while ((row = listReader.read()) != null) {
 
 		                if (listReader.length() != header.length) {
 		                    // skip row with invalid number of columns
 		                	logger.info("Skipping invalid row, length : " + listReader.length()  + ", header length : " + header.length);
-		                	String listText = "";
-		                	for (int i = 0; i < listReader.length(); i++)
-		                	{
-		                		String item = listReader.get(i);
-		                		listText += item + ", ";
-		                	}
-		                	logger.info("List reader: " + listText);
+
 		                	continue;
 		                }
 
