@@ -17,7 +17,7 @@
 	</MailData>
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
-		<eventname>QCProblemwithTCMedia</eventname>
+		<eventname>QCProblemWithTCMedia</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.AutoQcEmailTemplate">
 			<subject>URGENT ISSUE: QC Fail at TX transfer for item Material ID(%s), Title(%s)</subject>
 			<body>Cerify has failed item. Please resolve or transfer manually to TX.</body>
