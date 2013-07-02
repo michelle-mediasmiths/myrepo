@@ -69,63 +69,36 @@ public class DiskUsageJob implements Job
 		        
 		        
 		        ICsvListReader listReader = new CsvListReader(new BufferedReader(new InputStreamReader(new URL(filename).openStream())), CsvPreference.STANDARD_PREFERENCE);
-		            List<String> row = null;
-		            while ((row = listReader.read()) != null) {
+	            List<String> row = null;
+	            
+	            //Discard first 2 rows
+	            listReader.read();
+	            listReader.read();
+	            
+	            while ((row = listReader.read()) != null) {
 
-		                if (listReader.length() != header.length) {
-		                    // skip row with invalid number of columns
-		                	logger.info("Skipping invalid row, length : " + listReader.length()  + ", header length : " + header.length);
+	                if (listReader.length() != header.length) {
+	                    // skip row with invalid number of columns
+	                	logger.info("Skipping invalid row, length : " + listReader.length()  + ", header length : " + header.length);
+	                	continue;
+	                }
 
-		                	continue;
-		                }
+	                // safe to create map now
+	                Map<String, String> rowMap = new HashMap<String, String>();
+	                Util.filterListToMap(rowMap, header, row);
+	                logger.info("Row map : " + rowMap);
+	                
+	                DiskUsageEvent diskUsageEvent = new DiskUsageEvent();
+	                diskUsageEvent.setChannel(rowMap.get(header[0]));
+	                diskUsageEvent.setHrSize(rowMap.get(header[1]));
+	                diskUsageEvent.setTsmSize(rowMap.get(header[2]));
+	                diskUsageEvent.setLrSize(rowMap.get(header[3]));
+	                diskUsageEvent.setOthersSize(rowMap.get(header[4]));
+	                diskUsageEvent.setTotalSize(rowMap.get(header[5]));
+	                events.saveEvent(SYSTEM_NAMESPACE, EventNames.DISK_USAGE_EVENT, diskUsageEvent);
 
-		                // safe to create map now
-		                Map<String, String> rowMap = new HashMap<String, String>();
-		                Util.filterListToMap(rowMap, header, row);
-		                logger.info("Row map : " + rowMap);
-		                
-		                DiskUsageEvent diskUsageEvent = new DiskUsageEvent();
-		                diskUsageEvent.setChannel(rowMap.get(header[0]));
-		                diskUsageEvent.setHrSize(rowMap.get(header[1]));
-		                diskUsageEvent.setTsmSize(rowMap.get(header[2]));
-		                diskUsageEvent.setLrSize(rowMap.get(header[3]));
-		                diskUsageEvent.setOthersSize(rowMap.get(header[4]));
-		                diskUsageEvent.setTotalSize(rowMap.get(header[5]));
-		                events.saveEvent(SYSTEM_NAMESPACE, EventNames.DISK_USAGE_EVENT, diskUsageEvent);
-
-		            }
-		            listReader.close();
-		        
-		        
-		        
-		        
-		        
-		        boolean endOfFile = true;
-		        while (!endOfFile)
-		        {
-		        	try
-		        	{
-				        diskUsage = beanReader.read(DiskUsageEvent.class, header, processors);
-				        if (diskUsage != null)
-				        {
-				        	logger.info(String.format("lineNo=%s, rowNo=%s, customer=%s", beanReader.getLineNumber(), beanReader.getRowNumber(), diskUsage));
-				        	events.saveEvent(SYSTEM_NAMESPACE, EventNames.DISK_USAGE_EVENT, diskUsage);
-				        }
-				        else {
-				        	logger.warn("Null value read on line: " + beanReader.getRowNumber());
-				        }
-			        } 
-		        	catch (SuperCsvConstraintViolationException ex) {
-			            logger.warn("NON CORRECT VALUE ENCOUNTERD ON ROW "+beanReader.getRowNumber(), ex);
-			            endOfFile = false;
-			       } catch (SuperCsvCellProcessorException ex){
-			           logger.warn("PARSER EXCEPTION ON ROW "+beanReader.getRowNumber(), ex);
-			           endOfFile = false;
-			       } catch (org.supercsv.exception.SuperCsvException ex){
-			            logger.warn("ERROR ON ROW "+beanReader.getRowNumber(), ex);
-			            endOfFile = true;
-			       }
-		        }
+	            }
+	            listReader.close();
 		    }
 		    catch(FileNotFoundException e)
 		    {
