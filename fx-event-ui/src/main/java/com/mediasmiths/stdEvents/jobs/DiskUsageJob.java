@@ -72,11 +72,7 @@ public class DiskUsageJob implements Job
 		            List<String> row = null;
 		            while ((row = listReader.read()) != null) {
 
-		                if (listReader.length() != header.length) {
-		                    // skip row with invalid number of columns
-		                	logger.info("Skipping invalid row");
-		                    continue;
-		                }
+
 
 		                // safe to create map now
 		                Map<String, String> rowMap = new HashMap<String, String>();
@@ -84,6 +80,12 @@ public class DiskUsageJob implements Job
 
 		                // do something with your map
 		                logger.info("Row map : " + rowMap);
+		                
+		                if (listReader.length() != header.length) {
+		                    // skip row with invalid number of columns
+		                	logger.info("Skipping invalid row, length : " + listReader.length()  + ", header length : " + header.length);
+		       
+		                }
 		            }
 		            listReader.close();
 		        
