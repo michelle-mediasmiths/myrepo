@@ -5,7 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -17,8 +21,12 @@ import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.exception.SuperCsvCellProcessorException;
 import org.supercsv.exception.SuperCsvConstraintViolationException;
 import org.supercsv.io.CsvBeanReader;
+import org.supercsv.io.CsvListReader;
 import org.supercsv.io.ICsvBeanReader;
+import org.supercsv.io.ICsvListReader;
+import org.supercsv.io.ITokenizer;
 import org.supercsv.prefs.CsvPreference;
+import org.supercsv.util.Util;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -57,8 +65,36 @@ public class DiskUsageJob implements Job
 		        	headerDesc +=  col + ", ";
 		        }
 		        logger.info("CSV header is : " + headerDesc);
-		        	        
-		        boolean endOfFile = false;
+		        
+		        
+		        
+		        ICsvListReader listReader = new CsvListReader(new BufferedReader(new InputStreamReader(new URL(filename).openStream())), new CsvPreference.Builder('"', '\t', "\r\n").build());
+
+		            final String[] headers = listReader.getHeader(true);
+
+		            List<String> row = null;
+		            while ((row = listReader.read()) != null) {
+
+		                if (listReader.length() != headers.length) {
+		                    // skip row with invalid number of columns
+		                	logger.info("Skipping invalid row");
+		                    continue;
+		                }
+
+		                // safe to create map now
+		                Map<String, String> rowMap = new HashMap<String, String>();
+		                Util.filterListToMap(rowMap, headers, row);
+
+		                // do something with your map
+		                logger.info("Row map : " + rowMap);
+		            }
+		            listReader.close();
+		        
+		        
+		        
+		        
+		        
+		        boolean endOfFile = true;
 		        while (!endOfFile)
 		        {
 		        	try
