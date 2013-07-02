@@ -20,22 +20,16 @@ public class DiskUsageEventJobScheduler {
 	private static final transient Logger logger = Logger.getLogger(DiskUsageEventJobScheduler.class);
 	
 	@Inject
-	@Named("diskUsageLoc")
-	private static String DISK_USAGE_LOC;
-	
-	@Inject
-	private static EventService events;
-	
-	public DiskUsageEventJobScheduler()
+	public DiskUsageEventJobScheduler(@Named("diskUsageLoc") String diskUsageloc, EventService events)
 	{
 		try {
 			logger.info("Setting up daily disk usage job scheduler");
 			Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
 			
 			DiskUsageJob.setEvents(events);
-			DiskUsageJob.setLocation(DISK_USAGE_LOC);
+			DiskUsageJob.setLocation(diskUsageloc);
 			
-			logger.info("CSV file from properties file: " + DISK_USAGE_LOC);
+			logger.info("CSV file from properties file: " + diskUsageloc);
 			
 		    JobDetail job = newJob(DiskUsageJob.class)
 		        .withIdentity("dailyDiskUsageJob", "diskUsageEvent")

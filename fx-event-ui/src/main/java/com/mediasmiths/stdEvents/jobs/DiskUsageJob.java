@@ -1,8 +1,11 @@
 package com.mediasmiths.stdEvents.jobs;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -38,14 +41,27 @@ public class DiskUsageJob implements Job
 	    try{
 		    try {
 		    	logger.info("Reading Disk Usage CSV : " + filename);
-		    	beanReader = new CsvBeanReader(new FileReader(filename), CsvPreference.STANDARD_PREFERENCE);
+		    	BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(filename).openStream()));
+		    	beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
 		            
 		        // the header elements are used to map the values to the bean (names must match)
-		        final String[] header = beanReader.getHeader(true);
+		    	beanReader.getHeader(false);
+		        final String[] header = {"channel", "hrSize", "tsmSize", "lrSize", "othersSize", "totalSize"};
 		        final CellProcessor[] processors = getProcessors();
-		            
+		        
+		        String headerDesc = "";
+		        for (String col: header)
+		        {
+		        	headerDesc +=  col + ", ";
+		        }
+		        logger.info("CSV header is : " + headerDesc);
+		        
+		        //Discard first 2 rows
+		        beanReader.read(DiskUsageEvent.class, header, processors);
+		        beanReader.read(DiskUsageEvent.class, header, processors);
+		        
 		        while( (diskUsage = beanReader.read(DiskUsageEvent.class, header, processors)) != null ) {
-		        	System.out.println(String.format("lineNo=%s, rowNo=%s, customer=%s", beanReader.getLineNumber(), beanReader.getRowNumber(), diskUsage));
+		        	logger.info(String.format("lineNo=%s, rowNo=%s, customer=%s", beanReader.getLineNumber(), beanReader.getRowNumber(), diskUsage));
 		        	events.saveEvent(SYSTEM_NAMESPACE, EventNames.DISK_USAGE_EVENT, diskUsage);
 		        }
 		    }
