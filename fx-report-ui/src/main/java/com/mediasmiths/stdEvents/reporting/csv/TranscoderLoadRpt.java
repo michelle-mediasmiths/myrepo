@@ -249,19 +249,29 @@ public class TranscoderLoadRpt extends ReportUtils
 
 		ret.maxConcurrentTranscodes= maxConcurrent;
 
-		//calculate mean transcodes per day + standard deviation
-		StandardDeviation standardDeviation = new StandardDeviation();
 
-		Integer totalByDay = 0;
+		try
+		{
+			//calculate mean transcodes per day + standard deviation
+			StandardDeviation standardDeviation = new StandardDeviation();
 
-		for(Integer day : numberCreatedPerDay.keySet()){
-			standardDeviation.increment((double) numberCreatedPerDay.get(day));
-			totalByDay += numberCreatedPerDay.get(day);
+			Integer totalByDay = 0;
+
+			for (Integer day : numberCreatedPerDay.keySet())
+			{
+				standardDeviation.increment((double) numberCreatedPerDay.get(day));
+				totalByDay += numberCreatedPerDay.get(day);
+			}
+
+			if (numberCreatedPerDay.keySet().size() != 0)
+			{
+				ret.averagePerDay = totalByDay / numberCreatedPerDay.keySet().size();
+				ret.sdPerDay = standardDeviation.getResult();
+			}
 		}
-
-		if(numberCreatedPerDay.keySet().size() != 0){
-			ret.averagePerDay = totalByDay / numberCreatedPerDay.keySet().size();
-			ret.sdPerDay = standardDeviation.getResult();
+		catch (Exception e)
+		{
+			logger.error("Error calculating average transcodes per day", e);
 		}
 
 		return ret;
