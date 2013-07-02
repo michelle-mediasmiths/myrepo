@@ -2,6 +2,7 @@ package com.mediasmiths.stdEvents.reporting.csv;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
@@ -39,6 +40,8 @@ public class DiskUsageRpt extends ReportUtils
 	@Inject
 	private QueryAPIImpl queryApi;
 	
+	private final JAXBSerialiser serializer = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
+	
 	public void writeDiskUsage(List<EventEntity> events, DateTime startDate, DateTime endDate, String reportName)
 	{
 		List<DiskUsageEvent> reports = getReportList(events, startDate, endDate);		
@@ -49,9 +52,10 @@ public class DiskUsageRpt extends ReportUtils
 	{
 		logger.debug(">>>getReportList");
 		Map<String, DiskUsageEvent> reportMap = new HashMap <String, DiskUsageEvent> ();
+		
 		for (EventEntity event: events)
 		{
-			DiskUsageEvent report = (DiskUsageEvent) unmarshallReport(event);
+			DiskUsageEvent report = (DiskUsageEvent) serializer.deserialise(event.getPayload());
 			
 			if (report != null)
 			{
