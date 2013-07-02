@@ -16,6 +16,7 @@ import com.mediasmiths.stdEvents.persistence.db.dao.ManualQAEntityDAO;
 import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.PurgeDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.TitleDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.TranscodeJobDao;
 import com.mediasmiths.stdEvents.persistence.rest.impl.eventmapping.EventTypeMapper;
 import org.apache.log4j.Logger;
 
@@ -54,6 +55,10 @@ public class EventAPIImpl implements EventAPI
 
 	@Inject
 	protected ComplianceLoggingDao complianceLoggingDao;
+
+	@Inject
+	protected TranscodeJobDao transcodeJobDao;
+
 
 	private final EventingDao eventingDao;
 
@@ -134,7 +139,19 @@ public class EventAPIImpl implements EventAPI
 			complianceTaskEvent(event);
 		}
 
+
+		if((event.getEventName().equals(EventNames.TRANSCODE_REPORT_DATA))){
+			transcodeReportData(event);
+		}
+
+
 		logger.info("Event saved");
+	}
+
+
+	private void transcodeReportData(final EventEntity event)
+	{
+		transcodeJobDao.transcodeReportMessage(event);
 	}
 
 

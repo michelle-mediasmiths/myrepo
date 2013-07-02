@@ -52,13 +52,14 @@ public class WfsClient
 		return job.getStatus();
 	}
 	
-	public void deleteJob(UUID jobid){
+	public Job deleteJob(UUID jobid){
 		Job job = getJob(jobid);
 		job.setStatus(JobStatus.ABORT);
 		
 		ArrayOfJob aoj = new ArrayOfJob();
 		aoj.getJob().add(job);
 		service.updateJobStatus(aoj);
+		return job;
 	}
 
 	/**
@@ -68,7 +69,7 @@ public class WfsClient
 	 * @return
 	 * @throws WfsClientException
 	 */
-	public UUID transcode(String pcpxml) throws WfsClientException
+	public Job transcode(String pcpxml) throws WfsClientException
 	{
 		if (log.isTraceEnabled())
 		{
@@ -82,7 +83,7 @@ public class WfsClient
 		Job j = service.queueJobXML(pcpxml);
 		
 		log.info(String.format("job %s created", j.getGuid()));
-		return UUID.fromString(j.getGuid());
+		return j;
 	}
 
 	/**

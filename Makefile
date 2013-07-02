@@ -54,6 +54,9 @@ reportslocal : reports
 	rm -r /opt/tomcat/webapps/fx-event-ui
 	/opt/tomcat/bin/start.sh
 	
+tclocal : carbon
+	cp fx-TcAdapter/target/fx-TcAdapter.war /opt/tomcat/webapps
+	
 wfadapterlocal : wfadapter
 	cp fx-WFAdapter/target/fx-WFAdapter.war /opt/tomcat/webapps
 

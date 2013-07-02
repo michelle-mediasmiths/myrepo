@@ -6,9 +6,11 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,7 +19,7 @@ import java.util.Map;
 
 public abstract class ReportUtils
 {
-	protected static final String dateAndTimeFormatString = "dd-MM-yyyy-hh:mm:ss";
+	protected static final String dateAndTimeFormatString = "dd-MM-yyyy-HH:mm:ss";
 	protected static final DateTimeFormatter dateAndTimeFormatter = DateTimeFormat.forPattern(dateAndTimeFormatString);
 	protected static final DateFormat dateAndTimeFormat = new SimpleDateFormat(dateAndTimeFormatString);
 	private final static transient Logger logger = Logger.getLogger(ReportUtils.class);
@@ -131,6 +133,43 @@ public abstract class ReportUtils
 		else
 		{
 			map.put(header[index], format.format(date));
+		}
+	}
+
+
+	protected void putFormattedTimeInCSVMap(final String[] header,
+	                                        final int index,
+	                                        final Map<String, Object> map,
+	                                        final Long time)
+	{
+
+		if (time == null)
+		{
+			map.put(header[index], null);
+		}
+		else
+		{
+			map.put(header[index], getDDHHMMSSStringForMillis(time));
+		}
+	}
+
+
+	protected String getDDHHMMSSStringForMillis(Long millis)
+	{
+
+		if (millis == null)
+		{
+			return "";
+		}
+		else
+		{
+
+			Period period = new Duration(millis.longValue()).toPeriod();
+			return String.format("%02d:%02d:%02d:%02d",
+			                     period.getDays(),
+			                     period.getHours(),
+			                     period.getMinutes(),
+			                     period.getSeconds());
 		}
 	}
 

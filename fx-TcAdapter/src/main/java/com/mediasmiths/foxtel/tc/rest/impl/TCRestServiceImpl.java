@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.tc.rest.impl;
 import com.google.inject.Inject;
 import com.mediasmiths.carbon.type.mutable.CarbonProject;
 import com.mediasmiths.foxtel.carbonwfs.WfsClient;
+import com.mediasmiths.foxtel.tc.reporting.TcReporting;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobInfo;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 import com.mediasmiths.foxtel.tc.rest.api.TCRestService;
@@ -11,13 +12,12 @@ import org.apache.log4j.Logger;
 import org.datacontract.schemas._2004._07.rhozet.Job;
 import org.jdom2.output.XMLOutputter;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.UUID;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.UUID;
 
 public class TCRestServiceImpl implements TCRestService
 {
@@ -32,6 +32,9 @@ public class TCRestServiceImpl implements TCRestService
 	@Inject
 	CarbonMarshaller marshaller = new CarbonMarshaller();
 
+	@Inject
+	TcReporting tcReporting;
+
 	@Override
 	public String ping()
 	{
@@ -45,10 +48,13 @@ public class TCRestServiceImpl implements TCRestService
 		final String xml = createPCPXML(parameters);
 
 		// Create and start the job
-		final UUID id = wfsClient.transcode(xml);
+		Job job = wfsClient.transcode(xml);
+		final UUID id = UUID.fromString(job.getGuid());
 
 		// Set the initial job priority
 		setJobPriority(id.toString(), parameters.priority);
+
+		tcReporting.recordStart(id, parameters, job);
 
 		return id.toString();
 	}
@@ -87,6 +93,8 @@ public class TCRestServiceImpl implements TCRestService
 		// Query the job
 		final Job job = wfsClient.getJob(id);
 
+		tcReporting.recordStatus(id,job);
+
 		return marshaller.marshal(job);
 	}
 
@@ -104,7 +112,11 @@ public class TCRestServiceImpl implements TCRestService
 	public void deleteJob(@PathParam("guid") String guid) throws Exception
 	{
 		log.info(String.format("Received delete request for job %s", guid));
-		
-		wfsClient.deleteJob(UUID.fromString(guid));
+
+		UUID id = UUID.fromString(guid);
+
+		final Job job = wfsClient.deleteJob(id);
+
+		tcReporting.recordStatus(id,job);
 	}
 }

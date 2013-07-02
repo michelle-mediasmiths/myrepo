@@ -878,6 +878,29 @@
 		</xs:complexType>
 	</xs:element>
 
+	<xs:element name="TranscodeReportData">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation>Used to track transcode job information for reporting</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="IPEvent">
+					<xs:sequence>
+						<xs:element name="jobID" type="xs:string"></xs:element>
+						<xs:element name="created" type="xs:dateTime"></xs:element>
+						<xs:element name="updated" type="xs:dateTime"></xs:element>
+						<xs:element name="started" type="xs:dateTime"></xs:element>
+						<xs:element name="sourceFormat" type="xs:string"></xs:element>
+						<xs:element name="destinationFormat" type="xs:string"></xs:element>
+						<xs:element name="priority" type="xs:int"></xs:element>
+						<xs:element name="status" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+	</xs:element>
+
 	<xs:element name="CreationComplete">
 		<xs:complexType>
 			<xs:complexContent>

@@ -11,6 +11,7 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.ManualQAEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Purge;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.TranscodeJob;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.persistence.db.dao.AutoQCDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.ComplianceLoggingDao;
@@ -20,6 +21,7 @@ import com.mediasmiths.stdEvents.persistence.db.dao.ManualQAEntityDAO;
 import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.PurgeDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.TitleDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.TranscodeJobDao;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
@@ -56,6 +58,9 @@ public class QueryAPIImpl implements QueryAPI
 
 	@Inject
 	protected ComplianceLoggingDao complianceLoggingDao;
+
+	@Inject
+	protected TranscodeJobDao transcodeJobDao;
 
 	private static final transient Logger logger = Logger.getLogger(QueryAPIImpl.class);
 
@@ -212,5 +217,12 @@ public class QueryAPIImpl implements QueryAPI
 	public List<ComplianceLogging> getComplianceByDate(DateTime start, DateTime end)
 	{
 		return complianceLoggingDao.getComplianceByDate(start, end);
+	}
+
+	@Override
+	@GET
+	@Path("TranscodeJobsByDate")
+	public List<TranscodeJob> getTranscodeJobsByDate(DateTime start, DateTime end){
+		return transcodeJobDao.getTranscodeJobsInDateRange(start,end);
 	}
 }
