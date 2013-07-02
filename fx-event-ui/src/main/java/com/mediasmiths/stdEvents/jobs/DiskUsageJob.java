@@ -57,11 +57,7 @@ public class DiskUsageJob implements Job
 		        	headerDesc +=  col + ", ";
 		        }
 		        logger.info("CSV header is : " + headerDesc);
-		        
-		        //Discard first 2 rows
-		        beanReader.read(DiskUsageEvent.class, header, processors);
-		        beanReader.read(DiskUsageEvent.class, header, processors);
-		        
+		        	        
 		        boolean endOfFile = false;
 		        while (!endOfFile)
 		        {
