@@ -14,6 +14,8 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
+import org.supercsv.exception.SuperCsvCellProcessorException;
+import org.supercsv.exception.SuperCsvConstraintViolationException;
 import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
@@ -60,9 +62,31 @@ public class DiskUsageJob implements Job
 		        beanReader.read(DiskUsageEvent.class, header, processors);
 		        beanReader.read(DiskUsageEvent.class, header, processors);
 		        
-		        while( (diskUsage = beanReader.read(DiskUsageEvent.class, header, processors)) != null ) {
-		        	logger.info(String.format("lineNo=%s, rowNo=%s, customer=%s", beanReader.getLineNumber(), beanReader.getRowNumber(), diskUsage));
-		        	events.saveEvent(SYSTEM_NAMESPACE, EventNames.DISK_USAGE_EVENT, diskUsage);
+		        boolean endOfFile = false;
+		        while (!endOfFile)
+		        {
+		        	try
+		        	{
+				        diskUsage = beanReader.read(DiskUsageEvent.class, header, processors);
+				        if (diskUsage != null)
+				        {
+				        	logger.info(String.format("lineNo=%s, rowNo=%s, customer=%s", beanReader.getLineNumber(), beanReader.getRowNumber(), diskUsage));
+				        	events.saveEvent(SYSTEM_NAMESPACE, EventNames.DISK_USAGE_EVENT, diskUsage);
+				        }
+				        else {
+				        	logger.warn("Null value read on line: " + beanReader.getRowNumber());
+				        }
+			        } 
+		        	catch (SuperCsvConstraintViolationException ex) {
+			            logger.warn("NON CORRECT VALUE ENCOUNTERD ON ROW "+beanReader.getRowNumber(), ex);
+			            endOfFile = false;
+			       } catch (SuperCsvCellProcessorException ex){
+			           logger.warn("PARSER EXCEPTION ON ROW "+beanReader.getRowNumber(), ex);
+			           endOfFile = false;
+			       } catch (org.supercsv.exception.SuperCsvException ex){
+			            logger.warn("ERROR ON ROW "+beanReader.getRowNumber(), ex);
+			            endOfFile = true;
+			       }
 		        }
 		    }
 		    catch(FileNotFoundException e)
