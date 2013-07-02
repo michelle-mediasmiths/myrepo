@@ -244,6 +244,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		{
 			if (notification.isForTXDelivery())
 			{
+				log.info("QC is for tx delivery task");
 				// id is a package id
 				String packageID = notification.getAssetId();
 				final Set<String> channelGroups = mayamClient.getChannelGroupsForPackage(packageID);
@@ -255,6 +256,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			}
 			else
 			{
+				log.info("QC is for autoqc task");
 				// id is an item id
 				mayamClient.autoQcFailedForMaterial(notification.getAssetId(), notification.getTaskID());
 				attachQcReports(notification.getAssetId(), notification.getJobName());
@@ -549,7 +551,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		if (! notification.isForTXDelivery())
 		{
-			log.info("Failed transcode was for proxy export, it will be retried or if this was the last attmempt then TCFailedTotal will be called");
+			log.info("Failed transcode was for proxy export, it will be retried or if this was the last attempt then TCFailedTotal will be called");
 		}
 		else
 		{
@@ -941,6 +943,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			event.setAssetID(notificationReceived.getAssetID());
 			event.setTitle(notificationReceived.getTitle());
 			event.setTaskID(notificationReceived.getTaskID() + "");
+			event.withChannelGroup(channelGroups);
+
 			if (attachment != null)
 			{
 				event.getAttachments().add(attachment);
