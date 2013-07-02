@@ -68,7 +68,7 @@ public class DiskUsageJob implements Job
 		        
 		        
 		        
-		        ICsvListReader listReader = new CsvListReader(new BufferedReader(new InputStreamReader(new URL(filename).openStream())), new CsvPreference.Builder(',', '\t', "\r\n").build());
+		        ICsvListReader listReader = new CsvListReader(new BufferedReader(new InputStreamReader(new URL(filename).openStream())), CsvPreference.STANDARD_PREFERENCE);
 		            List<String> row = null;
 		            while ((row = listReader.read()) != null) {
 
