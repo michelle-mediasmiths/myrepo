@@ -314,7 +314,7 @@ public class ReportUIImpl implements ReportUI
 		List<EventEntity> events = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/system",
                 EventNames.DISK_USAGE_EVENT, MAX, start, end);
 
-		
+		logger.info("Number of Disk Usage Events : " + events.size());
 		logger.debug(String.format(
 				"Requesting disk usage report for date range: %s to %s; report name will be: %s ",
 				start.toString(),
