@@ -6,8 +6,11 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.TranscodeJob;
 import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.math.stat.descriptive.moment.StandardDeviation;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.MutableDateTime;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvMapWriter;
@@ -91,7 +94,7 @@ public class TranscoderLoadRpt extends ReportUtils
 			statsString.append(String.format("Total Submitted %d\n", stats.totalSubmitted));
 			statsString.append(String.format("Total Completed %d\n", stats.totalSuccessful));
 			statsString.append(String.format("Total Failed %d\n", stats.totalFailures));
-//			statsString.append(String.format("Average concurrent transcodes %d\n", stats.averageTranscodes));
+			statsString.append(String.format("Average transcodes per day %s  (standard deviation %s)\n", stats.averageTranscodesPerDay, stats.averagePerDayStandardDeviation));
 			statsString.append(String.format("Max concurrent transcodes %d\n", stats.maxConcurrentTranscodes));
 			statsString.append(String.format("Average queued time %s\n",getDDHHMMSSStringForMillis(stats.averageQueuedTime)));
 			statsString.append(String.format("Average transcode time %s\n",getDDHHMMSSStringForMillis(stats.averageTranscodeTime)));
@@ -166,7 +169,10 @@ public class TranscoderLoadRpt extends ReportUtils
 			}
 		}
 
-		ret.maxConcurrentTranscodes = getMaxConcurrentTranscodes(jobs);
+		final TranscodeStatsMaxConcurrentAndAveragePerDay maxConcurrentAndAveragePerDayTranscodes = getMaxConcurrentAndAveragePerDayTranscodes(jobs);
+		ret.maxConcurrentTranscodes =maxConcurrentAndAveragePerDayTranscodes.maxConcurrentTranscodes;
+		ret.averageTranscodesPerDay=maxConcurrentAndAveragePerDayTranscodes.averagePerDay;
+		ret.averagePerDayStandardDeviation=maxConcurrentAndAveragePerDayTranscodes.sdPerDay;
 
 		if (numberOfJobsCountedForQueueTime != 0)
 		{
@@ -183,8 +189,11 @@ public class TranscoderLoadRpt extends ReportUtils
 	}
 
 
-	protected int getMaxConcurrentTranscodes(final List<TranscodeJob> jobs)
+	//two stats calculated with the one function so save an extra sort + loop
+	protected TranscodeStatsMaxConcurrentAndAveragePerDay getMaxConcurrentAndAveragePerDayTranscodes(final List<TranscodeJob> jobs)
 	{
+		TranscodeStatsMaxConcurrentAndAveragePerDay ret = new TranscodeStatsMaxConcurrentAndAveragePerDay();
+
 		//forms an ordered set of start and stop times then iterates through that list, increasing a counter when a 'start' time is encountered and decreasing when a 'stop' is encountered.
 		Set<TranscodeStartOrStop> times = new TreeSet<TranscodeStartOrStop>();
 
@@ -192,10 +201,10 @@ public class TranscoderLoadRpt extends ReportUtils
 		{
 			if (job.isSuccess())
 			{
-				long created = job.getCreated().getTime();
-				long updated = job.getUpdated().getTime();
+				DateTime created = new DateTime(job.getCreated());
+				DateTime updated = new DateTime(job.getUpdated());
 
-				if (created <= updated)
+				if (created.isBefore(updated))
 				{
 					times.add(new TranscodeStartOrStop(created, true));
 					times.add(new TranscodeStartOrStop(updated, false));
@@ -203,13 +212,27 @@ public class TranscoderLoadRpt extends ReportUtils
 			}
 		}
 
-		int maxConcurrent = Integer.MIN_VALUE;
+		int maxConcurrent = 0;
 		int currentConcurrent = 0;
+
+		//Map day -> count in that day
+		Map<Integer, Integer> numberCreatedPerDay = new HashMap<Integer, Integer>();
 
 		for (TranscodeStartOrStop t : times)
 		{
 			if (t.start)
 			{
+
+				Integer day = daysSinceEpoch(t.time);
+				if (numberCreatedPerDay.containsKey(day))
+				{
+					numberCreatedPerDay.put(day, numberCreatedPerDay.get(day) + 1);
+				}
+				else
+				{
+					numberCreatedPerDay.put(day, Integer.valueOf(1));
+				}
+
 				currentConcurrent++;
 				if (currentConcurrent > maxConcurrent)
 				{
@@ -222,18 +245,40 @@ public class TranscoderLoadRpt extends ReportUtils
 			}
 		}
 
-		return maxConcurrent;
+		ret.maxConcurrentTranscodes= maxConcurrent;
+
+		StandardDeviation standardDeviation = new StandardDeviation();
+
+		Integer totalByDay = 0;
+
+		for(Integer day : numberCreatedPerDay.keySet()){
+			standardDeviation.increment((double) numberCreatedPerDay.get(day));
+			totalByDay += numberCreatedPerDay.get(day);
+		}
+
+		if(numberCreatedPerDay.keySet().size() != 0){
+			ret.averagePerDay = totalByDay / numberCreatedPerDay.keySet().size();
+			ret.sdPerDay = standardDeviation.getResult();
+		}
+
+		return ret;
 	}
 
+	private Integer daysSinceEpoch(DateTime d){
+		MutableDateTime epoch = new MutableDateTime();
+		epoch.setDate(0); //Set to Epoch time
+		Days days = Days.daysBetween(epoch, d);
+		return days.getDays();
+	}
 
 	class TranscodeStartOrStop implements Comparable
 	{
 
-		final Long time;
+		final DateTime time;
 		final boolean start;
 
 
-		public TranscodeStartOrStop(long time, boolean start)
+		public TranscodeStartOrStop(DateTime time, boolean start)
 		{
 			this.time = time;
 			this.start = start;
@@ -264,6 +309,12 @@ public class TranscoderLoadRpt extends ReportUtils
 
 	}
 
+	//this class is just for returning 3 related values from one method
+	class TranscodeStatsMaxConcurrentAndAveragePerDay{
+		int maxConcurrentTranscodes;
+		int averagePerDay;
+		double sdPerDay;
+	}
 
 	class TranscodeStats
 	{
@@ -271,7 +322,8 @@ public class TranscoderLoadRpt extends ReportUtils
 		int totalSuccessful;
 		int totalFailures;
 
-		int averageTranscodes;
+		int averageTranscodesPerDay;
+		double averagePerDayStandardDeviation;
 		int maxConcurrentTranscodes;
 
 		long averageQueuedTime;

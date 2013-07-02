@@ -25,7 +25,8 @@ public class TranscoderLoadRptTest
 		jobs.add(finishedJob(200l,950l));
 		jobs.add(finishedJob(1001l,10000l));
 
-		assertEquals(3, toTest.getMaxConcurrentTranscodes(jobs));
+		assertEquals(3, toTest.getMaxConcurrentAndAveragePerDayTranscodes(jobs).maxConcurrentTranscodes);
+		assertEquals(5, toTest.getMaxConcurrentAndAveragePerDayTranscodes(jobs).averagePerDay);
 	}
 
 
