@@ -218,11 +218,13 @@ public class TranscoderLoadRpt extends ReportUtils
 		//Map day -> count in that day
 		Map<Integer, Integer> numberCreatedPerDay = new HashMap<Integer, Integer>();
 
+		//loop over the times
 		for (TranscodeStartOrStop t : times)
 		{
 			if (t.start)
 			{
 
+				//if the job is starting, record a job starting against that day
 				Integer day = daysSinceEpoch(t.time);
 				if (numberCreatedPerDay.containsKey(day))
 				{
@@ -247,6 +249,7 @@ public class TranscoderLoadRpt extends ReportUtils
 
 		ret.maxConcurrentTranscodes= maxConcurrent;
 
+		//calculate mean transcodes per day + standard deviation
 		StandardDeviation standardDeviation = new StandardDeviation();
 
 		Integer totalByDay = 0;
