@@ -82,11 +82,16 @@ public class DiskUsageJob implements Job
 		                // safe to create map now
 		                Map<String, String> rowMap = new HashMap<String, String>();
 		                Util.filterListToMap(rowMap, header, row);
-
-		                
-		                // do something with your map
 		                logger.info("Row map : " + rowMap);
 		                
+		                DiskUsageEvent diskUsageEvent = new DiskUsageEvent();
+		                diskUsageEvent.setChannel(rowMap.get(header[0]));
+		                diskUsageEvent.setHrSize(rowMap.get(header[1]));
+		                diskUsageEvent.setTsmSize(rowMap.get(header[2]));
+		                diskUsageEvent.setLrSize(rowMap.get(header[3]));
+		                diskUsageEvent.setOthersSize(rowMap.get(header[4]));
+		                diskUsageEvent.setTotalSize(rowMap.get(header[5]));
+		                events.saveEvent(SYSTEM_NAMESPACE, EventNames.DISK_USAGE_EVENT, diskUsageEvent);
 
 		            }
 		            listReader.close();
