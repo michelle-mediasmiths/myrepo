@@ -52,19 +52,25 @@ public class DiskUsageRpt extends ReportUtils
 		for (EventEntity event: events)
 		{
 			DiskUsageEvent report = (DiskUsageEvent) unmarshallReport(event);
-	
-			DiskUsageEvent cumulativeUsage = reportMap.get(report.getChannel());
-			if (cumulativeUsage == null)
+			
+			if (report != null)
 			{
-				reportMap.put(report.getChannel(), report);
+				DiskUsageEvent cumulativeUsage = reportMap.get(report.getChannel());
+				if (cumulativeUsage == null)
+				{
+					reportMap.put(report.getChannel(), report);
+				}
+				else {
+					cumulativeUsage.setHrSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+					cumulativeUsage.setTsmSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+					cumulativeUsage.setLrSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+					cumulativeUsage.setOthersSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+					cumulativeUsage.setTotalSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+					reportMap.put(report.getChannel(), cumulativeUsage);
+				}
 			}
 			else {
-				cumulativeUsage.setHrSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
-				cumulativeUsage.setTsmSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
-				cumulativeUsage.setLrSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
-				cumulativeUsage.setOthersSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
-				cumulativeUsage.setTotalSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
-				reportMap.put(report.getChannel(), cumulativeUsage);
+				logger.warn("Null report after unmarshalling event : " + event.toString());
 			}
 		}
 		logger.debug("<<<getReportList");
