@@ -111,7 +111,7 @@ public class DiskUsageRpt extends ReportUtils
 		ICsvBeanWriter beanWriter = null;
 		try { 
 			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
-			final String[] header = {"dateRange", "channel", "hrSize", "tsmSize", "lrSize", "othersSize", "totalSize"};
+			final String[] header = {"channel", "hrSize", "tsmSize", "lrSize", "othersSize", "totalSize"};
 			final CellProcessor[] processors = getProcessors();
 			beanWriter.writeHeader(header);
 			
