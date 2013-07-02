@@ -311,8 +311,7 @@ public class ReportUIImpl implements ReportUI
 		String endDate = end.toString(dateFormatter);
 		logger.info("dates readable start: " + startDate + " end: " + endDate);
 		
-		List<EventEntity> events = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/system",
-                EventNames.DISK_USAGE_EVENT, MAX, start, end);
+		List<EventEntity> events = queryApi.getByEventNameWindowDateRange(EventNames.DISK_USAGE_EVENT, MAX, start, end);
 
 		logger.info("Number of Disk Usage Events : " + events.size());
 		logger.debug(String.format(
