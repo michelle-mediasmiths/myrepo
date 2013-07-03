@@ -363,7 +363,7 @@
 			<body>WFE is trying to communicate with an interfacing system but has failed after multiple retries %s</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
