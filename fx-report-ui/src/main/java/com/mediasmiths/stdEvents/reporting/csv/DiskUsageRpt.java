@@ -59,18 +59,21 @@ public class DiskUsageRpt extends ReportUtils
 			
 			if (report != null)
 			{
-				DiskUsageEvent cumulativeUsage = reportMap.get(report.getChannel());
-				if (cumulativeUsage == null)
+				if (report.getChannel() != null && !report.getChannel().toLowerCase().contains("channel"))
 				{
-					reportMap.put(report.getChannel(), report);
-				}
-				else {
-					cumulativeUsage.setHrSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
-					cumulativeUsage.setTsmSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
-					cumulativeUsage.setLrSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
-					cumulativeUsage.setOthersSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
-					cumulativeUsage.setTotalSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
-					reportMap.put(report.getChannel(), cumulativeUsage);
+					DiskUsageEvent cumulativeUsage = reportMap.get(report.getChannel());
+					if (cumulativeUsage == null)
+					{
+						reportMap.put(report.getChannel(), report);
+					}
+					else {
+						cumulativeUsage.setHrSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+						cumulativeUsage.setTsmSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+						cumulativeUsage.setLrSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+						cumulativeUsage.setOthersSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+						cumulativeUsage.setTotalSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+						reportMap.put(report.getChannel(), cumulativeUsage);
+					}
 				}
 			}
 			else {
@@ -84,7 +87,6 @@ public class DiskUsageRpt extends ReportUtils
 	
 	private String add(String cumulative, String newSize)
 	{
-		String x = "10.5GB";
 		CharSequence trimmedTotal = cumulative.subSequence(0, cumulative.length() - 2);
 		double runningTotal = Double.parseDouble(trimmedTotal.toString());
 		
