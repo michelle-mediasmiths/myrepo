@@ -83,7 +83,7 @@ public class TaskListRpt extends ReportUtils
 				}
 				if (mayamTask.getAttribute(Attribute.CLOSED) != null)
 				{
-					Date taskFinish = mayamTask.getAttribute(Attribute.CLOSED));
+					Date taskFinish = mayamTask.getAttribute(Attribute.CLOSED);
 					if (taskFinish != null)
 					{
 						String formattedFinish = new SimpleDateFormat(dateAndTimeFormatString).format(taskFinish);
