@@ -200,7 +200,7 @@ public class IncomingListener extends MqClientListener
 		try
 		{
 			logger.trace("IncomingListener onMessage");
-			logger.trace("Message is: " + msg.toString());
+			logger.info("Message is: " + msg.toString());
 			MqContentType type = msg.getType();
 			
 			String origin = msg.getProperties().get(MqMessage.PROP_ORIGIN_DESTINATION);
