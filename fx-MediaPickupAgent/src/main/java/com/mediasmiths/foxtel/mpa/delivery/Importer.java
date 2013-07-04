@@ -205,7 +205,7 @@ public class Importer
 
 				payload.setMaterialID(r.getMaterial().getMaterialID());
 				payload.setTitle(r.getMaterial().getDetails().getTitle());
-				payload.setAggregatorID("");
+				payload.setAggregatorID("Ruzz");
 				payload.setFormat(r.getMaterial().getDetails().getFormat());
 				payload.setTapeDelivery(false);
 				payload.setFileDelivery(true);
