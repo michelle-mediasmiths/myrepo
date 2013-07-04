@@ -87,7 +87,7 @@
 				<xs:element name="operator" type="xs:string"/>
 				<xs:element name="department" type="xs:string"/>
 				<xs:element name="taskStart" type="xs:string"/>
-				<xs:element name="taskFinish" type="xs:dateTime"/>
+				<xs:element name="taskFinish" type="xs:string"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

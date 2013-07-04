@@ -21,6 +21,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -61,7 +62,13 @@ public class TaskListRpt extends ReportUtils
 				
 			task.setTaskType(mayamTask.getAttributeAsString(Attribute.TASK_LIST_ID));
 			task.setTaskStatus(mayamTask.getAttributeAsString(Attribute.TASK_STATE));
-			task.setTaskStart(mayamTask.getAttributeAsString(Attribute.TASK_CREATED));
+			
+			Date taskStart = mayamTask.getAttribute(Attribute.TASK_CREATED);
+			if (taskStart != null)
+			{
+				String formattedStart = new SimpleDateFormat(dateAndTimeFormatString).format(taskStart);
+				task.setTaskStart(formattedStart);
+			}
 			if (mayamTask.getAttribute(Attribute.TASK_UPDATED_BY) != null)
 			{
 				task.setOperator(mayamTask.getAttributeAsString(Attribute.TASK_UPDATED_BY));
@@ -76,9 +83,12 @@ public class TaskListRpt extends ReportUtils
 				}
 				if (mayamTask.getAttribute(Attribute.CLOSED) != null)
 				{
-					GregorianCalendar c = new GregorianCalendar();
-					c.setTime((Date) mayamTask.getAttribute(Attribute.CLOSED));
-					task.setTaskFinish(DatatypeFactory.newInstance().newXMLGregorianCalendar(c));
+					Date taskFinish = mayamTask.getAttribute(Attribute.CLOSED));
+					if (taskFinish != null)
+					{
+						String formattedFinish = new SimpleDateFormat(dateAndTimeFormatString).format(taskFinish);
+						task.setTaskFinish(formattedFinish);
+					}
 				}
 			} catch (DatatypeConfigurationException e) {
 				Log.warn("Error while converting task start and end times to XMLGregorianCalendar");
