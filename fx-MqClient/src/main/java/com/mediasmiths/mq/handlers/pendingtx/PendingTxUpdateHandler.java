@@ -9,6 +9,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.PackageNotFoundException;
@@ -26,6 +27,15 @@ public class PendingTxUpdateHandler extends TaskUpdateHandler
 	{
 		final EnumSet<TaskState> OPEN_STATES = EnumSet.of(TaskState.OPEN, TaskState.ERROR);
 
+		// Refetching task to ensure attributes are latest
+		try {
+			long taskId = currentAttributes.getAttribute(Attribute.TASK_LIST_ID);
+			currentAttributes = taskController.getTask(taskId);
+			currentAttributes.putAll(after);
+		} catch (RemoteException e) {
+			log.warn("Error refetching task attributes. Some attributes may be out of date.", e);
+		}
+		
 		TaskState taskState = currentAttributes.getAttribute(Attribute.TASK_STATE);
 		if (OPEN_STATES.contains(taskState))
 		{
