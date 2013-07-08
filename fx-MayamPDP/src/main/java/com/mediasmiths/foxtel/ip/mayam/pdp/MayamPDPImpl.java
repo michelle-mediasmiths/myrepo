@@ -262,7 +262,7 @@ public class MayamPDPImpl implements MayamPDP
 						{
 							logger.debug("User can override a segment mismatch for " + presentationID);
 
-							warnings.add(messageSegmentMismatchOverride);
+							errors.add(messageSegmentMismatchOverride);
 						}
 						else
 						{
