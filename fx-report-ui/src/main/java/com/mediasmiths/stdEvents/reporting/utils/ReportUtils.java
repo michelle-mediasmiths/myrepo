@@ -14,6 +14,7 @@ import org.joda.time.format.DateTimeFormatter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -80,7 +81,8 @@ public abstract class ReportUtils
 	{
 		if (channels != null)
 		{
-			map.put(header[index], StringUtils.join(channels, ';'));
+			LinkedHashSet<String> channelS = new LinkedHashSet<String>(channels);
+			map.put(header[index], StringUtils.join(channelS, ';'));
 		}
 		else
 		{
