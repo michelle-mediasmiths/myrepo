@@ -1,5 +1,8 @@
 package com.mediasmiths.foxtel.mpa.validation;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
@@ -79,7 +82,13 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 
 	private boolean isAggregatorAO(Material message)
 	{
-		return aoAggregatorName.toLowerCase().equals(message.getDetails().getSupplier().getSupplierID().toLowerCase());
+		List<String> locationNames = Arrays.asList(aoAggregatorName.split(","));
+		boolean isAO = false;
+		for (String location: locationNames)
+		{
+			isAO = location.toLowerCase().equals(message.getDetails().getSupplier().getSupplierID().toLowerCase());
+		}
+		return isAO;
 	}
 
 	private boolean isMaterialAO(Material message)
