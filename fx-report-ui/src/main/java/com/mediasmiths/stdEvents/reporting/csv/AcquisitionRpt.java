@@ -141,15 +141,15 @@ public class AcquisitionRpt extends ReportUtils
 			}
 			
 			log.debug("file: " + acq.isFileDelivery() + " tape: " + acq.isTapeDelivery());
-			if (acq.isFileDelivery())
-			{
-				acq.setFileDel("1");
-				acq.setTapeDel("0");
-			}
-			else if (acq.isTapeDelivery() || isFromTape)
+			if (acq.isTapeDelivery() || isFromTape)
 			{
 				acq.setTapeDel("1");
 				acq.setFileDel("0");
+			}
+			else if (acq.isFileDelivery())
+			{
+				acq.setFileDel("1");
+				acq.setTapeDel("0");
 			}
 
 			log.info(acq.getMaterialID() + " " + acq.getTitle() + " " + acq.getChannels());

@@ -162,7 +162,22 @@ public class Importer
 			@SuppressWarnings("rawtypes") MediaEnvelope materialEnvelope = pi.getMaterialEnvelope();
 			Object message = materialEnvelope.getMessage();
 
-			if (message instanceof Material)
+			if (message instanceof RuzzIngestRecord)
+			{
+				RuzzIngestRecord r = (RuzzIngestRecord) message;
+
+				payload.setMaterialID(r.getMaterial().getMaterialID());
+				payload.setTitle(r.getMaterial().getDetails().getTitle());
+				payload.setAggregatorID("Ruzz");
+				payload.setFormat(r.getMaterial().getDetails().getFormat());
+				payload.setTapeDelivery(false);
+				payload.setFileDelivery(true);
+				payload.setFilesize(fileSize + "");
+				payload.setTitleLength(r.getMaterial().getDetails().getDuration());
+
+				eventService.saveEvent(EventNames.PROGRAMME_CONTENT_AVAILABLE, JAXB_SERIALISER.serialise(payload));
+			}
+			else if (message instanceof Material)
 			{
 
 				Material m = (Material) message;
@@ -198,21 +213,6 @@ public class Importer
 
 					eventService.saveEvent(EventNames.MARKETING_CONTENT_AVAILABLE, JAXB_SERIALISER.serialise(payload));
 				}
-			}
-			else if (message instanceof RuzzIngestRecord)
-			{
-				RuzzIngestRecord r = (RuzzIngestRecord) message;
-
-				payload.setMaterialID(r.getMaterial().getMaterialID());
-				payload.setTitle(r.getMaterial().getDetails().getTitle());
-				payload.setAggregatorID("Ruzz");
-				payload.setFormat(r.getMaterial().getDetails().getFormat());
-				payload.setTapeDelivery(false);
-				payload.setFileDelivery(true);
-				payload.setFilesize(fileSize + "");
-				payload.setTitleLength(r.getMaterial().getDetails().getDuration());
-
-				eventService.saveEvent(EventNames.PROGRAMME_CONTENT_AVAILABLE, JAXB_SERIALISER.serialise(payload));
 			}
 			else
 			{
