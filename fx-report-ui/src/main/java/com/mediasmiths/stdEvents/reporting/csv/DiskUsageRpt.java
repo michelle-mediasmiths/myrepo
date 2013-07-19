@@ -68,10 +68,10 @@ public class DiskUsageRpt extends ReportUtils
 					}
 					else {
 						cumulativeUsage.setHrSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
-						cumulativeUsage.setTsmSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
-						cumulativeUsage.setLrSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
-						cumulativeUsage.setOthersSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
-						cumulativeUsage.setTotalSize(add(cumulativeUsage.getHrSize(), report.getHrSize()));
+						cumulativeUsage.setTsmSize(add(cumulativeUsage.getTsmSize(), report.getTsmSize()));
+						cumulativeUsage.setLrSize(add(cumulativeUsage.getLrSize(), report.getLrSize()));
+						cumulativeUsage.setOthersSize(add(cumulativeUsage.getOthersSize(), report.getOthersSize()));
+						cumulativeUsage.setTotalSize(add(cumulativeUsage.getTotalSize(), report.getTotalSize()));
 						reportMap.put(report.getChannel(), cumulativeUsage);
 					}
 				}
@@ -85,27 +85,43 @@ public class DiskUsageRpt extends ReportUtils
 		return new ArrayList<DiskUsageEvent>(reportMap.values());
 	}
 	
-	private String add(String cumulative, String newSize)
+	private String add(String cumulativeSize, String newSize)
 	{
-		CharSequence trimmedTotal = cumulative.subSequence(0, cumulative.length() - 2);
-		double runningTotal = Double.parseDouble(trimmedTotal.toString());
-		
-		CharSequence trimmedNew = newSize.subSequence(0, newSize.length() - 2);
-		double newValue = Double.parseDouble(trimmedTotal.toString());
-		
-		if (newSize.substring(newSize.length() - 2).toLowerCase().equals("kb"))
+		try
 		{
-			newValue = newValue / 1024;
+			if (cumulativeSize.equals(null) || cumulativeSize.length() < 3)
+			{
+				cumulativeSize = "0GB";
+			}
+			else {
+				CharSequence trimmedTotal = cumulativeSize.subSequence(0, cumulativeSize.length() - 2);
+				
+				if (trimmedTotal != null && trimmedTotal.length() >= 3)
+				{
+					double runningTotal = Double.parseDouble(trimmedTotal.toString());
+					
+					CharSequence trimmedNew = newSize.subSequence(0, newSize.length() - 2);
+					double newValue = Double.parseDouble(trimmedTotal.toString());
+					
+					if (newSize.substring(newSize.length() - 2).toLowerCase().equals("kb"))
+					{
+						newValue = newValue / 1024;
+					}
+					else if (newSize.substring(newSize.length() - 2).toLowerCase().equals("mb"))
+					{
+						newValue = newValue / (1024 * 1024);
+					}
+					
+					runningTotal += newValue;
+					cumulativeSize = runningTotal + "GB";
+				}
+			}
 		}
-		else if (newSize.substring(newSize.length() - 2).toLowerCase().equals("mb"))
+		catch (NumberFormatException e)
 		{
-			newValue = newValue / (1024 * 1024);
+			Log.warn("Number format exception while parsing and adding the Strings " + cumulativeSize + ", and " + newSize);
 		}
-		
-		runningTotal += newValue;
-		cumulative = runningTotal + "GB";
-		
-		return cumulative;
+		return cumulativeSize;
 	}
 	
 	private void createCsv (List<DiskUsageEvent> enteries, String reportName)
