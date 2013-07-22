@@ -96,6 +96,10 @@ public class MayamPDPSetUp extends AbstractModule
 		securityGroups.put(PrivilegedOperations.SEGMENT_MISMATCH_OVERRIDE, getGroupSet(injector.getInstance(Key.get(String.class,
 		                                                                                                            Names.named("groups.segments.override.nonao"))),
 		                                                                               adminGroups));
+		
+		securityGroups.put(PrivilegedOperations.FIX_AND_STITCH, getGroupSet(injector.getInstance(Key.get(String.class,
+																													Names.named("groups.fixandstitch.modify.nonao"))),
+																						adminGroups));
 
 		return securityGroups;
 	}
@@ -166,6 +170,9 @@ public class MayamPDPSetUp extends AbstractModule
 		securityGroups.put(PrivilegedOperations.SEGMENT_MISMATCH_OVERRIDE, getGroupSet(injector.getInstance(Key.get(String.class,
 		                                                                                                            Names.named("groups.segments.override.ao"))),
 		                                                                               adminGroups));
+		securityGroups.put(PrivilegedOperations.FIX_AND_STITCH, getGroupSet(injector.getInstance(Key.get(String.class,
+                																									Names.named("groups.fixandstitch.modify.ao"))),
+                																		adminGroups));
 
 		return securityGroups;
 	}

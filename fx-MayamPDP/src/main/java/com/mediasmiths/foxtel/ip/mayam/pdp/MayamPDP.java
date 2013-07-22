@@ -166,6 +166,12 @@ public interface MayamPDP
 	@Produces("application/json")
 	@Consumes("application/json")
 	public String matchAllowed(String attributeMapStr) throws RemoteException;
+	
+	@Path("fixAndStitch")
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String fixAndStitch(String attributeMapStr) throws RemoteException;
 
 
 }

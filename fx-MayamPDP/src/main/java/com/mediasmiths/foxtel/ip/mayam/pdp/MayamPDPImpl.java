@@ -1146,6 +1146,37 @@ public class MayamPDPImpl implements MayamPDP
 	}
 	
 	@Override
+	public String fixAndStitch(final String attributeMapStr)
+	{
+		try
+		{
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.FIX_AND_STITCH;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
+
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
+				return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.FIX_STITCH_EDIT));
+			}
+			else
+			{
+				return getTaskPermissionErrorStatus(operation);
+			}
+		}
+		catch (RemoteException e)
+		{
+			logger.error("PDP Comms Error:  unable to retrieve required data to complete fix and stitch operation", e);
+
+
+			return getErrorStatus("PDP Comms Error:  unable to retrieve required data to complete fix and stitch operation");
+		}
+	}
+	
+	@Override
 	@Path("matchallowed")
 	@POST
 	@Produces("application/json")
