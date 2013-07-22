@@ -64,7 +64,7 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 	 }
 	
 	@Transactional
-	 public List<MayamAccessRights> retrieve(String qcStatus, String qaStatus, Boolean qcParallel, String assetType, Set <String> channelsOwners, boolean restrictedAccess, Boolean adultOnly) 
+	 public List<MayamAccessRights> retrieve(String qcStatus, String qaStatus, Boolean qcParallel, String assetType, Set <String> channelsOwners, Boolean restrictedAccess, Boolean adultOnly) 
 	 {
 		
 		log.debug("Rereiving mayam access rights");
@@ -102,19 +102,19 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 		}
 		
 		  Criteria criteria = createCriteria();
-		  if (qcStatus != null) {
+		  if (qcStatus != null && !qcStatus.isEmpty()) {
 			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("qcStatus", qcStatus)).add(Restrictions.eq("qcStatus", "*")));
 		  }
-		  if (qaStatus != null) {
+		  if (qaStatus != null && !qaStatus.isEmpty()) {
 			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("qaStatus", qaStatus)).add(Restrictions.eq("qaStatus", "*")));
 		  }
 		  if (qcParallel != null) {
 			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("qcParallel", qcParallel)).add(Restrictions.isNull("qcParallel")));
 		  }
-		  if (assetType != null) {
+		  if (assetType != null && !assetType.isEmpty()) {
 			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("contentType", assetType)).add(Restrictions.eq("contentType", "*")));
 		  }
-		  if (assetType != null) {
+		  if (restrictedAccess != null) {
 			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("restricted", restrictedAccess)).add(Restrictions.isNull("restricted")));
 		  }
 		  if (adultOnly != null) {
@@ -124,7 +124,7 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 			  criteria.add(Restrictions.eq("adultOnly", Boolean.FALSE));
 		  }
 		  
-		  if (channelsOwners != null)
+		  if (channelsOwners != null && !channelsOwners.isEmpty())
 		  {
 
 		  	  Disjunction restrictions = Restrictions.disjunction();
@@ -146,7 +146,7 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 		AssetType assetType = attributeMap.getAttribute(Attribute.ASSET_TYPE);
 		String houseId = attributeMap.getAttribute(Attribute.HOUSE_ID);
 
-		boolean retrictedAccess = false;
+		Boolean retrictedAccess = false;
 
 		if (attributeMap.getAttribute(Attribute.CONT_RESTRICTED_ACCESS) != null)
 		{
