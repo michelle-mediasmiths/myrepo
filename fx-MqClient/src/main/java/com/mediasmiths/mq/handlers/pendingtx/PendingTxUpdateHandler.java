@@ -1,10 +1,5 @@
 package com.mediasmiths.mq.handlers.pendingtx;
 
-import java.util.EnumSet;
-
-
-import org.apache.log4j.Logger;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.SegmentList;
@@ -16,6 +11,9 @@ import com.mediasmiths.mayam.PackageNotFoundException;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskUpdateHandler;
+import org.apache.log4j.Logger;
+
+import java.util.EnumSet;
 
 public class PendingTxUpdateHandler extends TaskUpdateHandler
 {
@@ -29,7 +27,7 @@ public class PendingTxUpdateHandler extends TaskUpdateHandler
 
 		// Refetching task to ensure attributes are latest
 		try {
-			long taskId = currentAttributes.getAttribute(Attribute.TASK_LIST_ID);
+			Long taskId = currentAttributes.getAttribute(Attribute.TASK_ID);
 			currentAttributes = taskController.getTask(taskId);
 			currentAttributes.putAll(after);
 		} catch (RemoteException e) {
