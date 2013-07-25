@@ -6,6 +6,7 @@ import com.mayam.wf.attributes.shared.type.Timecode;
 import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
+import com.mediasmiths.std.types.Framerate;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -116,7 +117,19 @@ public class SegmentUtilTest
 			assertEquals(expected, actual);
 		}
 
-		@Test
+	@Test
+	public void testCalculateDuration(){
+
+
+		com.mediasmiths.std.types.Timecode start = com.mediasmiths.std.types.Timecode.getInstance("23:29:59:05", Framerate.HZ_25);
+		String duration = "00:59:59:22";
+
+		final String eom = SegmentUtil.calculateEOM(duration, start);
+		assertEquals("00:29:59:01",eom);
+	}
+
+
+	@Test
 		public void testTotal() throws InvalidTimecodeException{
 
 			Segment one = new Segment();
@@ -245,6 +258,42 @@ public class SegmentUtilTest
 		Segment two = new Segment();
 		two.setIn(new Timecode("00:18:00:07"));
 		two.setDuration(new Timecode("00:00:00:09"));
+
+		SegmentList segmentList = new SegmentList();
+		segmentList.getEntries().add(one);
+		segmentList.getEntries().add(two);
+		Boolean actual = SegmentUtil.noSegmentationOverlap(segmentList);
+		assertTrue(actual);
+	}
+
+	@Test
+	public void testSegmentOverlappingCheckForTwoNonOverlappingSegmentsCrossingMidnight() throws InvalidTimecodeException
+	{
+		Segment one = new Segment();
+		one.setIn(new Timecode("23:29:59:05"));
+		one.setDuration(new Timecode("00:40:00:00"));
+
+		Segment two = new Segment();
+		two.setIn(new Timecode("00:12:00:07"));
+		two.setDuration(new Timecode("00:10:00:00"));
+
+		SegmentList segmentList = new SegmentList();
+		segmentList.getEntries().add(one);
+		segmentList.getEntries().add(two);
+		Boolean actual = SegmentUtil.noSegmentationOverlap(segmentList);
+		assertTrue(actual);
+	}
+
+	@Test
+	public void testSegmentOverlappingCheckForTwoNonOverlappingSegmentsCrossingMidnightTwo() throws InvalidTimecodeException
+	{
+		Segment one = new Segment();
+		one.setIn(new Timecode("23:29:59:05"));
+		one.setDuration(new Timecode("00:20:00:00"));
+
+		Segment two = new Segment();
+		two.setIn(new Timecode("00:12:00:07"));
+		two.setDuration(new Timecode("00:10:00:00"));
 
 		SegmentList segmentList = new SegmentList();
 		segmentList.getEntries().add(one);

@@ -150,8 +150,14 @@ public class SegmentUtil
 	{
 		final String eom;
 		Timecode durationTimecode =  Timecode.getInstance(duration, Framerate.HZ_25);
+		final SampleCount startSampleCount = new SampleCount(1, start.getFramerate());
+		final SampleCount durationSampleCount = durationTimecode.getSampleCount();
 
-		return start.add(durationTimecode.getSampleCount().subtract(new SampleCount(1, start.getFramerate()))).toSMPTEString();
+		final SampleCount difference = durationSampleCount.subtract(startSampleCount);
+
+		Timecode end = start.add(difference,true);
+
+		return end.toSMPTEString();
 
 	}
 	
@@ -184,7 +190,7 @@ public class SegmentUtil
 			{
 				if(segmentList.getEntries().size() == 1)
 				{
-					return result;
+					return true;
 				}
 				else
 				{
@@ -223,16 +229,20 @@ public class SegmentUtil
 
 						if (aEnd.lt(bStart))
 						{
-							log.debug("No overlap");
-
-							result = true;
+							log.info("No overlap");
 						}
 						else
 						{
-							log.debug("Overlap");
-
-							result = false;
-							break loop;
+							log.info("Overlap! Checking for 23:59:59:24 to 00:00:00:00 threshold crossing");
+							if(aEnd.getHoursPart()==23 && bStart.getHoursPart()==0)
+							{
+								log.info("A segment has an earlier time code than the previous segment, however it appears to cross the midnight boundary");
+							}
+							else
+							{
+								log.info("Overlap or segments cross 00:00:00:00 by too great a gap");
+								return false;
+							}
 						}
 					}
 				}
