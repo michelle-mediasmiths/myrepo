@@ -26,6 +26,141 @@ public class FSRestServiceImpl implements FSRestService
 
 	private final static Logger log = Logger.getLogger(FSRestService.class);
 
+	@Override
+	@PUT
+	@Path("/cleanup")
+	@Produces("application/xml")
+	public boolean cleanup(String filepath) throws FSAdapterException
+	{
+		log.info(String.format("Received cleanup request for path %s", filepath));
+		
+		int fileIndex = 1;
+		int filesDeleted = 0;
+		
+		boolean filesRemaining = true;
+		String currentFile = filepath;
+		int fileExtensionIndex = filepath.indexOf(".");
+		
+		//Remove file and all assocaited filenames (filename_1 ... filename_x)
+		
+		while (filesRemaining)
+		{
+			if (pathAllowed(currentFile)
+			{
+	
+				File f = new File(currentFile);
+	
+				if (!f.exists())
+				{
+					log.info("file %s does not exist, exiting cleanup", currentFile);
+					filesRemaining = false;
+				}
+				else
+				{
+					boolean deleted = f.delete();
+	
+					if (deleted)
+					{
+						log.info(String.format("Deleted file %s", f.getAbsolutePath()));
+						filesDeleted ++;
+					}
+					else
+					{
+						log.error(String.format("Failed to delete file %s", f.getAbsolutePath()));
+					}
+	
+					currentFile = (filePath.subString(0, fileExtensionIndex) + "_" + fileIndex + filePath.subString(fileExtensionIndex, filePath.length()));
+					fileIndex ++;
+				}
+			}
+			else
+			{
+				throw new FSAdapterException(String.format("Not allowed to operate on specified path (%s)", currentFile));
+			}
+		}
+		
+		return (filesDeleted > 0);
+	}
+	
+	@Override
+	@PUT
+	@Path("/selectMostRecent")
+	@Produces("application/xml")
+	public boolean selectMostRecent(String filepath) throws FSAdapterException
+	{
+		log.info(String.format("Received selectMostRecent request for path %s", filepath));
+		
+		// Select file with highest index (eg filename_x) and rename to filename
+		// Remove all other files
+		
+		int fileCount = 0;
+		
+		boolean filesRemaining = true;
+		String currentFile = filepath;
+		int fileExtensionIndex = filepath.indexOf(".");
+		
+		//Remove file and all assocaited filenames (filename_1 ... filename_x)
+		
+		while (filesRemaining)
+		{
+			if (pathAllowed(currentFile)
+			{
+				File f = new File(currentFile);
+	
+				if (!f.exists())
+				{
+					filesRemaining = false;
+				}
+				else
+				{
+					currentFile = (filePath.subString(0, fileExtensionIndex) + "_" + fileIndex + filePath.subString(fileExtensionIndex, filePath.length()));
+					fileCount ++;
+				}
+			}
+			else
+			{
+				throw new FSAdapterException(String.format("Not allowed to operate on specified path (%s)", currentFile));
+			}
+		}
+		
+		for (int fileIndex = 1; fileIndex < fileCount; fileIndex++)
+		{
+			if (pathAllowed(currentFile)
+			{
+				File f = new File(currentFile);
+	
+				if (!f.exists())
+				{
+					log.warn("file %s does not exist, cannot delete", currentFile);
+				}
+				else
+				{
+					boolean deleted = f.delete();
+					
+					if (deleted)
+					{
+						log.info(String.format("Deleted file %s", f.getAbsolutePath()));
+						filesDeleted ++;
+					}
+					else
+					{
+						log.error(String.format("Failed to delete file %s", f.getAbsolutePath()));
+					}
+					
+					currentFile = (filePath.subString(0, fileExtensionIndex) + "_" + fileIndex + filePath.subString(fileExtensionIndex, filePath.length()));
+				}
+			}
+			else
+			{
+				throw new FSAdapterException(String.format("Not allowed to operate on specified path (%s)", currentFile));
+			}
+		}
+		
+		File mostRecentFile = new File(currentFile);
+		File originalFile = new File(filepath);
+		
+		return mostRecentFile.renameTo(originalFile);
+	}
 
 	@Override
 	@PUT
