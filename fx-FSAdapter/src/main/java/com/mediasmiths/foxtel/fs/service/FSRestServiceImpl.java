@@ -52,7 +52,7 @@ public class FSRestServiceImpl implements FSRestService
 	
 				if (!f.exists())
 				{
-					log.info("file %s does not exist, exiting cleanup", currentFile);
+					log.info(String.format("file %s does not exist, exiting cleanup", currentFile));
 					filesRemaining = false;
 				}
 				else
@@ -69,7 +69,7 @@ public class FSRestServiceImpl implements FSRestService
 						log.error(String.format("Failed to delete file %s", f.getAbsolutePath()));
 					}
 	
-					currentFile = (filePath.subString(0, fileExtensionIndex) + "_" + fileIndex + filePath.subString(fileExtensionIndex, filePath.length()));
+					currentFile = (filePath.substring(0, fileExtensionIndex) + "_" + fileIndex + filePath.substring(fileExtensionIndex, filePath.length()));
 					fileIndex ++;
 				}
 			}
@@ -113,7 +113,7 @@ public class FSRestServiceImpl implements FSRestService
 				}
 				else
 				{
-					currentFile = (filePath.subString(0, fileExtensionIndex) + "_" + fileIndex + filePath.subString(fileExtensionIndex, filePath.length()));
+					currentFile = (filePath.substring(0, fileExtensionIndex) + "_" + fileIndex + filePath.substring(fileExtensionIndex, filePath.length()));
 					fileCount ++;
 				}
 			}
@@ -131,7 +131,7 @@ public class FSRestServiceImpl implements FSRestService
 	
 				if (!f.exists())
 				{
-					log.warn("file %s does not exist, cannot delete", currentFile);
+					log.warn(String.format("file %s does not exist, cannot delete", currentFile));
 				}
 				else
 				{
@@ -140,14 +140,13 @@ public class FSRestServiceImpl implements FSRestService
 					if (deleted)
 					{
 						log.info(String.format("Deleted file %s", f.getAbsolutePath()));
-						filesDeleted ++;
 					}
 					else
 					{
 						log.error(String.format("Failed to delete file %s", f.getAbsolutePath()));
 					}
 					
-					currentFile = (filePath.subString(0, fileExtensionIndex) + "_" + fileIndex + filePath.subString(fileExtensionIndex, filePath.length()));
+					currentFile = (filePath.substring(0, fileExtensionIndex) + "_" + fileIndex + filePath.substring(fileExtensionIndex, filePath.length()));
 				}
 			}
 			else
