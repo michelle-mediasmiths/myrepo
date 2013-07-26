@@ -45,7 +45,7 @@ public class FSRestServiceImpl implements FSRestService
 		
 		while (filesRemaining)
 		{
-			if (pathAllowed(currentFile)
+			if (pathAllowed(currentFile))
 			{
 	
 				File f = new File(currentFile);
@@ -103,7 +103,7 @@ public class FSRestServiceImpl implements FSRestService
 		
 		while (filesRemaining)
 		{
-			if (pathAllowed(currentFile)
+			if (pathAllowed(currentFile))
 			{
 				File f = new File(currentFile);
 	
@@ -125,7 +125,7 @@ public class FSRestServiceImpl implements FSRestService
 		
 		for (int fileIndex = 1; fileIndex < fileCount; fileIndex++)
 		{
-			if (pathAllowed(currentFile)
+			if (pathAllowed(currentFile))
 			{
 				File f = new File(currentFile);
 	
