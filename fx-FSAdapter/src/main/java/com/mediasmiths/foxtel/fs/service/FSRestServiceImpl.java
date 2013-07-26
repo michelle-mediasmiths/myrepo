@@ -69,7 +69,7 @@ public class FSRestServiceImpl implements FSRestService
 						log.error(String.format("Failed to delete file %s", f.getAbsolutePath()));
 					}
 	
-					currentFile = (filePath.substring(0, fileExtensionIndex) + "_" + fileIndex + filePath.substring(fileExtensionIndex, filePath.length()));
+					currentFile = (filepath.substring(0, fileExtensionIndex) + "_" + fileIndex + filepath.substring(fileExtensionIndex, filepath.length()));
 					fileIndex ++;
 				}
 			}
@@ -113,8 +113,8 @@ public class FSRestServiceImpl implements FSRestService
 				}
 				else
 				{
-					currentFile = (filePath.substring(0, fileExtensionIndex) + "_" + fileIndex + filePath.substring(fileExtensionIndex, filePath.length()));
 					fileCount ++;
+					currentFile = (filepath.substring(0, fileExtensionIndex) + "_" + fileCount + filepath.substring(fileExtensionIndex, filepath.length()));
 				}
 			}
 			else
@@ -146,7 +146,7 @@ public class FSRestServiceImpl implements FSRestService
 						log.error(String.format("Failed to delete file %s", f.getAbsolutePath()));
 					}
 					
-					currentFile = (filePath.substring(0, fileExtensionIndex) + "_" + fileIndex + filePath.substring(fileExtensionIndex, filePath.length()));
+					currentFile = (filepath.substring(0, fileExtensionIndex) + "_" + fileIndex + filepath.substring(fileExtensionIndex, filepath.length()));
 				}
 			}
 			else

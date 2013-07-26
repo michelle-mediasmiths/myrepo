@@ -44,13 +44,11 @@ public interface FSRestService
 	@Produces("application/xml")
 	public MoveResponse movefile(MoveRequest mr) throws FSAdapterException;
 	
-	@Override
 	@PUT
 	@Path("/selectMostRecent")
 	@Produces("application/xml")
 	public boolean selectMostRecent(String filepath) throws FSAdapterException;
 	
-	@Override
 	@PUT
 	@Path("/cleanup")
 	@Produces("application/xml")
