@@ -33,7 +33,7 @@
   </wsdl:binding>
   <wsdl:service name="restService">
     <wsdl:port name="httpPort" binding="autoQCRequiredForTX:restBinding">
-      <http:address location="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tx/autoQCRequired?taskID={taskID}"/>
+      <http:address location="http://mamwfe-pkg.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/autoQCRequired?taskID={taskID}"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

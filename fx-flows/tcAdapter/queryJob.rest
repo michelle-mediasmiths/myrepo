@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.213:8080/fx-TcAdapter/transcoder/job/{guid}" ID="_k475IGk1EeKkF6Cl22xM4g">
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://mamwfe-pkg.mam.foxtel.com.au:8080/fx-TcAdapter/transcoder/job/{guid}" ID="_k475IGk1EeKkF6Cl22xM4g">
   <rest:operation verb="GET" name="queryJob" ID="_k475JGk1EeKkF6Cl22xM4g">
     <rest:output type="project:///tcAdapter/tcAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/tc/adapter}JobInfo" name="response" headerDirection="request" contentType="application/xml" ID="_k475JWk1EeKkF6Cl22xM4g"/>
   </rest:operation>

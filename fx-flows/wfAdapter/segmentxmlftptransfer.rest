@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tx/delivery/ftpAoSegmentXML?packageID={packageID}" ID="_2VXY8N5TEeKHYfK0AvlEkA">
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://mamwfe-pkg.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/delivery/ftpAoSegmentXML?packageID={packageID}" ID="_2VXY8N5TEeKHYfK0AvlEkA">
   <rest:operation verb="GET" name="ftpTransferForAoSegmentXML" ID="_2VXY8t5TEeKHYfK0AvlEkA">
     <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}anyType" name="response" headerDirection="request" contentType="text/plain" ID="_2VXY895TEeKHYfK0AvlEkA"/>
   </rest:operation>

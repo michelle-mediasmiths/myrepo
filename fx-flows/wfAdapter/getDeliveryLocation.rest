@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tx/deliveryLocation?packageID={packageID}" ID="_iI2NcCjGEeK0LJoN9o-OZw">
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://mamwfe-pkg.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/deliveryLocation?packageID={packageID}" ID="_iI2NcCjGEeK0LJoN9o-OZw">
   <rest:operation verb="GET" name="getDeliveryLocation " ID="_iI2NcSjGEeK0LJoN9o-OZw">
     <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="response" headerDirection="request" contentType="text/plain" ID="_iI2NcijGEeK0LJoN9o-OZw"/>
   </rest:operation>

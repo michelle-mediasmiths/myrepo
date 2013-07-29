@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tc/priority" ID="_p1UxoKahEeKCpI3wQsthIA">
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://mamwfe-pkg.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/priority" ID="_p1UxoKahEeKCpI3wQsthIA">
   <rest:operation verb="POST" name="getpriority" ID="_p1UxoaahEeKCpI3wQsthIA">
     <rest:input type="project:///wfAdapter/wfAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/wf/adapter}getPriorityRequest" name="body" headerDirection="request" contentType="application/xml" ID="_p1UxoqahEeKCpI3wQsthIA"/>
     <rest:output type="project:///wfAdapter/wfAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/wf/adapter}getPriorityResponse" name="response" headerDirection="request" contentType="application/xml" ID="_p1Uxo6ahEeKCpI3wQsthIA"/>

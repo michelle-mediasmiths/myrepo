@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tx/abortFxpTransfer" ID="_3kpi0MFEEeK0bdupt1rWrA">
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://mamwfe-pkg.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/abortFxpTransfer" ID="_3kpi0MFEEeK0bdupt1rWrA">
   <rest:operation verb="PUT" name="abortFxpTransfer" ID="_3kpi0cFEEeK0bdupt1rWrA">
     <rest:input type="project:///wfAdapter/wfAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/wf/adapter}abortFxpTransferRequest" name="body" headerDirection="request" contentType="application/xml" ID="_3kpi0sFEEeK0bdupt1rWrA"/>
     <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}anyType" name="response" headerDirection="request" contentType="text/xml" ID="_3kpi08FEEeK0bdupt1rWrA"/>

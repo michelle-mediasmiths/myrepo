@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/delete" ID="_4lTygSp-EeKzs8kIl2qm7w">
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://mamwfe-pkg.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/delete" ID="_4lTygSp-EeKzs8kIl2qm7w">
   <rest:operation verb="PUT" name="delete" ID="_4lVnsCp-EeKzs8kIl2qm7w">
     <rest:input type="project:///fsAdapter/FSAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/fs/adapter}deleteRequest" name="body" headerDirection="request" contentType="application/xml" ID="_4lWOwCp-EeKzs8kIl2qm7w"/>
     <rest:output type="project:///fsAdapter/FSAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/fs/adapter}deleteResponse" name="response" headerDirection="request" contentType="application/xml" ID="_4lW10Cp-EeKzs8kIl2qm7w"/>
