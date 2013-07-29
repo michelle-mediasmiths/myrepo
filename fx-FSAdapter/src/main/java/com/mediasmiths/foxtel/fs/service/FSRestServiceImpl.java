@@ -39,7 +39,7 @@ public class FSRestServiceImpl implements FSRestService
 		
 		boolean filesRemaining = true;
 		String currentFile = filepath;
-		int fileExtensionIndex = filepath.indexOf(".");
+		int fileExtensionIndex = filepath.lastIndexOf(".");
 		
 		//Remove file and all assocaited filenames (filename_1 ... filename_x)
 		
@@ -69,7 +69,7 @@ public class FSRestServiceImpl implements FSRestService
 						log.error(String.format("Failed to delete file %s", f.getAbsolutePath()));
 					}
 	
-					currentFile = (filepath.substring(0, fileExtensionIndex) + "_" + fileIndex + filepath.substring(fileExtensionIndex, filepath.length()));
+					currentFile = getIndexedFilePath(filepath, fileIndex, fileExtensionIndex);
 					fileIndex ++;
 				}
 			}
@@ -93,11 +93,11 @@ public class FSRestServiceImpl implements FSRestService
 		// Select file with highest index (eg filename_x) and rename to filename
 		// Remove all other files
 		
-		int fileCount = 0;
+		int highestIndex = 0;
 		
 		boolean filesRemaining = true;
 		String currentFile = filepath;
-		int fileExtensionIndex = filepath.indexOf(".");
+		int fileExtensionIndex = filepath.lastIndexOf(".");
 		
 		//Remove file and all assocaited filenames (filename_1 ... filename_x)
 		
@@ -110,11 +110,12 @@ public class FSRestServiceImpl implements FSRestService
 				if (!f.exists())
 				{
 					filesRemaining = false;
+					highestIndex--; //file at filename_highestIndex doesnt exist, so decrement highestIndex
 				}
 				else
 				{
-					fileCount ++;
-					currentFile = (filepath.substring(0, fileExtensionIndex) + "_" + fileCount + filepath.substring(fileExtensionIndex, filepath.length()));
+					highestIndex ++;
+					currentFile = getIndexedFilePath(filepath, highestIndex, fileExtensionIndex);
 				}
 			}
 			else
@@ -123,8 +124,10 @@ public class FSRestServiceImpl implements FSRestService
 			}
 		}
 		
-		for (int fileIndex = 1; fileIndex < fileCount; fileIndex++)
+		for (int fileIndex = 1; fileIndex < highestIndex ; fileIndex++)
 		{
+			currentFile = getIndexedFilePath(filepath, fileIndex, fileExtensionIndex);
+
 			if (pathAllowed(currentFile))
 			{
 				File f = new File(currentFile);
@@ -146,7 +149,7 @@ public class FSRestServiceImpl implements FSRestService
 						log.error(String.format("Failed to delete file %s", f.getAbsolutePath()));
 					}
 					
-					currentFile = (filepath.substring(0, fileExtensionIndex) + "_" + fileIndex + filepath.substring(fileExtensionIndex, filepath.length()));
+					currentFile = getIndexedFilePath(filepath, fileIndex, fileExtensionIndex);
 				}
 			}
 			else
@@ -154,12 +157,26 @@ public class FSRestServiceImpl implements FSRestService
 				throw new FSAdapterException(String.format("Not allowed to operate on specified path (%s)", currentFile));
 			}
 		}
-		
+
+		currentFile = getIndexedFilePath(filepath, highestIndex, fileExtensionIndex);
 		File mostRecentFile = new File(currentFile);
 		File originalFile = new File(filepath);
-		
-		return mostRecentFile.renameTo(originalFile);
+
+		log.info("Deleting "+originalFile);
+		DeleteRequest dr = new DeleteRequest();
+		dr.setPath(filepath);
+		deleteFile(dr);
+		log.info("Moving "+currentFile+" to "+filepath);
+
+		return moveFileToFile(mostRecentFile,originalFile).isSuccessful();
 	}
+
+
+	private String getIndexedFilePath(final String filepath, final int fileCount, final int fileExtensionIndex)
+	{
+		return (filepath.substring(0, fileExtensionIndex) + "_" + fileCount + filepath.substring(fileExtensionIndex, filepath.length()));
+	}
+
 
 	@Override
 	@PUT

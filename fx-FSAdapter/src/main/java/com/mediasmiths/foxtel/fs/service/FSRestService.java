@@ -1,14 +1,14 @@
 package com.mediasmiths.foxtel.fs.service;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-
 import com.mediasmiths.foxtel.fs.model.DeleteRequest;
 import com.mediasmiths.foxtel.fs.model.DeleteResponse;
 import com.mediasmiths.foxtel.fs.model.MoveRequest;
 import com.mediasmiths.foxtel.fs.model.MoveResponse;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 @Path("/fs")
 public interface FSRestService
@@ -46,11 +46,11 @@ public interface FSRestService
 	
 	@PUT
 	@Path("/selectMostRecent")
-	@Produces("application/xml")
+	@Produces("text/plain")
 	public boolean selectMostRecent(String filepath) throws FSAdapterException;
 	
 	@PUT
 	@Path("/cleanup")
-	@Produces("application/xml")
+	@Produces("text/plain")
 	public boolean cleanup(String filepath) throws FSAdapterException;
 }
