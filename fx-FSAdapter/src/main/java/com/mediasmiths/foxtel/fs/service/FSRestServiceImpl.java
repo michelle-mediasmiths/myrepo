@@ -123,7 +123,13 @@ public class FSRestServiceImpl implements FSRestService
 				throw new FSAdapterException(String.format("Not allowed to operate on specified path (%s)", currentFile));
 			}
 		}
-		
+
+		if (highestIndex == 0)
+		{
+			log.info("No higher versions that " + filepath + " exist");
+			return true;
+		}
+
 		for (int fileIndex = 1; fileIndex < highestIndex ; fileIndex++)
 		{
 			currentFile = getIndexedFilePath(filepath, fileIndex, fileExtensionIndex);
