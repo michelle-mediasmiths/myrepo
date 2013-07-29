@@ -1,7 +1,7 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:rhozetCleanup="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetCleanup.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:rhozetSelectMostRecent="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetSelectMostRecent.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:diag="http://thisdiagram" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:fs="http://thisdiagram/fs" xmlns:Auto_QC="http://thisdiagram/Auto_QC" xmlns:this="http://thisdiagram/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Transcode">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:rhozetCleanup="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetCleanup.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:rhozetSelectMostRecent="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetSelectMostRecent.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:diag="http://thisdiagram" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:fs="http://thisdiagram/fs" xmlns:Auto_QC="http://thisdiagram/Auto_QC" xmlns:this="http://thisdiagram/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Transcode">
     <bpdm:dependencies version="6000089">
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" bpdm:prefix="tcFailure" bpdm:comment="contrib=&apos;project:///wfAdapter/tcFailure.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" bpdm:prefix="isTaskCancelled" bpdm:comment="contrib=&apos;project:///wfAdapter/isTaskCancelled.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" bpdm:prefix="tcFailure" bpdm:comment="contrib=&apos;project:///wfAdapter/tcFailure.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" bpdm:prefix="deleteJob" bpdm:comment="contrib=&apos;project:///tcAdapter/deleteJob.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/fs/adapter" bpdm:prefix="FSAdapter" bpdm:comment="contrib=&apos;project:///fsAdapter/FSAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
@@ -176,11 +176,7 @@
                                                     <bpdm:linkset bpdm:type="assignments">
                                                         <bpel:copy>
                                                             <bpel:from>$TCFilePath</bpel:from>
-                                                            <bpel:to>$rhozetCleanupRhozetCleanupRequestMsg.body/FSAdapter:path/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="14354842" targetPath="$rhozetCleanupRhozetCleanupRequestMsg.body/FSAdapter:path/text()" targetedBy="29559953-arg0"></mapper:vertice>
-  <mapper:vertice id="29559953" sourcePath="$TCFilePath"></mapper:vertice>
-</mapper:mapperLink>
+                                                            <bpel:to>$rhozetCleanupRhozetCleanupRequestMsg.body/FSAdapter:path/text()</bpel:to><mapper:mapperLink><mapper:vertice id="14354842" targetPath="$rhozetCleanupRhozetCleanupRequestMsg.body/FSAdapter:path/text()" targetedBy="29559953-arg0"></mapper:vertice><mapper:vertice id="29559953" sourcePath="$TCFilePath"></mapper:vertice></mapper:mapperLink>
                                                         </bpel:copy>
                                                     </bpdm:linkset>
                                                     <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="rhozetCleanupRhozetCleanupRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="rhozetCleanup:rhozetCleanup_input" bpdm:binding="rhozetCleanup:restBinding" bpdm:ID="_-dNhIPguEeKzHqVPlR5KFg"></bpdm:linkset>
@@ -487,7 +483,11 @@
                                                         <bpdm:linkset bpdm:type="assignments">
                                                             <bpel:copy>
                                                                 <bpel:from>$TCFilePath</bpel:from>
-                                                                <bpel:to>$rhozetSelectMostRecentRhozetSelectMostRecentRequestMsg.body/text()</bpel:to><mapper:mapperLink><mapper:vertice id="28741568" targetPath="$rhozetSelectMostRecentRhozetSelectMostRecentRequestMsg.body/text()" targetedBy="4815682-arg0"></mapper:vertice><mapper:vertice id="4815682" sourcePath="$TCFilePath"></mapper:vertice></mapper:mapperLink>
+                                                                <bpel:to>$rhozetSelectMostRecentRhozetSelectMostRecentRequestMsg.body/FSAdapter:path/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="17441769" targetPath="$rhozetSelectMostRecentRhozetSelectMostRecentRequestMsg.body/FSAdapter:path/text()" targetedBy="26035331-arg0"></mapper:vertice>
+  <mapper:vertice id="26035331" sourcePath="$TCFilePath"></mapper:vertice>
+</mapper:mapperLink>
                                                             </bpel:copy>
                                                         </bpdm:linkset>
                                                         <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="rhozetSelectMostRecentRhozetSelectMostRecentRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="rhozetSelectMostRecent:rhozetSelectMostRecent_input" bpdm:binding="rhozetSelectMostRecent:restBinding" bpdm:ID="_LP7GAPgsEeKzHqVPlR5KFg"></bpdm:linkset>
@@ -555,11 +555,7 @@
                                                         <bpdm:linkset bpdm:type="assignments">
                                                             <bpel:copy>
                                                                 <bpel:from>$TCFilePath</bpel:from>
-                                                                <bpel:to>$rhozetCleanupRhozetCleanupRequestMsg.body/FSAdapter:path/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="16093243" targetPath="$rhozetCleanupRhozetCleanupRequestMsg.body/FSAdapter:path/text()" targetedBy="30541206-arg0"></mapper:vertice>
-  <mapper:vertice id="30541206" sourcePath="$TCFilePath"></mapper:vertice>
-</mapper:mapperLink>
+                                                                <bpel:to>$rhozetCleanupRhozetCleanupRequestMsg.body/FSAdapter:path/text()</bpel:to><mapper:mapperLink><mapper:vertice id="16093243" targetPath="$rhozetCleanupRhozetCleanupRequestMsg.body/FSAdapter:path/text()" targetedBy="30541206-arg0"></mapper:vertice><mapper:vertice id="30541206" sourcePath="$TCFilePath"></mapper:vertice></mapper:mapperLink>
                                                             </bpel:copy>
                                                         </bpdm:linkset>
                                                         <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="rhozetCleanupRhozetCleanupRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="rhozetCleanup:rhozetCleanup_input" bpdm:binding="rhozetCleanup:restBinding" bpdm:ID="_8MPkEPguEeKzHqVPlR5KFg"></bpdm:linkset>
@@ -587,11 +583,7 @@
                                                 <bpdm:linkset bpdm:type="assignments">
                                                     <bpel:copy>
                                                         <bpel:from>$TCFilePath</bpel:from>
-                                                        <bpel:to>$rhozetCleanupRhozetCleanupRequestMsg.body/FSAdapter:path/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="16093243" targetPath="$rhozetCleanupRhozetCleanupRequestMsg.body/FSAdapter:path/text()" targetedBy="30541206-arg0"></mapper:vertice>
-  <mapper:vertice id="30541206" sourcePath="$TCFilePath"></mapper:vertice>
-</mapper:mapperLink>
+                                                        <bpel:to>$rhozetCleanupRhozetCleanupRequestMsg.body/FSAdapter:path/text()</bpel:to><mapper:mapperLink><mapper:vertice id="16093243" targetPath="$rhozetCleanupRhozetCleanupRequestMsg.body/FSAdapter:path/text()" targetedBy="30541206-arg0"></mapper:vertice><mapper:vertice id="30541206" sourcePath="$TCFilePath"></mapper:vertice></mapper:mapperLink>
                                                     </bpel:copy>
                                                 </bpdm:linkset>
                                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="rhozetCleanupRhozetCleanupRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="rhozetCleanup:rhozetCleanup_input" bpdm:binding="rhozetCleanup:restBinding" bpdm:ID="_8MPkEPguEeKzHqVPlR5KFg"></bpdm:linkset>
