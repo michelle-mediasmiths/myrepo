@@ -2,10 +2,14 @@ package com.mediasmiths.foxtel.fs.service;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.fs.model.CleanupRequest;
+import com.mediasmiths.foxtel.fs.model.CleanupResponse;
 import com.mediasmiths.foxtel.fs.model.DeleteRequest;
 import com.mediasmiths.foxtel.fs.model.DeleteResponse;
 import com.mediasmiths.foxtel.fs.model.MoveRequest;
 import com.mediasmiths.foxtel.fs.model.MoveResponse;
+import com.mediasmiths.foxtel.fs.model.SelectMostRecentRequest;
+import com.mediasmiths.foxtel.fs.model.SelectMostRecentResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
@@ -30,8 +34,9 @@ public class FSRestServiceImpl implements FSRestService
 	@PUT
 	@Path("/cleanup")
 	@Produces("application/xml")
-	public boolean cleanup(String filepath) throws FSAdapterException
+	public CleanupResponse cleanup(final CleanupRequest req) throws FSAdapterException
 	{
+		final String filepath = req.getPath();
 		log.info(String.format("Received cleanup request for path %s", filepath));
 		
 		int fileIndex = 1;
@@ -78,16 +83,18 @@ public class FSRestServiceImpl implements FSRestService
 				throw new FSAdapterException(String.format("Not allowed to operate on specified path (%s)", currentFile));
 			}
 		}
-		
-		return (filesDeleted > 0);
+
+		final boolean someFilesDeleted = filesDeleted > 0;
+		return new CleanupResponse(someFilesDeleted);
 	}
 	
 	@Override
 	@PUT
 	@Path("/selectMostRecent")
 	@Produces("application/xml")
-	public boolean selectMostRecent(String filepath) throws FSAdapterException
+	public SelectMostRecentResponse selectMostRecent(final SelectMostRecentRequest req) throws FSAdapterException
 	{
+		final String filepath = req.getPath();
 		log.info(String.format("Received selectMostRecent request for path %s", filepath));
 		
 		// Select file with highest index (eg filename_x) and rename to filename
@@ -127,7 +134,7 @@ public class FSRestServiceImpl implements FSRestService
 		if (highestIndex == 0)
 		{
 			log.info("No higher versions that " + filepath + " exist");
-			return true;
+			return new SelectMostRecentResponse(true);
 		}
 
 		for (int fileIndex = 1; fileIndex < highestIndex ; fileIndex++)
@@ -174,7 +181,8 @@ public class FSRestServiceImpl implements FSRestService
 		deleteFile(dr);
 		log.info("Moving "+currentFile+" to "+filepath);
 
-		return moveFileToFile(mostRecentFile,originalFile).isSuccessful();
+		final boolean successful = moveFileToFile(mostRecentFile, originalFile).isSuccessful();
+		return new SelectMostRecentResponse(successful);
 	}
 
 
@@ -343,7 +351,6 @@ public class FSRestServiceImpl implements FSRestService
 			                                           mr.getTo()));
 		}
 	}
-
 
 	private MoveResponse moveDirectoryToSelf(final String fromPath, final String toPath)
 	{
