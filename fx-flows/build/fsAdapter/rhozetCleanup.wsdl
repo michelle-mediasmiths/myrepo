@@ -1,0 +1,40 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:rhozetCleanup="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetCleanup.rest" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetCleanup.rest">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetCleanup.rest">
+      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+      <xs:element type="xs:string" name="body_rhozetCleanup_inputType"/>
+      <xs:element type="xs:boolean" name="response_rhozetCleanup_outputType"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="rhozetCleanup_input">
+    <wsdl:part name="body" element="rhozetCleanup:body_rhozetCleanup_inputType"/>
+  </wsdl:message>
+  <wsdl:message name="rhozetCleanup_output">
+    <wsdl:part name="response" element="rhozetCleanup:response_rhozetCleanup_outputType"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="rhozetCleanup">
+      <wsdl:input message="rhozetCleanup:rhozetCleanup_input"/>
+      <wsdl:output message="rhozetCleanup:rhozetCleanup_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="rhozetCleanup:restInterface">
+    <wsdl:operation name="rhozetCleanup">
+      <ode:binding verb="PUT"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+        <mime:content type="text/plain" part="body"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/plain" part="response"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="rhozetCleanup:restBinding">
+      <http:address location="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/cleanup"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

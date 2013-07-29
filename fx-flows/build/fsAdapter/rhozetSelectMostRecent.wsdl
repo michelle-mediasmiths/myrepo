@@ -1,0 +1,40 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:rhozetSelectMostRecent="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetSelectMostRecent.rest" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetSelectMostRecent.rest">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetSelectMostRecent.rest">
+      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+      <xs:element type="xs:string" name="body_rhozetSelectMostRecent_inputType"/>
+      <xs:element type="xs:boolean" name="response_rhozetSelectMostRecent_outputType"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="rhozetSelectMostRecent_input">
+    <wsdl:part name="body" element="rhozetSelectMostRecent:body_rhozetSelectMostRecent_inputType"/>
+  </wsdl:message>
+  <wsdl:message name="rhozetSelectMostRecent_output">
+    <wsdl:part name="response" element="rhozetSelectMostRecent:response_rhozetSelectMostRecent_outputType"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="rhozetSelectMostRecent">
+      <wsdl:input message="rhozetSelectMostRecent:rhozetSelectMostRecent_input"/>
+      <wsdl:output message="rhozetSelectMostRecent:rhozetSelectMostRecent_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="rhozetSelectMostRecent:restInterface">
+    <wsdl:operation name="rhozetSelectMostRecent">
+      <ode:binding verb="PUT"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+        <mime:content type="text/plain" part="body"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/plain" part="response"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="rhozetSelectMostRecent:restBinding">
+      <http:address location="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/selectMostRecent"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

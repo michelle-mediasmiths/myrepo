@@ -1,0 +1,7 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/cleanup" ID="_UMRn4PgqEeKeqe51R6X2ag">
+  <rest:operation verb="PUT" name="rhozetCleanup" ID="_UMRn4fgqEeKeqe51R6X2ag">
+    <rest:input type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="body" headerDirection="request" contentType="text/plain" ID="_UMRn4vgqEeKeqe51R6X2ag"/>
+    <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}boolean" name="response" headerDirection="request" contentType="text/plain" ID="_UMRn4_gqEeKeqe51R6X2ag"/>
+  </rest:operation>
+</rest:descriptor>

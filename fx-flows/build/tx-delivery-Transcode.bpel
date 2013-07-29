@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:TCAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/TCAdapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:fs="http://ns.mediasmithsforge.com/foxtel/tx-delivery/fs" xmlns:Auto_QC="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:Caller="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Caller" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Transcode" name="Transcode" bpmn:id="_i0TRQGuNEeK7FdvgH5F2kQ" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode">
-  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" location="fsAdapter/delete.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:rhozetCleanup="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetCleanup.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:rhozetSelectMostRecent="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetSelectMostRecent.rest" xmlns:Caller="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Caller" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:TCAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/TCAdapter" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:fs="http://ns.mediasmithsforge.com/foxtel/tx-delivery/fs" xmlns:Auto_QC="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Transcode" name="Transcode" bpmn:id="_i0TRQGuNEeK7FdvgH5F2kQ" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode">
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetCleanup.rest" location="fsAdapter/rhozetCleanup.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetSelectMostRecent.rest" location="fsAdapter/rhozetSelectMostRecent.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" location="tcAdapter/createJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" location="tcAdapter/deleteJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" location="tcAdapter/queryJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -15,7 +16,7 @@
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" location="tx-delivery-Transcode.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:partnerLinks>
     <bpel:partnerLink name="transcodeAndCallerPlkVar" partnerLinkType="TX_Delivery:TranscodeAndCaller" myRole="Transcode_for_Caller"/>
-    <bpel:partnerLink name="transcodeAndFsForHttpPortPlkVar" partnerLinkType="TX_Delivery:TranscodeAndFsForHttpPortPlk" initializePartnerRole="yes" partnerRole="fs_for_Transcode"/>
+    <bpel:partnerLink name="transcodeAndFsForHttpPortPlk0Var" partnerLinkType="TX_Delivery:TranscodeAndFsForHttpPortPlk0" initializePartnerRole="yes" partnerRole="fs_for_Transcode"/>
     <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode"/>
     <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode"/>
     <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
@@ -23,6 +24,7 @@
     <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
     <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode"/>
     <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
+    <bpel:partnerLink name="transcodeAndFsForHttpPortPlk1Var" partnerLinkType="TX_Delivery:TranscodeAndFsForHttpPortPlk1" initializePartnerRole="yes" partnerRole="fs_for_Transcode"/>
     <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
     <bpel:partnerLink name="auto_QcAndTranscodePlkVar" partnerLinkType="TX_Delivery:Auto_QcAndTranscode" initializePartnerRole="yes" partnerRole="Auto_QC_for_Transcode"/>
     <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk4Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk4" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
@@ -154,28 +156,26 @@
                     <ext:retryDelay>60</ext:retryDelay>
                   </ext:failureHandling>
                   <bpel:variables>
-                    <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output"/>
-                    <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input"/>
+                    <bpel:variable name="rhozetCleanupRhozetCleanupRequestMsg" messageType="rhozetCleanup:rhozetCleanup_input"/>
+                    <bpel:variable name="rhozetCleanupRhozetCleanupResponseMsg" messageType="rhozetCleanup:rhozetCleanup_output"/>
                   </bpel:variables>
                   <bpel:sequence>
                     <bpel:assign name="init-variables-SubProcess" bpmn:id="_9SE0kLcQEeKdLrMPHFRfaw">
-                      <bpel:copy bpmn:label="$deleteDeleteRequestMsg">
+                      <bpel:copy bpmn:label="$rhozetCleanupRhozetCleanupRequestMsg">
                         <bpel:from>
                           <bpel:literal>
-<FSAdapter:deleteRequest>
-  <FSAdapter:path></FSAdapter:path>
-</FSAdapter:deleteRequest></bpel:literal>
+<rhozetCleanup:body_rhozetCleanup_inputType></rhozetCleanup:body_rhozetCleanup_inputType></bpel:literal>
                         </bpel:from>
-                        <bpel:to>$deleteDeleteRequestMsg.body</bpel:to>
+                        <bpel:to>$rhozetCleanupRhozetCleanupRequestMsg.body</bpel:to>
                       </bpel:copy>
                     </bpel:assign>
-                    <bpel:assign bpmn:label="Delete Partial Files" name="Delete_Partial_Files" bpmn:id="_9SFboLcQEeKdLrMPHFRfaw">
+                    <bpel:assign bpmn:label="delete partial transcode outputs" name="delete_partial_transcode_outputs" bpmn:id="_bIAZAPgsEeKzHqVPlR5KFg">
                       <bpel:copy>
                         <bpel:from>$TCFilePath</bpel:from>
-                        <bpel:to>$deleteDeleteRequestMsg.body/FSAdapter:path</bpel:to>
+                        <bpel:to>$rhozetCleanupRhozetCleanupRequestMsg.body</bpel:to>
                       </bpel:copy>
                     </bpel:assign>
-                    <bpel:invoke partnerLink="transcodeAndFsForHttpPortPlkVar" portType="delete:restInterface" operation="delete" inputVariable="deleteDeleteRequestMsg" outputVariable="deleteDeleteResponseMsg" bpmn:label="Delete Partial Files" name="Delete_Partial_Files-1" bpmn:id="_9SFboLcQEeKdLrMPHFRfaw"></bpel:invoke>
+                    <bpel:invoke partnerLink="transcodeAndFsForHttpPortPlk0Var" portType="rhozetCleanup:restInterface" operation="rhozetCleanup" inputVariable="rhozetCleanupRhozetCleanupRequestMsg" outputVariable="rhozetCleanupRhozetCleanupResponseMsg" bpmn:label="delete partial transcode outputs" name="delete_partial_transcode_outputs-1" bpmn:id="_bIAZAPgsEeKzHqVPlR5KFg"></bpel:invoke>
                   </bpel:sequence>
                 </bpel:scope>
                 <bpel:wait bpmn:label="wait a minute before retrying" name="wait_a_minute_before_retrying" bpmn:id="__NKoQLcQEeKdLrMPHFRfaw">
@@ -477,28 +477,26 @@
                     <ext:retryDelay>60</ext:retryDelay>
                   </ext:failureHandling>
                   <bpel:variables>
-                    <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output"/>
-                    <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input"/>
+                    <bpel:variable name="rhozetCleanupRhozetCleanupRequestMsg" messageType="rhozetCleanup:rhozetCleanup_input"/>
+                    <bpel:variable name="rhozetCleanupRhozetCleanupResponseMsg" messageType="rhozetCleanup:rhozetCleanup_output"/>
                   </bpel:variables>
                   <bpel:sequence>
                     <bpel:assign name="init-variables-SubProcess" bpmn:id="_PKs4cLcQEeKdLrMPHFRfaw">
-                      <bpel:copy bpmn:label="$deleteDeleteRequestMsg">
+                      <bpel:copy bpmn:label="$rhozetCleanupRhozetCleanupRequestMsg">
                         <bpel:from>
                           <bpel:literal>
-<FSAdapter:deleteRequest>
-  <FSAdapter:path></FSAdapter:path>
-</FSAdapter:deleteRequest></bpel:literal>
+<rhozetCleanup:body_rhozetCleanup_inputType></rhozetCleanup:body_rhozetCleanup_inputType></bpel:literal>
                         </bpel:from>
-                        <bpel:to>$deleteDeleteRequestMsg.body</bpel:to>
+                        <bpel:to>$rhozetCleanupRhozetCleanupRequestMsg.body</bpel:to>
                       </bpel:copy>
                     </bpel:assign>
-                    <bpel:assign bpmn:label="Delete Partial Files" name="Delete_Partial_Files-2" bpmn:id="_PKxw8LcQEeKdLrMPHFRfaw">
+                    <bpel:assign bpmn:label="delete partial transcode outputs" name="delete_partial_transcode_outputs-2" bpmn:id="_UeJJEPgsEeKzHqVPlR5KFg">
                       <bpel:copy>
                         <bpel:from>$TCFilePath</bpel:from>
-                        <bpel:to>$deleteDeleteRequestMsg.body/FSAdapter:path</bpel:to>
+                        <bpel:to>$rhozetCleanupRhozetCleanupRequestMsg.body</bpel:to>
                       </bpel:copy>
                     </bpel:assign>
-                    <bpel:invoke partnerLink="transcodeAndFsForHttpPortPlkVar" portType="delete:restInterface" operation="delete" inputVariable="deleteDeleteRequestMsg" outputVariable="deleteDeleteResponseMsg" bpmn:label="Delete Partial Files" name="Delete_Partial_Files-3" bpmn:id="_PKxw8LcQEeKdLrMPHFRfaw"></bpel:invoke>
+                    <bpel:invoke partnerLink="transcodeAndFsForHttpPortPlk0Var" portType="rhozetCleanup:restInterface" operation="rhozetCleanup" inputVariable="rhozetCleanupRhozetCleanupRequestMsg" outputVariable="rhozetCleanupRhozetCleanupResponseMsg" bpmn:label="delete partial transcode outputs" name="delete_partial_transcode_outputs-3" bpmn:id="_UeJJEPgsEeKzHqVPlR5KFg"></bpel:invoke>
                   </bpel:sequence>
                 </bpel:scope>
               </bpel:sequence>
@@ -573,6 +571,35 @@
                           <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk3Var" portType="tcPassed:restInterface" operation="tcPassed" inputVariable="tcPassedTcPassedRequestMsg" outputVariable="tcPassedTcPassedResponseMsg" bpmn:label="Send Success Message" name="Send_Success_Message-1" bpmn:id="_D-9_0LcQEeKdLrMPHFRfaw"></bpel:invoke>
                         </bpel:sequence>
                       </bpel:scope>
+                      <bpel:scope bpmn:label="SubProcess" name="SubProcess-9" bpmn:id="_GTtDoPgsEeKzHqVPlR5KFg">
+                        <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                          <ext:faultOnFailure>true</ext:faultOnFailure>
+                          <ext:retryFor>10</ext:retryFor>
+                          <ext:retryDelay>60</ext:retryDelay>
+                        </ext:failureHandling>
+                        <bpel:variables>
+                          <bpel:variable name="rhozetSelectMostRecentRhozetSelectMostRecentRequestMsg" messageType="rhozetSelectMostRecent:rhozetSelectMostRecent_input"/>
+                          <bpel:variable name="rhozetSelectMostRecentRhozetSelectMostRecentResponseMsg" messageType="rhozetSelectMostRecent:rhozetSelectMostRecent_output"/>
+                        </bpel:variables>
+                        <bpel:sequence>
+                          <bpel:assign name="init-variables-SubProcess" bpmn:id="_GTtDoPgsEeKzHqVPlR5KFg">
+                            <bpel:copy bpmn:label="$rhozetSelectMostRecentRhozetSelectMostRecentRequestMsg">
+                              <bpel:from>
+                                <bpel:literal>
+<rhozetSelectMostRecent:body_rhozetSelectMostRecent_inputType></rhozetSelectMostRecent:body_rhozetSelectMostRecent_inputType></bpel:literal>
+                              </bpel:from>
+                              <bpel:to>$rhozetSelectMostRecentRhozetSelectMostRecentRequestMsg.body</bpel:to>
+                            </bpel:copy>
+                          </bpel:assign>
+                          <bpel:assign bpmn:label="select most recent output" name="select_most_recent_output" bpmn:id="_GT2NkPgsEeKzHqVPlR5KFg">
+                            <bpel:copy>
+                              <bpel:from>$TCFilePath</bpel:from>
+                              <bpel:to>$rhozetSelectMostRecentRhozetSelectMostRecentRequestMsg.body</bpel:to>
+                            </bpel:copy>
+                          </bpel:assign>
+                          <bpel:invoke partnerLink="transcodeAndFsForHttpPortPlk1Var" portType="rhozetSelectMostRecent:restInterface" operation="rhozetSelectMostRecent" inputVariable="rhozetSelectMostRecentRhozetSelectMostRecentRequestMsg" outputVariable="rhozetSelectMostRecentRhozetSelectMostRecentResponseMsg" bpmn:label="select most recent output" name="select_most_recent_output-1" bpmn:id="_GT2NkPgsEeKzHqVPlR5KFg"></bpel:invoke>
+                        </bpel:sequence>
+                      </bpel:scope>
                     </bpel:sequence>
                     <bpel:else>
                       <bpel:sequence>
@@ -583,7 +610,7 @@
                             <bpel:to>$TranscodeErrorCount</bpel:to>
                           </bpel:copy>
                         </bpel:assign>
-                        <bpel:scope bpmn:label="SubProcess" name="SubProcess-9" bpmn:id="_GocjgLcQEeKdLrMPHFRfaw">
+                        <bpel:scope bpmn:label="SubProcess" name="SubProcess-10" bpmn:id="_GocjgLcQEeKdLrMPHFRfaw">
                           <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
                             <ext:faultOnFailure>true</ext:faultOnFailure>
                             <ext:retryFor>10</ext:retryFor>
@@ -630,35 +657,33 @@
                           </bpel:sequence>
                         </bpel:scope>
                         <bpel:empty bpmn:label="join" name="join-1" bpmn:id="_MgriMLcQEeKdLrMPHFRfaw"/>
-                        <bpel:scope bpmn:label="SubProcess" name="SubProcess-10" bpmn:id="_PKs4cLcQEeKdLrMPHFRfaw">
+                        <bpel:scope bpmn:label="SubProcess" name="SubProcess-11" bpmn:id="_PKs4cLcQEeKdLrMPHFRfaw">
                           <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
                             <ext:faultOnFailure>true</ext:faultOnFailure>
                             <ext:retryFor>10</ext:retryFor>
                             <ext:retryDelay>60</ext:retryDelay>
                           </ext:failureHandling>
                           <bpel:variables>
-                            <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output"/>
-                            <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input"/>
+                            <bpel:variable name="rhozetCleanupRhozetCleanupRequestMsg" messageType="rhozetCleanup:rhozetCleanup_input"/>
+                            <bpel:variable name="rhozetCleanupRhozetCleanupResponseMsg" messageType="rhozetCleanup:rhozetCleanup_output"/>
                           </bpel:variables>
                           <bpel:sequence>
                             <bpel:assign name="init-variables-SubProcess" bpmn:id="_PKs4cLcQEeKdLrMPHFRfaw">
-                              <bpel:copy bpmn:label="$deleteDeleteRequestMsg">
+                              <bpel:copy bpmn:label="$rhozetCleanupRhozetCleanupRequestMsg">
                                 <bpel:from>
                                   <bpel:literal>
-<FSAdapter:deleteRequest>
-  <FSAdapter:path></FSAdapter:path>
-</FSAdapter:deleteRequest></bpel:literal>
+<rhozetCleanup:body_rhozetCleanup_inputType></rhozetCleanup:body_rhozetCleanup_inputType></bpel:literal>
                                 </bpel:from>
-                                <bpel:to>$deleteDeleteRequestMsg.body</bpel:to>
+                                <bpel:to>$rhozetCleanupRhozetCleanupRequestMsg.body</bpel:to>
                               </bpel:copy>
                             </bpel:assign>
-                            <bpel:assign bpmn:label="Delete Partial Files" name="Delete_Partial_Files-4" bpmn:id="_PKxw8LcQEeKdLrMPHFRfaw">
+                            <bpel:assign bpmn:label="delete partial transcode outputs" name="delete_partial_transcode_outputs-4" bpmn:id="_UeJJEPgsEeKzHqVPlR5KFg">
                               <bpel:copy>
                                 <bpel:from>$TCFilePath</bpel:from>
-                                <bpel:to>$deleteDeleteRequestMsg.body/FSAdapter:path</bpel:to>
+                                <bpel:to>$rhozetCleanupRhozetCleanupRequestMsg.body</bpel:to>
                               </bpel:copy>
                             </bpel:assign>
-                            <bpel:invoke partnerLink="transcodeAndFsForHttpPortPlkVar" portType="delete:restInterface" operation="delete" inputVariable="deleteDeleteRequestMsg" outputVariable="deleteDeleteResponseMsg" bpmn:label="Delete Partial Files" name="Delete_Partial_Files-5" bpmn:id="_PKxw8LcQEeKdLrMPHFRfaw"></bpel:invoke>
+                            <bpel:invoke partnerLink="transcodeAndFsForHttpPortPlk1Var" portType="rhozetCleanup:restInterface" operation="rhozetCleanup" inputVariable="rhozetCleanupRhozetCleanupRequestMsg" outputVariable="rhozetCleanupRhozetCleanupResponseMsg" bpmn:label="delete partial transcode outputs" name="delete_partial_transcode_outputs-5" bpmn:id="_UeJJEPgsEeKzHqVPlR5KFg"></bpel:invoke>
                           </bpel:sequence>
                         </bpel:scope>
                       </bpel:sequence>
@@ -676,7 +701,7 @@
       <bpel:condition>$TranscodeSuccess</bpel:condition>
       <bpel:sequence>
         <bpel:empty bpmn:label="Transcode Finished Successfuly" name="Transcode_Finished_Successfuly" bpmn:id="_Q02FQGuREeK7FdvgH5F2kQ"/>
-        <bpel:scope bpmn:label="SubProcess" name="SubProcess-11" bpmn:id="_rLuoULcSEeKdLrMPHFRfaw">
+        <bpel:scope bpmn:label="SubProcess" name="SubProcess-12" bpmn:id="_rLuoULcSEeKdLrMPHFRfaw">
           <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
             <ext:retryFor>10</ext:retryFor>
             <ext:retryDelay>60</ext:retryDelay>
@@ -740,7 +765,7 @@
       </bpel:elseif>
       <bpel:else>
         <bpel:sequence>
-          <bpel:scope bpmn:label="SubProcess" name="SubProcess-12" bpmn:id="_Z6NdMLcSEeKdLrMPHFRfaw">
+          <bpel:scope bpmn:label="SubProcess" name="SubProcess-13" bpmn:id="_Z6NdMLcSEeKdLrMPHFRfaw">
             <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
               <ext:retryFor>10</ext:retryFor>
               <ext:retryDelay>60</ext:retryDelay>
