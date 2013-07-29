@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/fs/adapter" elementFormDefault="qualified" targetNamespace="http://ns.mediasmiths.com/foxtel/fs/adapter" version="1.0">
 
+  <xs:element name="cleanupRequest" type="tns:cleanupRequest"/>
+
+  <xs:element name="cleanupResponse" type="tns:cleanupResponse"/>
+
   <xs:element name="deleteRequest" type="tns:deleteRequest"/>
 
   <xs:element name="deleteResponse" type="tns:deleteResponse"/>
@@ -9,6 +13,10 @@
 
   <xs:element name="moveResponse" type="tns:moveResponse"/>
 
+  <xs:element name="selectMostRecentRequest" type="tns:selectMostRecentRequest"/>
+
+  <xs:element name="selectMostRecentResponse" type="tns:selectMostRecentResponse"/>
+
   <xs:complexType name="moveRequest">
     <xs:sequence>
       <xs:element name="from" type="xs:string"/>
@@ -16,7 +24,7 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="deleteResponse">
+  <xs:complexType name="selectMostRecentResponse">
     <xs:complexContent>
       <xs:extension base="tns:fsAdapterResponse">
         <xs:sequence/>
@@ -28,6 +36,28 @@
     <xs:sequence>
       <xs:element name="successful" type="xs:boolean"/>
     </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="cleanupResponse">
+    <xs:complexContent>
+      <xs:extension base="tns:fsAdapterResponse">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="cleanupRequest">
+    <xs:sequence>
+      <xs:element name="path" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="deleteResponse">
+    <xs:complexContent>
+      <xs:extension base="tns:fsAdapterResponse">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="deleteRequest">
@@ -42,5 +72,11 @@
         <xs:sequence/>
       </xs:extension>
     </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="selectMostRecentRequest">
+    <xs:sequence>
+      <xs:element name="path" type="xs:string"/>
+    </xs:sequence>
   </xs:complexType>
 </xs:schema>
