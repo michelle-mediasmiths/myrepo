@@ -1,17 +1,16 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:rhozetCleanup="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetCleanup.rest" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetCleanup.rest">
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:adapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:rhozetCleanup="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetCleanup.rest" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetCleanup.rest">
   <wsdl:types>
-    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetCleanup.rest">
-      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
-      <xs:element type="xs:string" name="body_rhozetCleanup_inputType"/>
-      <xs:element type="xs:boolean" name="response_rhozetCleanup_outputType"/>
+    <xs:schema targetNamespace="http://ns.mediasmiths.com/foxtel/fs/adapter">
+      <xs:include schemaLocation="FSAdapter.xsd"/>
     </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/rhozetCleanup.rest"/>
   </wsdl:types>
   <wsdl:message name="rhozetCleanup_input">
-    <wsdl:part name="body" element="rhozetCleanup:body_rhozetCleanup_inputType"/>
+    <wsdl:part name="body" element="adapter:cleanupRequest"/>
   </wsdl:message>
   <wsdl:message name="rhozetCleanup_output">
-    <wsdl:part name="response" element="rhozetCleanup:response_rhozetCleanup_outputType"/>
+    <wsdl:part name="response" element="adapter:cleanupResponse"/>
   </wsdl:message>
   <wsdl:portType name="restInterface">
     <wsdl:operation name="rhozetCleanup">
@@ -25,10 +24,10 @@
       <http:operation location=""/>
       <wsdl:input>
         <http:urlReplacement/>
-        <mime:content type="text/plain" part="body"/>
+        <mime:content type="application/xml" part="body"/>
       </wsdl:input>
       <wsdl:output>
-        <mime:content type="text/plain" part="response"/>
+        <mime:content type="application/xml" part="response"/>
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
