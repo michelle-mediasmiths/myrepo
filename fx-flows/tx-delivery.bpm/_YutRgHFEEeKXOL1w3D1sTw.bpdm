@@ -19,8 +19,8 @@
     </bpdm:dependencies>
     <bpel:scope bpdm:label="fs" bpdm:ID="_YutRgHFEEeKXOL1w3D1sTw">
         <bpel:partnerLinks>
-            <bpel:partnerLink name="transcodeAndFsForHttpPortPlk1Var" partnerLinkType="TX_Delivery:TranscodeAndFsForHttpPortPlk1" myRole="fs_for_Transcode" bpdm:enableSharing="false" bpdm:providedService="rhozetSelectMostRecent:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/selectMostRecent" bpdm:providedIsDefault="true" bpdm:clientTasks="_YutRgHFEEeKXOL1w3D1sTw:_KkY1sPgsEeKzHqVPlR5KFg" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
-            <bpel:partnerLink name="transcodeAndFsForHttpPortPlk0Var" partnerLinkType="TX_Delivery:TranscodeAndFsForHttpPortPlk0" myRole="fs_for_Transcode" bpdm:enableSharing="false" bpdm:providedService="rhozetCleanup:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/cleanup" bpdm:providedIsDefault="true" bpdm:clientTasks="_YutRgHFEEeKXOL1w3D1sTw:_T-zhsfgsEeKzHqVPlR5KFg, _YutRgHFEEeKXOL1w3D1sTw:_ekj_cPgsEeKzHqVPlR5KFg" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcodeAndFsForHttpPortPlk1Var" partnerLinkType="TX_Delivery:TranscodeAndFsForHttpPortPlk1" myRole="fs_for_Transcode" bpdm:enableSharing="false" bpdm:providedService="rhozetSelectMostRecent:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwfe-pkg.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/selectMostRecent" bpdm:providedIsDefault="true" bpdm:clientTasks="_YutRgHFEEeKXOL1w3D1sTw:_KkY1sPgsEeKzHqVPlR5KFg" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcodeAndFsForHttpPortPlk0Var" partnerLinkType="TX_Delivery:TranscodeAndFsForHttpPortPlk0" myRole="fs_for_Transcode" bpdm:enableSharing="false" bpdm:providedService="rhozetCleanup:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwfe-pkg.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/cleanup" bpdm:providedIsDefault="true" bpdm:clientTasks="_YutRgHFEEeKXOL1w3D1sTw:_7dY6APguEeKzHqVPlR5KFg, _YutRgHFEEeKXOL1w3D1sTw:_90nQEPguEeKzHqVPlR5KFg" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
         </bpel:partnerLinks>
         <bpel:variables>
             <bpel:variable name="rhozetSelectMostRecentRhozetSelectMostRecentRequestMsg" messageType="rhozetSelectMostRecent:rhozetSelectMostRecent_input" binding="rhozetSelectMostRecent:restBinding" operation="rhozetSelectMostRecent" opMsgType="0" bpdm:id="_LQUHlfgsEeKzHqVPlR5KFg" bpdm:messageIds="inc:_LP7GAPgsEeKzHqVPlR5KFg"/>
@@ -29,8 +29,8 @@
                     <bpel:literal bpdm:linkedMessageType="rhozetSelectMostRecent:rhozetSelectMostRecent_output" bpdm:linkedPart="response" bpdm:binding="rhozetSelectMostRecent:restBinding" bpdm:opMsgType="1" bpdm:operation="rhozetSelectMostRecent"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
-            <bpel:variable name="rhozetCleanupRhozetCleanupRequestMsg" messageType="rhozetCleanup:rhozetCleanup_input" binding="rhozetCleanup:restBinding" operation="rhozetCleanup" opMsgType="0" bpdm:id="_Wpp-YPgsEeKzHqVPlR5KFg" bpdm:messageIds="inc:_Wpb78PgsEeKzHqVPlR5KFg,_fPfLwPgsEeKzHqVPlR5KFg"/>
-            <bpel:variable name="rhozetCleanupRhozetCleanupResponseMsg" messageType="rhozetCleanup:rhozetCleanup_output" binding="rhozetCleanup:restBinding" operation="rhozetCleanup" opMsgType="1" bpdm:id="_W6JRcPgsEeKzHqVPlR5KFg" bpdm:messageIds=" out:_fhJjgPgsEeKzHqVPlR5KFg,_W572EPgsEeKzHqVPlR5KFg">
+            <bpel:variable name="rhozetCleanupRhozetCleanupRequestMsg" messageType="rhozetCleanup:rhozetCleanup_input" binding="rhozetCleanup:restBinding" operation="rhozetCleanup" opMsgType="0" bpdm:id="_Wpp-YPgsEeKzHqVPlR5KFg" bpdm:messageIds="inc:_-dNhIPguEeKzHqVPlR5KFg,_8MPkEPguEeKzHqVPlR5KFg"/>
+            <bpel:variable name="rhozetCleanupRhozetCleanupResponseMsg" messageType="rhozetCleanup:rhozetCleanup_output" binding="rhozetCleanup:restBinding" operation="rhozetCleanup" opMsgType="1" bpdm:id="_W6JRcPgsEeKzHqVPlR5KFg" bpdm:messageIds=" out:_-u-mkPguEeKzHqVPlR5KFg,_8d6i4PguEeKzHqVPlR5KFg">
                 <bpel:from bpdm:toPart="response">
                     <bpel:literal bpdm:linkedMessageType="rhozetCleanup:rhozetCleanup_output" bpdm:linkedPart="response" bpdm:binding="rhozetCleanup:restBinding" bpdm:opMsgType="1" bpdm:operation="rhozetCleanup"></bpel:literal>
                 </bpel:from>
@@ -38,21 +38,21 @@
         </bpel:variables>
         <bpel:flow>
             <bpel:sequence>
-                <bpdm:messagingtask operation="rhozetCleanup" partnerLink="transcodeAndFsForHttpPortPlk0Var" portType="rhozetCleanup:restInterface" isMyRole="true" enableSharing="false" bpdm:label="rhozetCleanup" bpdm:ID="_ekj_cPgsEeKzHqVPlR5KFg">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="rhozetCleanupRhozetCleanupRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="rhozetCleanup:rhozetCleanup_input" bpdm:binding="rhozetCleanup:restBinding" bpdm:ID="_fPfLwPgsEeKzHqVPlR5KFg"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="rhozetCleanupRhozetCleanupResponseMsg" bpdm:msgVarScopeId="_YutRgHFEEeKXOL1w3D1sTw" bpdm:variableIsManaged="true" bpdm:messageType="rhozetCleanup:rhozetCleanup_output" bpdm:binding="rhozetCleanup:restBinding" bpdm:ID="_fhJjgPgsEeKzHqVPlR5KFg"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
                 <bpdm:messagingtask operation="rhozetSelectMostRecent" partnerLink="transcodeAndFsForHttpPortPlk1Var" portType="rhozetSelectMostRecent:restInterface" isMyRole="true" enableSharing="false" bpdm:label="rhozetSelectMostRecent" bpdm:ID="_KkY1sPgsEeKzHqVPlR5KFg">
                     <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="rhozetSelectMostRecentRhozetSelectMostRecentRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="rhozetSelectMostRecent:rhozetSelectMostRecent_input" bpdm:binding="rhozetSelectMostRecent:restBinding" bpdm:ID="_LP7GAPgsEeKzHqVPlR5KFg"></bpdm:linkset>
                     <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="rhozetSelectMostRecentRhozetSelectMostRecentResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="rhozetSelectMostRecent:rhozetSelectMostRecent_output" bpdm:binding="rhozetSelectMostRecent:restBinding" bpdm:ID="_LmxfwPgsEeKzHqVPlR5KFg"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
-                <bpdm:messagingtask operation="rhozetCleanup" partnerLink="transcodeAndFsForHttpPortPlk0Var" portType="rhozetCleanup:restInterface" isMyRole="true" enableSharing="false" bpdm:label="rhozetCleanup" bpdm:ID="_T-zhsfgsEeKzHqVPlR5KFg">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="rhozetCleanupRhozetCleanupRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="rhozetCleanup:rhozetCleanup_input" bpdm:binding="rhozetCleanup:restBinding" bpdm:ID="_Wpb78PgsEeKzHqVPlR5KFg"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="rhozetCleanupRhozetCleanupResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="rhozetCleanup:rhozetCleanup_output" bpdm:binding="rhozetCleanup:restBinding" bpdm:ID="_W572EPgsEeKzHqVPlR5KFg"></bpdm:linkset>
+                <bpdm:messagingtask operation="rhozetCleanup" partnerLink="transcodeAndFsForHttpPortPlk0Var" portType="rhozetCleanup:restInterface" isMyRole="true" enableSharing="false" bpdm:label="rhozetCleanup" bpdm:ID="_7dY6APguEeKzHqVPlR5KFg">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="rhozetCleanupRhozetCleanupRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="rhozetCleanup:rhozetCleanup_input" bpdm:binding="rhozetCleanup:restBinding" bpdm:ID="_8MPkEPguEeKzHqVPlR5KFg"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="rhozetCleanupRhozetCleanupResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="rhozetCleanup:rhozetCleanup_output" bpdm:binding="rhozetCleanup:restBinding" bpdm:ID="_8d6i4PguEeKzHqVPlR5KFg"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="rhozetCleanup" partnerLink="transcodeAndFsForHttpPortPlk0Var" portType="rhozetCleanup:restInterface" isMyRole="true" enableSharing="false" bpdm:label="rhozetCleanup" bpdm:ID="_90nQEPguEeKzHqVPlR5KFg">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="rhozetCleanupRhozetCleanupRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="rhozetCleanup:rhozetCleanup_input" bpdm:binding="rhozetCleanup:restBinding" bpdm:ID="_-dNhIPguEeKzHqVPlR5KFg"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="rhozetCleanupRhozetCleanupResponseMsg" bpdm:msgVarScopeId="_YutRgHFEEeKXOL1w3D1sTw" bpdm:variableIsManaged="true" bpdm:messageType="rhozetCleanup:rhozetCleanup_output" bpdm:binding="rhozetCleanup:restBinding" bpdm:ID="_-u-mkPguEeKzHqVPlR5KFg"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
         </bpel:flow>
