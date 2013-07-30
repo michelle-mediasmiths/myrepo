@@ -42,7 +42,6 @@ import com.mediasmiths.mq.handlers.compliance.ComplianceLoggingStateChangeHandle
 import com.mediasmiths.mq.handlers.export.ExportTaskStateChangeHandler;
 import com.mediasmiths.mq.handlers.export.InitiateExportHandler;
 import com.mediasmiths.mq.handlers.fixstitch.ConformJobHandler;
-import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchCancelHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchFinishHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchRevertHandler;
 import com.mediasmiths.mq.handlers.ingest.IngestCompleteHandler;
@@ -112,8 +111,6 @@ public class IncomingListener extends MqClientListener
 	FixAndStitchFinishHandler fixAndStitchFinishHandler;
 	@Inject
 	FixAndStitchRevertHandler fixAndStitchRevertHandler;
-	@Inject
-	FixAndStitchCancelHandler fixAndStitchCancelHandler;
 	@Inject
 	IngestTaskCompleteHandler ingestTaskCompleteHandler;
 	@Inject
@@ -320,7 +317,6 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(previewTaskEscalationHandler, currentAttributes);
 				passEventToHandler(fixAndStitchFinishHandler, currentAttributes);
 				passEventToHandler(fixAndStitchRevertHandler, currentAttributes);
-				passEventToHandler(fixAndStitchCancelHandler, currentAttributes);
 				passEventToHandler(segmentationHandler, currentAttributes);
 				passEventToUpdateHandler(purgeCandidateExtendHandler, currentAttributes, beforeAttributes, afterAttributes);
 				//initiate tx handler, export and qc is present for both task create and state change in order to enable 'retry'
