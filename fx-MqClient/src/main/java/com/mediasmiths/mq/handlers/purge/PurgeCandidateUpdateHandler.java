@@ -4,10 +4,12 @@ import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mq.handlers.TaskUpdateHandler;
 import org.apache.log4j.Logger;
 
@@ -59,6 +61,27 @@ public class PurgeCandidateUpdateHandler extends TaskUpdateHandler
 			purgeEvent.setPurgeEventForPurgeCandidateTask(currentAttributes);
 		}
 
+
+		if (!taskController.taskIsInEndState(currentAttributes)) //if the task is still open
+		{
+			final QcStatus qcStatus = currentAttributes.getAttribute(Attribute.QC_STATUS);
+			if (QcStatus.PASS_MANUAL.equals(qcStatus) || QcStatus.PASS.equals(qcStatus)) //if qc status has been set to pass
+			{
+				String contentType = currentAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
+				if (MayamMaterialController.PROGRAMME_MATERIAL_CONTENT_TYPE.equals(contentType)) //if programme content
+				{
+					log.info("A purge candidate entry for programme content with a qc status of pass or pass manual exists, cancelling");
+					try
+					{
+						taskController.cancelTask(currentAttributes);
+					}
+					catch (MayamClientException e)
+					{
+						log.error("Error removing purge candidate task",e);
+					}
+				}
+			}
+		}
 	}
 
 	@Override
