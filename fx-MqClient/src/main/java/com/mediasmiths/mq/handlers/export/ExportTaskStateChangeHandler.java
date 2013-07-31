@@ -40,7 +40,7 @@ public class ExportTaskStateChangeHandler extends TaskStateChangeHandler
 
 		String materialID = null;
 
-		if (MayamAssetType.PACKAGE.equals(assetType))
+		if (MayamAssetType.PACKAGE.getAssetType().equals(assetType))
 		{
 			log.debug("Export task is for package");
 			materialID = messageAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
