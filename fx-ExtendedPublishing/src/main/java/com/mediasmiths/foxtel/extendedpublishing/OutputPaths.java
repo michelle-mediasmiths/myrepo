@@ -203,6 +203,8 @@ public class OutputPaths
 	{
 		String nixPath = getLocalPathToExportDestination(channelTag,jobType,filename,isDVD);
 		String uncPath = pathResolver.uncPath(PathResolver.PathType.NIX, nixPath);
+		uncPath = uncPath.replace(" ",
+		                          "%20"); //exports are limited to 0-9 a-z _, space is only character we really need to handle url encoding wise, if more are required then the path will need properly parsed out and fully urlencoded
 		return uncPath;
 	}
 

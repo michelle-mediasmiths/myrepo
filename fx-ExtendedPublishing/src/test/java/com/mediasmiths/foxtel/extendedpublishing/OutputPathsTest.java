@@ -329,6 +329,13 @@ public class OutputPathsTest
 	}
 
 	@Test
+	public void testUserDeliveryLocationPublicitySingleFileGrouphasSpace()
+	{
+		assertEquals("\\\\sydfpvs02\\MAM-Output\\Exports\\General%20Entertainment\\Publicity\\export.wmv",
+		             toTest.getUserDeliveryLocation("FOX", TranscodeJobType.PUBLICITY_PROXY, "export", false));
+	}
+
+	@Test
 	public void testUserDeliveryLocationPublicityDVD()
 	{
 		assertEquals("\\\\sydfpvs02\\MAM-Output\\Exports\\Generic\\Publicity\\export",
