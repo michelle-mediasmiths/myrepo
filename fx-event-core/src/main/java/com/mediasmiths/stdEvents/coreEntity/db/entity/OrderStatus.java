@@ -57,7 +57,8 @@ public class OrderStatus
 	protected Boolean tapeDelivery=Boolean.FALSE;
 	@Transient
 	protected Boolean fileDelivery=Boolean.TRUE;
-
+	
+	@Basic
 	protected String format;
 
 	@OneToOne(optional=true,fetch=FetchType.LAZY)

@@ -121,7 +121,7 @@ public class DumpAllEventsByEventName
 				try
 				{
 					logger.info(new Date(e.getTime()).toGMTString() + " " + e.getId());
-					serialiser.serialise(e, new File(e.getTime() + ".xml"));
+					serialiser.serialise(e, new File(e.getId() + ".xml"));
 				}
 				catch (Exception ex)
 				{

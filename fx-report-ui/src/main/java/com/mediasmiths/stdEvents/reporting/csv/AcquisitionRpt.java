@@ -233,11 +233,7 @@ public class AcquisitionRpt extends ReportUtils
 
 		for(OrderStatus order : orders)
 		{
-			if (order.getComplete() != null &&
-			    order.getAggregatorID() != null &&
-			    order.getAggregatorID().equalsIgnoreCase("ruzz") &&
-			    order.getAggregatorID().equalsIgnoreCase("DART") &&
-			    order.getAggregatorID().equalsIgnoreCase("VizCapture"))
+			if (order.isTapeDelivery())
 			{
 				stats.noTape++;
 			}

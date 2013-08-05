@@ -19,7 +19,6 @@ import com.mediasmiths.stdEvents.persistence.guice.PersistenceDatabaseModule;
 import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import org.apache.log4j.Logger;
 
-import java.util.Date;
 import java.util.List;
 
 import static java.lang.System.exit;
@@ -104,13 +103,17 @@ public class ImportPastManualAcqInfoToOrderStatus
 
 			programmeContentAvailable.addAll(events.getByNamePaged(EventNames.MARKETING_CONTENT_AVAILABLE, offset, limit));
 
-			logger.info("Found " + programmeContentAvailable.size() + " events");
+			logger.info("IMPORT: Found " + programmeContentAvailable.size() + " events");
+
+			if(programmeContentAvailable.size()==0){
+				break;
+			}
 
 			for (EventEntity e : programmeContentAvailable)
 			{
 				try
 				{
-					logger.info(new Date(e.getTime()).toGMTString() + " " + e.getPayload());
+//					logger.info(new Date(e.getTime()).toGMTString() + " " + e.getPayload());
 
 					Acquisition acq = (Acquisition) serialiser.deserialise(e.getPayload());
 
@@ -131,37 +134,37 @@ public class ImportPastManualAcqInfoToOrderStatus
 							try
 							{
 								Long lfileSize = Long.valueOf(filesize);
-								logger.info("Setting filesize "+lfileSize + " for "+materialID);
+								logger.info("IMPORT: Setting filesize "+lfileSize + " for "+materialID);
 								orderStatus.setFileSize(lfileSize);
 								updated = true;
 							}
 							catch (NumberFormatException nfe)
 							{
-								logger.error("cannot use file size " + acq.getFilesize());
+								logger.error("IMPORT: cannot use file size " + acq.getFilesize());
 							}
 						}
 
 						if (orderStatus.getFormat() == null && format != null)
 						{
-							logger.info("Setting format "+format + " for "+materialID);
+							logger.info("IMPORT: Setting format "+format + " for "+materialID);
 							orderStatus.setFormat(format);
 							updated = true;
 						}
 
 						if (updated)
 						{
-							logger.info("updating orderstatus for material "+materialID);
+							logger.info("IMPORT: updating orderstatus for material "+materialID);
 							orderStatusDao.update(orderStatus);
 						}
 					}
 					else
 					{
-						logger.info("no order status for material id : " + materialID);
+						logger.info("IMPORT: no order status for material id : " + materialID);
 					}
 				}
 				catch (Exception ex)
 				{
-					logger.error("error processing event " + e.getId(), ex);
+					logger.error("IMPORT: error processing event " + e.getId(), ex);
 				}
 			}
 			offset += limit;

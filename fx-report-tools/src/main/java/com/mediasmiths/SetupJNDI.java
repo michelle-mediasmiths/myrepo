@@ -35,6 +35,7 @@ public class SetupJNDI
 			//ds.setURL("jdbc:oracle:thin:oracle/oracle@192.168.2.62:1521/orcl");
 			ds.setUser(user);
 			ds.setPassword(password);
+
 			ic.bind("java:comp/env/jdbc/EventingSystem", ds);
 		}
 		catch (NamingException ex)
