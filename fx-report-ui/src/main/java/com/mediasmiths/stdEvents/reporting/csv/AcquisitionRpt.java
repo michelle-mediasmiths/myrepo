@@ -2,11 +2,11 @@ package com.mediasmiths.stdEvents.reporting.csv;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
@@ -42,30 +42,10 @@ public class AcquisitionRpt extends ReportUtils
 	{
 		log.debug(">>>writeAcquisitionDelivery");
 
+		fileSizeAndDeliveryType(orders);
 		OrderStatusStats stats = getStats(orders);
-
-		//Retrieving file size in GB
-
-		for (OrderStatus order : orders)
-		{
-			long fileSize;
-
-			if (order!= null && order.getFileSize() != null)
-			{
-				fileSize = order.getFileSize();
-			}
-			else
-			{
-				fileSize = order.getFileSize();
-			}
-			if (fileSize!= 0)
-			{
-				order.setFileSize(acquisitionReportFileSize(fileSize));
-			}
-
-		}
-
 		createCSV(orders, stats, reportName, startDate, endDate);
+
 		log.debug("<<<writeAcquisitionDelivery");
 	}
 
@@ -94,7 +74,57 @@ public class AcquisitionRpt extends ReportUtils
 		}
 		return displaySize;
 	}
-//
+
+	private void fileSizeAndDeliveryType(List<OrderStatus> orders)
+	{
+		//Retrieving file size in GB
+
+		for (OrderStatus order : orders)
+		{
+			long fileSize;
+			String aggregatorID = order.getAggregatorID();
+			boolean isFromTape = false;
+
+			if (order!= null && order.getComplete() != null && order.getFileSize() != null)
+			{
+				fileSize = order.getFileSize();
+			}
+			else
+			{
+				fileSize = order.getFileSize();
+			}
+			if (fileSize!= 0)
+			{
+				order.setFileSize(acquisitionReportFileSize(fileSize));
+			}
+			else
+			{
+				log.info("File size is 0");
+			}
+
+			//Set FileDel/TapeDel
+
+			if (aggregatorID != null)
+			{
+				if (aggregatorID.toLowerCase().equals("ruzz")
+				    || aggregatorID.toLowerCase().equals("vizcapture")
+				    || aggregatorID.toLowerCase().equals("dart"))
+				{
+					isFromTape = true;
+				}
+			}
+			if (order.isTapeDelivery() || isFromTape)
+			{
+				order.setTapeDel("1");
+				order.setFileDel("0");
+			}
+			else if (order.isFileDelivery())
+			{
+				order.setFileDel("1");
+				order.setTapeDel("0");
+			}
+		}
+	}
 
 	private void createCSV(List<OrderStatus> orderStatuses, OrderStatusStats stats, String reportName, DateTime start, DateTime end)
 	{
@@ -128,13 +158,16 @@ public class AcquisitionRpt extends ReportUtils
 			{
 				final Map<String, Object> orderMap = new HashMap<String, Object>();
 
+				orderMap.put(header[0], dateRange);
+
 				if (order.getComplete() != null)
 				{
-					orderMap.put(header[0], dateRange);
-					if (order.getTitle() != null && order.getComplete() != null)
+					log.info("If ingest is completed then get the details from orderstatus");
+
+					if (order.getTitle() != null)
 					{
 						orderMap.put(header[1], order.getTitle().getTitle());
-						putChannelListToCSVMap(header, 3, orderMap, order.getTitle().getChannels());
+						putChannelListToCSVMap(header, 3,orderMap, order.getTitle().getChannels());
 					}
 					else
 					{
@@ -143,32 +176,8 @@ public class AcquisitionRpt extends ReportUtils
 					}
 					orderMap.put(header[2], order.getMaterialid());
 					orderMap.put(header[4], order.getAggregatorID());
-
-					String aggregatorID = order.getAggregatorID();
-					boolean isFromTape = false;
-					if (aggregatorID != null)
-					{
-						if (aggregatorID.toLowerCase().equals("ruzz")
-						    || aggregatorID.toLowerCase().equals("vizcapture")
-						    || aggregatorID.toLowerCase().equals("dart"))
-						{
-							isFromTape = true;
-						}
-					}
-					if (order.isTapeDelivery() || isFromTape)
-					{
-						order.setTapeDel("1");
-						order.setFileDel("0");
-					}
-					else if (order.isFileDelivery())
-					{
-						order.setFileDel("1");
-						order.setTapeDel("0");
-					}
-
 					orderMap.put(header[5], order.getTapeDel());
 					orderMap.put(header[6], order.getFileDel());
-					orderMap.put(header[6], order.getComplete());
 					orderMap.put(header[7], order.getFormat());
 					orderMap.put(header[8], order.getFileSize());
 					orderMap.put(header[9], order.getTitleLength());
@@ -177,6 +186,14 @@ public class AcquisitionRpt extends ReportUtils
 				csvwriter.write(orderMap, header, processors);
 			}
 
+			StringBuilder statsString = new StringBuilder();
+			statsString.append(String.format("No By File %d\n", stats.noFile));
+			statsString.append(String.format("No By Tape %d\n", stats.noTape));
+			statsString.append(String.format("% By File %d\n", stats.perFile));
+			statsString.append(String.format("% By Tape %d\n", stats.perTape));
+
+			csvwriter.flush();
+			IOUtils.write(statsString.toString(), fileWriter);
 		}
 		catch (IOException e)
 		{
@@ -206,14 +223,6 @@ public class AcquisitionRpt extends ReportUtils
 		return processors;
 	}
 
-	private Acquisition addStats(String name, String value)
-	{
-		Acquisition acq = new Acquisition();
-		acq.setTitle(name);
-		acq.setMaterialID(value);
-		return acq;
-	}
-
 	class OrderStatusStats
 	{
 
@@ -231,7 +240,7 @@ public class AcquisitionRpt extends ReportUtils
 
 		for(OrderStatus order : orders)
 		{
-			if (order.getAggregatorID().equalsIgnoreCase("ruzz") && order.getAggregatorID().equalsIgnoreCase("DART") && order.getAggregatorID().equalsIgnoreCase("VizCapture"))
+			if (order.getComplete() != null && order.getAggregatorID().equalsIgnoreCase("ruzz") && order.getAggregatorID().equalsIgnoreCase("DART") && order.getAggregatorID().equalsIgnoreCase("VizCapture"))
 			{
 				stats.noTape++;
 			}

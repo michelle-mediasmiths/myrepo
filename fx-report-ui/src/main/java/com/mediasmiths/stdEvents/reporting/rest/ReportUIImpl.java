@@ -194,15 +194,17 @@ public class ReportUIImpl implements ReportUI
 		logger.debug(">>>getAcquisitionReportCSV");
 		logger.debug("start: " + start + " end: " + end);
 
-		List<EventEntity> materials = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/content",
-		                                                                EventNames.PROGRAMME_CONTENT_AVAILABLE,
-				MAX, start, end);
-										
-		materials.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/content",
-		                                                   EventNames.MARKETING_CONTENT_AVAILABLE,
-				MAX, start, end));
+		List<OrderStatus> orders = getOrdersInDateRange(start, end);
+
+//		List<EventEntity> materials = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/content",
+//		                                                                EventNames.PROGRAMME_CONTENT_AVAILABLE,
+//				MAX, start, end);
+//
+//		materials.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/content",
+//		                                                   EventNames.MARKETING_CONTENT_AVAILABLE,
+//				MAX, start, end));
 		
-		acquisition.writeAcquisitionDelivery(materials, start, end, reportName);
+		acquisition.writeAcquisitionDelivery(orders, start, end, reportName);
 
 		logger.debug("<<<getAcquisitionReportCSV");
 	}
