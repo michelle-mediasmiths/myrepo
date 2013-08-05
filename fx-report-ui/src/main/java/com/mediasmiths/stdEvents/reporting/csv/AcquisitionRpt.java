@@ -359,8 +359,8 @@ public class AcquisitionRpt extends ReportUtils
 
 		if (stats.total > 0)
 		{
-			stats.perFile = (stats.noFile / stats.total) * 100;
-			stats.perTape = (stats.noTape / stats.total) * 100;
+			stats.perFile = ((double)stats.noFile / (double)stats.total) * 100.0d;
+			stats.perTape = ((double)stats.noTape / (double)stats.total) * 100.0d;
 		}
 
 		log.debug("perFile: " + stats.perFile + " perTape: " + stats.perTape);
