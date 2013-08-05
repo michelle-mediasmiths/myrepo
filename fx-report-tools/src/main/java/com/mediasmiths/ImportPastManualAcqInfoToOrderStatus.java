@@ -155,6 +155,7 @@ public class ImportPastManualAcqInfoToOrderStatus
 						{
 							logger.info("IMPORT: updating orderstatus for material "+materialID);
 							orderStatusDao.update(orderStatus);
+							Thread.currentThread().wait(250l);
 						}
 					}
 					else
