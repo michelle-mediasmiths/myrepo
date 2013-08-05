@@ -71,6 +71,10 @@ public interface QueryAPI
 	List<OrderStatus> getOrdersInDateRange(DateTime start, DateTime end);
 
 	@GET
+	@Path("/OrdersByCompletedDate")
+	List<OrderStatus> getCompletedOrdersInDateRange(DateTime start, DateTime end);
+
+	@GET
 	@Path("AutoQcByDate")
 	List<AutoQC> getAutoQcInDateRange(DateTime start, DateTime end);
 	
@@ -97,4 +101,6 @@ public interface QueryAPI
 	@GET
 	@Path("TranscodeJobsByDate")
 	List<TranscodeJob> getTranscodeJobsByDate(DateTime start, DateTime end);
+
+
 }

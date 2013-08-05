@@ -52,7 +52,15 @@ public class OrderStatus
 	private Long fileSize;
 	@Basic
 	private Integer titleLength;
-	
+
+	@Transient
+	protected Boolean tapeDelivery=Boolean.FALSE;
+	@Transient
+	protected Boolean fileDelivery=Boolean.TRUE;
+
+	@Basic
+	protected String format;
+
 	@OneToOne(optional=true,fetch=FetchType.LAZY)
 	@PrimaryKeyJoinColumn
 	private AutoQC autoQc;
@@ -166,10 +174,34 @@ public class OrderStatus
 	{
 		this.fileSize = fileSize;
 	}
-	
+
 	public Integer getTitleLength()
 	{
 		return titleLength;
+	}
+
+	public Boolean isTapeDelivery() {
+		return tapeDelivery;
+	}
+
+	public void setTapeDelivery(Boolean value) {
+		this.tapeDelivery = value;
+	}
+
+	public Boolean isFileDelivery() {
+		return fileDelivery;
+	}
+
+	public void setFileDelivery(Boolean value) {
+		this.fileDelivery = value;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String value) {
+		this.format = value;
 	}
 
 	public void setTitleLength(Integer titleLength)
