@@ -46,6 +46,7 @@ public class OrderDaoImpl extends HibernateDao<OrderStatus, String> implements O
 		
 		Long fileSize = aoum.getFilesize();
 		Integer titleLength = aoum.getTitleLength();
+		String format = aoum.getFormat();
 		
 		Date requiredBy = null;
 
@@ -120,6 +121,11 @@ public class OrderDaoImpl extends HibernateDao<OrderStatus, String> implements O
 			order.setTitleLength(titleLength);
 		}
 
+		if (format != null)
+		{
+			order.setFormat(format);
+		}
+
 		TaskType currentTaskType = order.getTaskType();
 		TaskType taskType = TaskType.INGEST;
 
@@ -149,4 +155,14 @@ public class OrderDaoImpl extends HibernateDao<OrderStatus, String> implements O
 		return getList(criteria);
 	}
 
+	@Override
+	public List<OrderStatus> getCompletedOrdersInDateRange(final DateTime start, final DateTime end)
+	{
+		Criteria criteria = createCriteria();
+
+		criteria.add(Restrictions.between("completed", start.toDate(), end.toDate()));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+		return getList(criteria);
+	}
 }

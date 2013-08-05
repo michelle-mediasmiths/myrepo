@@ -164,6 +164,13 @@ public class QueryAPIImpl implements QueryAPI
 
 
 	@Override
+	public List<OrderStatus> getCompletedOrdersInDateRange(final DateTime start, final DateTime end)
+	{
+		return orderDao.getCompletedOrdersInDateRange(start,end);
+	}
+
+
+	@Override
 	public Title getTitleById(String id)
 	{
 		return titleDao.getById(id);

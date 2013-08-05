@@ -70,7 +70,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.mediasmiths.ImportPastManualQAMessages</mainClass>
+							<mainClass>com.mediasmiths.WritePastAcqMessages</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

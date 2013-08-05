@@ -8,7 +8,6 @@ import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.joda.time.Interval;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvMapWriter;
@@ -45,99 +44,13 @@ public class OrderStatusRpt extends ReportUtils
 		logger.debug(">>>writeOrderStatus");
 		logger.debug("List size: " + orders.size());
 
-		fillTransientFields(orders, start, end);
+		fillTransientOrderStatusFields(orders, start, end);
 		OrderStatusStats stats = getStats(orders);
 
 		createCsv(orders, stats, reportName, start, end);
 		logger.debug("<<<writeOrderStatus");
 	}
 
-	// fills in some information not returned by the sql query, perhaps the query could be modified to include this information but we will see how this goes
-	private void fillTransientFields(
-			List<com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus> orders,
-			DateTime start,
-			DateTime end)
-	{
-		Interval interval = new Interval(start, end);
-
-		for (OrderStatus orderStatus : orders)
-		{
-			if (orderStatus.getRequiredBy() != null)
-			{
-
-				DateTime requiredByDate = new DateTime(orderStatus.getRequiredBy());
-
-				if (orderStatus.getCompleted() != null)
-				{
-					// have required by and completed date
-					DateTime completedDate = new DateTime(orderStatus.getCompleted());
-
-					// determine if complete in date range
-					if (interval.contains(completedDate))
-					{
-						orderStatus.setComplete(Boolean.TRUE);
-					}
-					else
-					{
-						orderStatus.setComplete(Boolean.FALSE);
-					}
-
-					// determine if overdue in date range
-					if (completedDate.isAfter(requiredByDate))
-					{
-						orderStatus.setOverdue(Boolean.TRUE);
-					}
-					else
-					{
-						orderStatus.setOverdue(Boolean.FALSE);
-					}
-
-				}
-				else
-				{
-					// no completed date
-					orderStatus.setComplete(Boolean.FALSE);
-
-					// determine if overdue in date range
-					if (end.isAfter(requiredByDate))
-					{
-						orderStatus.setOverdue(Boolean.TRUE);
-					}
-					else
-					{
-						orderStatus.setOverdue(Boolean.FALSE);
-					}
-				}
-			}
-			else
-			{
-				// no required by date so cant be overdue
-				orderStatus.setOverdue(Boolean.FALSE);
-
-				if (orderStatus.getCompleted() != null)
-				{
-					// have completed date
-					DateTime completedDate = new DateTime(orderStatus.getCompleted());
-
-					// determine if complete in date range
-					if (interval.contains(completedDate))
-					{
-						orderStatus.setComplete(Boolean.TRUE);
-					}
-					else
-					{
-						orderStatus.setComplete(Boolean.FALSE);
-					}
-				}
-				else
-				{
-					// no completed date
-					orderStatus.setComplete(Boolean.FALSE);
-				}
-			}
-		}
-
-	}
 
 	private void createCsv(
 			List<OrderStatus> orderStatuses,

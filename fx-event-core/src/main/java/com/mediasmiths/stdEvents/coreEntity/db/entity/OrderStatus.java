@@ -53,12 +53,13 @@ public class OrderStatus
 	@Basic
 	private Integer titleLength;
 
-	protected Boolean tapeDelivery;
-	protected Boolean fileDelivery;
-	protected String tapeDel;
-	protected String fileDel;
+	@Transient
+	protected Boolean tapeDelivery=Boolean.FALSE;
+	@Transient
+	protected Boolean fileDelivery=Boolean.TRUE;
+
 	protected String format;
-	
+
 	@OneToOne(optional=true,fetch=FetchType.LAZY)
 	@PrimaryKeyJoinColumn
 	private AutoQC autoQc;
@@ -192,22 +193,6 @@ public class OrderStatus
 
 	public void setFileDelivery(Boolean value) {
 		this.fileDelivery = value;
-	}
-
-	public String getTapeDel() {
-		return tapeDel;
-	}
-
-	public void setTapeDel(String value) {
-		this.tapeDel = value;
-	}
-
-	public String getFileDel() {
-		return fileDel;
-	}
-
-	public void setFileDel(String value) {
-		this.fileDel = value;
 	}
 
 	public String getFormat() {

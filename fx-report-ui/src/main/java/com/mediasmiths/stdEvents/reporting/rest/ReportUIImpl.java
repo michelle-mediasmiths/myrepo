@@ -188,13 +188,20 @@ public class ReportUIImpl implements ReportUI
 		return queryApi.getOrdersInDateRange(start, end);
 	}
 
+
+	private List<OrderStatus> getCompletedOrdersInDateRange(final DateTime start, final DateTime end)
+	{
+		return queryApi.getCompletedOrdersInDateRange(start, end);
+	}
+
+
 	@Transactional(readOnly = true)
 	private void getAquisitionReportCSV(final DateTime start, final DateTime end, final String reportName)
 	{
 		logger.debug(">>>getAcquisitionReportCSV");
 		logger.debug("start: " + start + " end: " + end);
 
-		List<OrderStatus> orders = getOrdersInDateRange(start, end);
+		List<OrderStatus> orders = getCompletedOrdersInDateRange(start, end);
 
 //		List<EventEntity> materials = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/content",
 //		                                                                EventNames.PROGRAMME_CONTENT_AVAILABLE,

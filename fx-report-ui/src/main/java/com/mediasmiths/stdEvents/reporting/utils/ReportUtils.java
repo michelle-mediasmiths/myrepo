@@ -2,11 +2,13 @@ package com.mediasmiths.stdEvents.reporting.utils;
 
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
+import org.joda.time.Interval;
 import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -220,5 +222,92 @@ public abstract class ReportUtils
 
 	protected String getHHMMSSmmm(Period period){
 		return String.format("%02d:%02d:%02d:%03d", period.getHours(), period.getMinutes(), period.getSeconds(),period.getMillis());
+	}
+
+
+	// fills in some information not returned by the sql query, perhaps the query could be modified to include this information but we will see how this goes
+	protected void fillTransientOrderStatusFields(List<com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus> orders,
+	                                              DateTime start,
+	                                              DateTime end)
+	{
+		Interval interval = new Interval(start, end);
+
+		for (OrderStatus orderStatus : orders)
+		{
+			if (orderStatus.getRequiredBy() != null)
+			{
+
+				DateTime requiredByDate = new DateTime(orderStatus.getRequiredBy());
+
+				if (orderStatus.getCompleted() != null)
+				{
+					// have required by and completed date
+					DateTime completedDate = new DateTime(orderStatus.getCompleted());
+
+					// determine if complete in date range
+					if (interval.contains(completedDate))
+					{
+						orderStatus.setComplete(Boolean.TRUE);
+					}
+					else
+					{
+						orderStatus.setComplete(Boolean.FALSE);
+					}
+
+					// determine if overdue in date range
+					if (completedDate.isAfter(requiredByDate))
+					{
+						orderStatus.setOverdue(Boolean.TRUE);
+					}
+					else
+					{
+						orderStatus.setOverdue(Boolean.FALSE);
+					}
+
+				}
+				else
+				{
+					// no completed date
+					orderStatus.setComplete(Boolean.FALSE);
+
+					// determine if overdue in date range
+					if (end.isAfter(requiredByDate))
+					{
+						orderStatus.setOverdue(Boolean.TRUE);
+					}
+					else
+					{
+						orderStatus.setOverdue(Boolean.FALSE);
+					}
+				}
+			}
+			else
+			{
+				// no required by date so cant be overdue
+				orderStatus.setOverdue(Boolean.FALSE);
+
+				if (orderStatus.getCompleted() != null)
+				{
+					// have completed date
+					DateTime completedDate = new DateTime(orderStatus.getCompleted());
+
+					// determine if complete in date range
+					if (interval.contains(completedDate))
+					{
+						orderStatus.setComplete(Boolean.TRUE);
+					}
+					else
+					{
+						orderStatus.setComplete(Boolean.FALSE);
+					}
+				}
+				else
+				{
+					// no completed date
+					orderStatus.setComplete(Boolean.FALSE);
+				}
+			}
+		}
+
 	}
 }
