@@ -190,25 +190,27 @@ public abstract class ReportUtils
 		return object;
 	}
 
+
 	JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
-	
-	public Object unmarshallReport(final EventEntity event)
+	JAXBSerialiser JAXB_SERIALISER_REPORT = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.report.ObjectFactory.class);
+
+
+	public Object unmarshallReportEvent(final EventEntity event)
 	{
-		logger.info(">>>unmarshallReport");
+		logger.debug(">>>unmarshallReportEvent");
 		Object obj = null;
 		String payload = event.getPayload();
-		logger.info("Unmarshalling payload " + payload);
+		logger.debug("Unmarshalling payload " + payload);
 
 		try
 		{
-			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.report.ObjectFactory.class);
-			obj = JAXB_SERIALISER.deserialise(payload);
+			obj = JAXB_SERIALISER_REPORT.deserialise(payload);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
-		logger.debug("<<<unmarshallReport");
+		logger.debug("<<<unmarshallReportEvent");
 		return obj;
 	}
 

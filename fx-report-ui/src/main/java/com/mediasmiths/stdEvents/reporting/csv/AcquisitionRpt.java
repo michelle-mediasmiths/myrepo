@@ -2,6 +2,8 @@ package com.mediasmiths.stdEvents.reporting.csv;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
@@ -18,6 +20,7 @@ import org.supercsv.prefs.CsvPreference;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,20 +37,92 @@ public class AcquisitionRpt extends ReportUtils
 	@Inject
 	private QueryAPIImpl queryApi;
 
-	public void writeAcquisitionDelivery(
-			final List<com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus> orders,
-			final DateTime startDate,
-			final DateTime endDate,
-			final String reportName)
+	public void writeAcquisitionDelivery(final List<OrderStatus> orders,
+	                                     final List<EventEntity> marketingMaterial,
+	                                     final DateTime startDate,
+	                                     final DateTime endDate,
+	                                     final String reportName)
 	{
 		log.debug(">>>writeAcquisitionDelivery");
 
+		final List<Acquisition> unmatched = getReportList(marketingMaterial, startDate, endDate); //we still need to use the acquisition events to find out about marketing material
+
 		fileSizeAndDeliveryType(orders);
 		fillTransientOrderStatusFields(orders, startDate, endDate);
-		OrderStatusStats stats = getStats(orders);
-		createCSV(orders, stats, reportName, startDate, endDate);
+		OrderStatusStats stats = getStats(orders,unmatched);
+		createCSV(orders,unmatched, stats, reportName, startDate, endDate);
 
 		log.debug("<<<writeAcquisitionDelivery");
+	}
+
+
+	//handles the Acquisition events used to output this reports entries for unmatched and marketing assets
+	private List<Acquisition> getReportList(final List<EventEntity> events, final DateTime startDate, final DateTime endDate)
+	{
+		log.debug(">>>getReportList");
+		List<Acquisition> acqs = new ArrayList<Acquisition>();
+
+		String startF = startDate.toString(dateOnlyFormatString);
+		String endF = endDate.toString(dateOnlyFormatString);
+
+		for (EventEntity event : events)
+		{
+			Acquisition acq = (Acquisition) unmarshallReportEvent(event);
+
+			if (acq == null || acq.getMaterialID() == null)
+			{
+				continue;
+			}
+
+			final String materialID = acq.getMaterialID();
+
+			acq.setDateRange(startF + " - " + endF);
+			String aggregator = acq.getAggregatorID();
+			boolean isFromTape = false;
+			if (aggregator != null)
+			{
+				if (aggregator.toLowerCase().equals("ruzz") ||
+				    aggregator.toLowerCase().equals("vizcapture") ||
+				    aggregator.toLowerCase().equals("dart"))
+				{
+					isFromTape = true;
+				}
+			}
+
+			log.debug("file: " + acq.isFileDelivery() + " tape: " + acq.isTapeDelivery());
+			if (acq.isTapeDelivery() || isFromTape)
+			{
+				acq.setTapeDel("1");
+				acq.setFileDel("0");
+			}
+			else if (acq.isFileDelivery())
+			{
+				acq.setFileDel("1");
+				acq.setTapeDel("0");
+			}
+
+			if (acq != null && acq.getFilesize() != null)
+			{
+				final String filesize = acq.getFilesize();
+
+				try
+				{
+					Long filesizel = Long.parseLong(filesize);
+					acq.setFilesize(acquisitionReportFileSize(filesizel));
+				}
+				catch (NumberFormatException nfe)
+				{
+					log.info("Cannot use file size " + filesize);
+				}
+			}
+
+			log.info(acq.getMaterialID() + " " + acq.getTitle() + " " + acq.getChannels());
+
+			acqs.add(acq);
+		}
+
+		log.debug("<<<getReportList");
+		return acqs;
 	}
 
 	public static String acquisitionReportFileSize(long fileSize)
@@ -78,8 +153,6 @@ public class AcquisitionRpt extends ReportUtils
 
 	private void fileSizeAndDeliveryType(List<OrderStatus> orders)
 	{
-		//Retrieving file size in GB
-
 		for (OrderStatus order : orders)
 		{
 			long fileSize=0;
@@ -98,7 +171,12 @@ public class AcquisitionRpt extends ReportUtils
 		}
 	}
 
-	private void createCSV(List<OrderStatus> orderStatuses, OrderStatusStats stats, String reportName, DateTime start, DateTime end)
+	private void createCSV(List<OrderStatus> orderStatuses,
+	                       final List<Acquisition> unmatched,
+	                       OrderStatusStats stats,
+	                       String reportName,
+	                       DateTime start,
+	                       DateTime end)
 	{
 		ICsvMapWriter csvwriter = null;
 		try
@@ -179,6 +257,25 @@ public class AcquisitionRpt extends ReportUtils
 				csvwriter.write(orderMap, header, processors);
 			}
 
+
+			for (Acquisition um : unmatched)
+			{
+				final Map<String, Object> map = new HashMap<String, Object>();
+
+				map.put(header[0], um.getDateRange());
+				map.put(header[1], um.getTitle());
+				map.put(header[2], um.getMaterialID());
+				map.put(header[3], um.getChannels());
+				map.put(header[4], um.getAggregatorID());
+				map.put(header[5], um.getTapeDel());
+				map.put(header[6], um.getFileDel());
+				map.put(header[7], um.getFormat());
+				map.put(header[8], um.getFilesize());
+				map.put(header[9], um.getTitleLength());
+
+				csvwriter.write(map, header, processors);
+			}
+
 			StringBuilder statsString = new StringBuilder();
 			statsString.append(String.format("No By File %d\n", stats.noFile));
 			statsString.append(String.format("No By Tape %d\n", stats.noTape));
@@ -226,7 +323,7 @@ public class AcquisitionRpt extends ReportUtils
 		double perTape = 0;
 	}
 
-	public OrderStatusStats getStats(List<OrderStatus> orders)
+	public OrderStatusStats getStats(List<OrderStatus> orders, final List<Acquisition> unmatched)
 	{
 
 		OrderStatusStats stats = new OrderStatusStats();
@@ -243,6 +340,20 @@ public class AcquisitionRpt extends ReportUtils
 			}
 			stats.total++;
 		}
+
+		for (Acquisition acquisition : unmatched)
+		{
+			if (acquisition.isTapeDelivery())
+			{
+				stats.noTape++;
+			}
+			else
+			{
+				stats.noFile++;
+			}
+			stats.total++;
+		}
+
 
 		log.debug("noFile: " + stats.noFile + " noTape: " + stats.noTape);
 

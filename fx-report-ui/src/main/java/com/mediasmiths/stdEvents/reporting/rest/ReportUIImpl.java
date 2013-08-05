@@ -205,13 +205,13 @@ public class ReportUIImpl implements ReportUI
 
 //		List<EventEntity> materials = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/content",
 //		                                                                EventNames.PROGRAMME_CONTENT_AVAILABLE,
-//				MAX, start, end);
+//		                                                                MAX, start, end);
 //
-//		materials.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/content",
-//		                                                   EventNames.MARKETING_CONTENT_AVAILABLE,
-//				MAX, start, end));
+		List<EventEntity> materials =queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/content",
+		                                                   EventNames.MARKETING_CONTENT_AVAILABLE,
+		                                                   MAX, start, end);
 		
-		acquisition.writeAcquisitionDelivery(orders, start, end, reportName);
+		acquisition.writeAcquisitionDelivery(orders, materials,start, end, reportName);
 
 		logger.debug("<<<getAcquisitionReportCSV");
 	}

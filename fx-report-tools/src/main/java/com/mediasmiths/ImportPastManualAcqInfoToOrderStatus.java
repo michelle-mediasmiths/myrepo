@@ -101,7 +101,7 @@ public class ImportPastManualAcqInfoToOrderStatus
 			                                                                    offset,
 			                                                                    limit);
 
-			programmeContentAvailable.addAll(events.getByNamePaged(EventNames.MARKETING_CONTENT_AVAILABLE, offset, limit));
+//			programmeContentAvailable.addAll(events.getByNamePaged(EventNames.MARKETING_CONTENT_AVAILABLE, offset, limit));
 
 			logger.info("IMPORT: Found " + programmeContentAvailable.size() + " events");
 
