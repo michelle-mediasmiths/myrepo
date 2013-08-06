@@ -155,7 +155,7 @@ public class SegmentUtil
 
 		final SampleCount difference = durationSampleCount.subtract(startSampleCount);
 
-		Timecode end = start.add(difference,true);
+		Timecode end = start.add(difference);
 
 		return end.toSMPTEString();
 
