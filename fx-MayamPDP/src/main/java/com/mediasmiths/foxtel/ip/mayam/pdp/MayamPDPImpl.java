@@ -22,6 +22,7 @@ import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mayam.util.SegmentUtil;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.Consumes;
@@ -262,7 +263,7 @@ public class MayamPDPImpl implements MayamPDP
 						{
 							logger.debug("User can override a segment mismatch for " + presentationID);
 
-							errors.add(messageSegmentMismatchOverride);
+							warnings.add(messageSegmentMismatchOverride);
 						}
 						else
 						{
@@ -1499,17 +1500,25 @@ public class MayamPDPImpl implements MayamPDP
 		
 	}
 
-
-
-	private String formHTMLList(final List<String> warnings)
+	private String formHTMLList(final List<String> warnings, String colour)
 	{
 		String composite="<ul>";
+
+		if (!StringUtils.isEmpty(colour))
+		{
+			composite = "<ul style=\"color:" + colour + "\">";
+		}
 
 		for (String s : warnings)
 			if (s != null && s.length() != 0)
 				composite += "<li>" + s + "</li>";
 
 		return composite + "</ul>";
+	}
+
+	private String formHTMLList(final List<String> warnings)
+	{
+		return  formHTMLList(warnings,null);
 	}
 
 }
