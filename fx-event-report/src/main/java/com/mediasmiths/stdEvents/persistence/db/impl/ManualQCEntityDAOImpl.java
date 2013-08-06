@@ -28,14 +28,6 @@ public class ManualQCEntityDAOImpl extends HibernateDao<ManualQAEntity, String> 
 	@Inject
 	private OrderDao orderDao;
 
-
-	public ManualQCEntityDAOImpl()
-	{
-		super(ManualQAEntity.class);
-	}
-
-
-	@Override
 	@Transactional
 	public void manualQCMessage(final EventEntity event)
 	{

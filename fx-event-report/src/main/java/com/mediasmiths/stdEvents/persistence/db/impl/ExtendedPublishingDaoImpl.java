@@ -21,19 +21,14 @@ import java.util.List;
 
 public class ExtendedPublishingDaoImpl extends HibernateDao<ExtendedPublishing, Long> implements ExtendedPublishingDao
 {
-	private final JAXBSerialiser serializer = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 	private final static Logger log = Logger.getLogger(ExtendedPublishingDaoImpl.class);
+	private final JAXBSerialiser serializer = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 
 	@Inject
 	private OrderDao orderDao;
 
 	@Inject
 	private ExtendedPublishingDao extendedPublishingDao;
-
-	public ExtendedPublishingDaoImpl()
-	{
-		super(ExtendedPublishing.class);
-	}
 
 
 	@Override

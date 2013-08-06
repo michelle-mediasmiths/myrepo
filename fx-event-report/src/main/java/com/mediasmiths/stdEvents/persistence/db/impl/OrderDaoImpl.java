@@ -20,18 +20,13 @@ import java.util.List;
 
 public class OrderDaoImpl extends HibernateDao<OrderStatus, String> implements OrderDao
 {
+	private final static Logger log = Logger.getLogger(OrderDaoImpl.class);
 
 	protected JAXBSerialiser serialiser = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 
-	private final static Logger log = Logger.getLogger(OrderDaoImpl.class);
-	
 	@Inject
 	protected TitleDao titleDao;
-	
-	public OrderDaoImpl()
-	{
-		super(OrderStatus.class);
-	}
+
 
 	@Override
 	@Transactional

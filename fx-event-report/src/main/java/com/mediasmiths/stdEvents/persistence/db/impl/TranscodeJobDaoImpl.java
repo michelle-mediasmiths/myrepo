@@ -18,14 +18,9 @@ import java.util.List;
 
 public class TranscodeJobDaoImpl extends HibernateDao<TranscodeJob, String> implements TranscodeJobDao
 {
-	protected JAXBSerialiser serialiser = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 	private final static Logger log = Logger.getLogger(TranscodeJobDaoImpl.class);
 
-
-	public TranscodeJobDaoImpl()
-	{
-		super(TranscodeJob.class);
-	}
+	protected JAXBSerialiser serialiser = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 
 
 	@Override

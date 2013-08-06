@@ -13,13 +13,8 @@ import java.util.List;
 
 public class EventingTableDaoImpl extends HibernateDao<EventingTableEntity, Long> implements EventingTableDao
 {
-
 	private static final transient Logger logger = Logger.getLogger(EventTableDaoImpl.class);
 
-	public EventingTableDaoImpl()
-	{
-		super(EventingTableEntity.class);
-	}
 
 	@Override
 	public List<EventingTableEntity> findByNamespace(String namespace)

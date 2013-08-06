@@ -32,12 +32,6 @@ public class PurgeDaoImpl extends HibernateDao<Purge, String> implements PurgeDa
 	private OrderDao orderDao;
 
 
-	public PurgeDaoImpl()
-	{
-		super(Purge.class);
-	}
-
-
 	@Override
 	public void purgeMessage(final EventEntity event)
 	{

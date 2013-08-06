@@ -4,10 +4,10 @@ import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetAccess;
+import com.mayam.wf.attributes.shared.type.AssetAccess.EntityType;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.StringList;
-import com.mayam.wf.attributes.shared.type.AssetAccess.EntityType;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamContentTypes;
@@ -15,17 +15,17 @@ import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.util.Triplet;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.hibernate.dao.HibernateDao;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Restrictions;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.Criteria;
 
 public class MayamAccessRightsController extends HibernateDao<MayamAccessRights, Long> {
 
@@ -38,12 +38,6 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 		Attribute.CHANNELS, Attribute.CONT_MAT_TYPE, Attribute.CONT_CATEGORY, Attribute.CONT_RESTRICTED_MATERIAL,
 		Attribute.QC_PREVIEW_RESULT, Attribute.QC_PARALLEL_ALLOWED, Attribute.QC_STATUS};
 
-	
-	public MayamAccessRightsController()
-	{
-		super(MayamAccessRights.class);
-	}
-	
 	@Transactional
 	 public void create(String qcStatus, String qaStatus, boolean qcParallel, String assetType, String groupName, boolean read, boolean write, boolean admin, boolean purgeProtected, boolean adultOnly) 
 	 {
