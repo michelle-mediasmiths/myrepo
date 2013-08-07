@@ -21,18 +21,14 @@ import java.util.List;
 
 public class AutoQCDaoImpl extends HibernateDao<AutoQC, String> implements AutoQCDao
 {
+	private final static Logger log = Logger.getLogger(AutoQCDaoImpl.class);
 
-	public AutoQCDaoImpl()
-	{
-		super(AutoQC.class);
-	}
+	protected JAXBSerialiser serialiser = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 
 	@Inject
 	protected OrderDao orderDao;
 
-	protected JAXBSerialiser serialiser = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 
-	private final static Logger log = Logger.getLogger(AutoQCDaoImpl.class);
 
 	@Override
 	@Transactional

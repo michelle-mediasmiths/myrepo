@@ -13,13 +13,7 @@ import java.util.List;
 
 public class EventTableDaoImpl extends HibernateDao<EventTableEntity, Long> implements EventTableDao
 {
-
 	private static final transient Logger logger = Logger.getLogger(EventTableDaoImpl.class);
-
-	public EventTableDaoImpl()
-	{
-		super(EventTableEntity.class);
-	}
 
 	/**
 	 * Returns a list of events from a requested namespace

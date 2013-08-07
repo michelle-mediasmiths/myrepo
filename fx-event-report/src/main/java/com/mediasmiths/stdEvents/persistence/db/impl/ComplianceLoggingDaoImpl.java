@@ -22,22 +22,15 @@ import java.util.List;
 
 public class ComplianceLoggingDaoImpl extends HibernateDao<ComplianceLogging, Long> implements ComplianceLoggingDao
 {
+	private final static Logger log = Logger.getLogger(ComplianceLoggingDaoImpl.class);
 
 	protected JAXBSerialiser serializer = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
-
-	private final static Logger log = Logger.getLogger(ComplianceLoggingDaoImpl.class);
 
 	@Inject
 	private TitleDao titleDao;
 
 	@Inject
 	private ExtendedPublishingDao extendedPublishingDao;
-
-
-	public ComplianceLoggingDaoImpl()
-	{
-		super(ComplianceLogging.class);
-	}
 
 
 	@Override

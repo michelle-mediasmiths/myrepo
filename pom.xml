@@ -60,7 +60,6 @@
 		<module>fx-filepickup-api</module>
 		<module>fx-qcAdapter</module>
 		<module>fx-report-ui</module>
-		<module>fx-IbmsHelper</module>
 		<module>fx-heartbeat-api</module>
 		<module>fx-ChannelGroupsConfig</module>
 		<module>fx-MailAgent</module>
@@ -83,7 +82,7 @@
 		<worklists.version>0.9.9.9.47</worklists.version>
 		<mayam.wf.mq.version>0.9.9.9.40</mayam.wf.mq.version>
 		<mayam.wf.siteconfig.version>0.9.9.9.14</mayam.wf.siteconfig.version>
-		<stdlib.version>3.6.3</stdlib.version>
+		<stdlib.version>3.6.4</stdlib.version>
 		<events.version>1.10</events.version>
 		<commons.lang.version>2.5</commons.lang.version>
 	</properties>
@@ -156,13 +155,23 @@
 			</snapshots>
 		</repository>
 		<repository>
-
 			<id>Codehaus</id>
 			<name>codehaus</name>
 			<url>http://repository.codehaus.org</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
+		</repository>
+		<repository>
+			<id>mediasmiths-thirdparty</id>
+			<name>mediasmiths</name>
+			<url>http://build.mediasmiths.com/nexus/content/repositories/thirdparty</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 </project>

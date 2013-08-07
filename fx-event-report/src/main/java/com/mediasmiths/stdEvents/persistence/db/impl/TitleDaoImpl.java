@@ -15,15 +15,9 @@ import java.util.List;
 
 public class TitleDaoImpl extends HibernateDao<Title, String> implements TitleDao
 {
-
 	private final static Logger log = Logger.getLogger(TitleDaoImpl.class);
 	
 	protected JAXBSerialiser serialiser = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
-
-	public TitleDaoImpl()
-	{
-		super(Title.class);
-	}
 
 	@Override
 	@Transactional
