@@ -24,14 +24,14 @@
     </bpdm:dependencies>
     <bpel:scope bpdm:label="FS Adapter" bpdm:ID="_PVVBAGuWEeK7FdvgH5F2kQ">
         <bpel:partnerLinks>
-            <bpel:partnerLink name="auto_QcAndFS_AdapterForHttpPortPlkVar" partnerLinkType="TX_Delivery:Auto_QcAndFS_AdapterForHttpPortPlk" myRole="FS_Adapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="move:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/move" bpdm:providedIsDefault="true" bpdm:clientTasks="_PVVBAGuWEeK7FdvgH5F2kQ:_WGJMcHFHEeKXOL1w3D1sTw" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
-            <bpel:partnerLink name="fS_AdapterAndDeliveryForHttpPortPlk0Var" partnerLinkType="TX_Delivery:FS_AdapterAndDeliveryForHttpPortPlk0" myRole="FS_Adapter_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="delete:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/delete" bpdm:providedIsDefault="true" bpdm:clientTasks="_PVVBAGuWEeK7FdvgH5F2kQ:_3Kh2UHHqEeKIgPAPmx2ukA, _PVVBAGuWEeK7FdvgH5F2kQ:_K9MPZcFGEeK6DtOy-Yu5NA, _PVVBAGuWEeK7FdvgH5F2kQ:_p2KusMFGEeK6DtOy-Yu5NA" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
-            <bpel:partnerLink name="fS_AdapterAndDeliveryForHttpPortPlk1Var" partnerLinkType="TX_Delivery:FS_AdapterAndDeliveryForHttpPortPlk1" myRole="FS_Adapter_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="move:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/move" bpdm:providedIsDefault="true" bpdm:clientTasks="_PVVBAGuWEeK7FdvgH5F2kQ:_seJ6sN48EeKlbMDJE2xwlg, _PVVBAGuWEeK7FdvgH5F2kQ:_QPvYoN5GEeKlbMDJE2xwlg, _PVVBAGuWEeK7FdvgH5F2kQ:_WeG_Yd5GEeKlbMDJE2xwlg, _PVVBAGuWEeK7FdvgH5F2kQ:_jiM2QcFGEeK6DtOy-Yu5NA, _PVVBAGuWEeK7FdvgH5F2kQ:_A8g7wN8uEeKfrvEqwVWOOA, _PVVBAGuWEeK7FdvgH5F2kQ:_ITxeMXFGEeKXOL1w3D1sTw" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
-            <bpel:partnerLink name="fS_AdapterAndDeliveryForHttpPortPlk2Var" partnerLinkType="TX_Delivery:FS_AdapterAndDeliveryForHttpPortPlk2" myRole="FS_Adapter_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="txDeliveryFailure:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tx/failed" bpdm:providedIsDefault="true" bpdm:clientTasks="_PVVBAGuWEeK7FdvgH5F2kQ:_GoiXYN5SEeKt5anVAap8bQ, _PVVBAGuWEeK7FdvgH5F2kQ:_d8Q9kd5HEeKlbMDJE2xwlg, _PVVBAGuWEeK7FdvgH5F2kQ:_gW59kd5TEeKt5anVAap8bQ" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="auto_QcAndFS_AdapterForHttpPortPlkVar" partnerLinkType="TX_Delivery:Auto_QcAndFS_AdapterForHttpPortPlk" myRole="FS_Adapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="move:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwfe-pkg.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/move" bpdm:providedIsDefault="true" bpdm:clientTasks="_PVVBAGuWEeK7FdvgH5F2kQ:_WGJMcHFHEeKXOL1w3D1sTw" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
+            <bpel:partnerLink name="fS_AdapterAndDeliveryForHttpPortPlk0Var" partnerLinkType="TX_Delivery:FS_AdapterAndDeliveryForHttpPortPlk0" myRole="FS_Adapter_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="delete:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwfe-pkg.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/delete" bpdm:providedIsDefault="true" bpdm:clientTasks="_PVVBAGuWEeK7FdvgH5F2kQ:_3Kh2UHHqEeKIgPAPmx2ukA, _PVVBAGuWEeK7FdvgH5F2kQ:_ywfTkP86EeKSdvx_in4xuw, _PVVBAGuWEeK7FdvgH5F2kQ:_K9MPZcFGEeK6DtOy-Yu5NA, _PVVBAGuWEeK7FdvgH5F2kQ:_p2KusMFGEeK6DtOy-Yu5NA" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="fS_AdapterAndDeliveryForHttpPortPlk1Var" partnerLinkType="TX_Delivery:FS_AdapterAndDeliveryForHttpPortPlk1" myRole="FS_Adapter_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="move:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwfe-pkg.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/move" bpdm:providedIsDefault="true" bpdm:clientTasks="_PVVBAGuWEeK7FdvgH5F2kQ:_seJ6sN48EeKlbMDJE2xwlg, _PVVBAGuWEeK7FdvgH5F2kQ:_QPvYoN5GEeKlbMDJE2xwlg, _PVVBAGuWEeK7FdvgH5F2kQ:_WeG_Yd5GEeKlbMDJE2xwlg, _PVVBAGuWEeK7FdvgH5F2kQ:_jiM2QcFGEeK6DtOy-Yu5NA, _PVVBAGuWEeK7FdvgH5F2kQ:_A8g7wN8uEeKfrvEqwVWOOA, _PVVBAGuWEeK7FdvgH5F2kQ:_ITxeMXFGEeKXOL1w3D1sTw" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="fS_AdapterAndDeliveryForHttpPortPlk2Var" partnerLinkType="TX_Delivery:FS_AdapterAndDeliveryForHttpPortPlk2" myRole="FS_Adapter_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="txDeliveryFailure:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwfe-pkg.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/failed" bpdm:providedIsDefault="true" bpdm:clientTasks="_PVVBAGuWEeK7FdvgH5F2kQ:_GoiXYN5SEeKt5anVAap8bQ, _PVVBAGuWEeK7FdvgH5F2kQ:_d8Q9kd5HEeKlbMDJE2xwlg, _PVVBAGuWEeK7FdvgH5F2kQ:_gW59kd5TEeKt5anVAap8bQ" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
         </bpel:partnerLinks>
         <bpel:variables>
-            <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input" binding="delete:restBinding" operation="delete" opMsgType="0" bpdm:id="_ozP85W63EeKvjs-uExigJg" bpdm:messageIds="inc:_35hDQHHqEeKIgPAPmx2ukA,_L0x-sMFGEeK6DtOy-Yu5NA,_rC4ZcMFGEeK6DtOy-Yu5NA"/>
-            <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output" binding="delete:restBinding" operation="delete" opMsgType="1" bpdm:id="_pD_HkG63EeKvjs-uExigJg" bpdm:messageIds=" out:_Ma4VYMFGEeK6DtOy-Yu5NA,_4US6wHHqEeKIgPAPmx2ukA,_ryZx4MFGEeK6DtOy-Yu5NA">
+            <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input" binding="delete:restBinding" operation="delete" opMsgType="0" bpdm:id="_ozP85W63EeKvjs-uExigJg" bpdm:messageIds="inc:_zh5iYP86EeKSdvx_in4xuw,_35hDQHHqEeKIgPAPmx2ukA,_rC4ZcMFGEeK6DtOy-Yu5NA,_L0x-sMFGEeK6DtOy-Yu5NA"/>
+            <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output" binding="delete:restBinding" operation="delete" opMsgType="1" bpdm:id="_pD_HkG63EeKvjs-uExigJg" bpdm:messageIds=" out:_Ma4VYMFGEeK6DtOy-Yu5NA,_4US6wHHqEeKIgPAPmx2ukA,_ryZx4MFGEeK6DtOy-Yu5NA,_z8ho4P86EeKSdvx_in4xuw">
                 <bpel:from bpdm:toPart="response">
                     <bpel:literal bpdm:linkedMessageType="delete:delete_output" bpdm:linkedPart="response" bpdm:binding="delete:restBinding" bpdm:opMsgType="1" bpdm:operation="delete"></bpel:literal>
                 </bpel:from>
@@ -57,15 +57,9 @@
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
-                <bpdm:messagingtask operation="move" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk1Var" portType="move:restInterface" isMyRole="true" enableSharing="false" bpdm:label="move" bpdm:ID="_ITxeMXFGEeKXOL1w3D1sTw">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="moveMoveRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_input" bpdm:binding="move:restBinding" bpdm:ID="_I_BaoHFGEeKXOL1w3D1sTw"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="moveMoveResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_output" bpdm:binding="move:restBinding" bpdm:ID="_JWKIQHFGEeKXOL1w3D1sTw"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
-                <bpdm:messagingtask operation="move" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk1Var" portType="move:restInterface" isMyRole="true" enableSharing="false" bpdm:label="move" bpdm:ID="_A8g7wN8uEeKfrvEqwVWOOA">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="moveMoveRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_input" bpdm:binding="move:restBinding" bpdm:ID="_BrUigN8uEeKfrvEqwVWOOA"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="moveMoveResponseMsg" bpdm:msgVarScopeId="_PVVBAGuWEeK7FdvgH5F2kQ" bpdm:variableIsManaged="true" bpdm:messageType="move:move_output" bpdm:binding="move:restBinding" bpdm:ID="_CN_KsN8uEeKfrvEqwVWOOA"></bpdm:linkset>
+                <bpdm:messagingtask operation="move" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk1Var" portType="move:restInterface" isMyRole="true" enableSharing="false" bpdm:label="move" bpdm:ID="_QPvYoN5GEeKlbMDJE2xwlg">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="moveMoveRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_input" bpdm:binding="move:restBinding" bpdm:ID="_RGrnsN5GEeKlbMDJE2xwlg"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="moveMoveResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_output" bpdm:binding="move:restBinding" bpdm:ID="_Rf8cQN5GEeKlbMDJE2xwlg"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
@@ -75,9 +69,9 @@
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
-                <bpdm:messagingtask operation="move" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk1Var" portType="move:restInterface" isMyRole="true" enableSharing="false" bpdm:label="move" bpdm:ID="_QPvYoN5GEeKlbMDJE2xwlg">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="moveMoveRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_input" bpdm:binding="move:restBinding" bpdm:ID="_RGrnsN5GEeKlbMDJE2xwlg"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="moveMoveResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_output" bpdm:binding="move:restBinding" bpdm:ID="_Rf8cQN5GEeKlbMDJE2xwlg"></bpdm:linkset>
+                <bpdm:messagingtask operation="delete" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk0Var" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_p2KusMFGEeK6DtOy-Yu5NA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_rC4ZcMFGEeK6DtOy-Yu5NA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_ryZx4MFGEeK6DtOy-Yu5NA"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
@@ -87,15 +81,33 @@
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
-                <bpdm:messagingtask operation="move" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk1Var" portType="move:restInterface" isMyRole="true" enableSharing="false" bpdm:label="move" bpdm:ID="_jiM2QcFGEeK6DtOy-Yu5NA">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="moveMoveRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_input" bpdm:binding="move:restBinding" bpdm:ID="_kx8m4MFGEeK6DtOy-Yu5NA"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="moveMoveResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_output" bpdm:binding="move:restBinding" bpdm:ID="_lZHUkMFGEeK6DtOy-Yu5NA"></bpdm:linkset>
+                <bpdm:messagingtask operation="delete" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk0Var" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_3Kh2UHHqEeKIgPAPmx2ukA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_35hDQHHqEeKIgPAPmx2ukA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_4US6wHHqEeKIgPAPmx2ukA"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
-                <bpdm:messagingtask operation="delete" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk0Var" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_p2KusMFGEeK6DtOy-Yu5NA">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_rC4ZcMFGEeK6DtOy-Yu5NA"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_ryZx4MFGEeK6DtOy-Yu5NA"></bpdm:linkset>
+                <bpdm:messagingtask operation="txDeliveryFailure" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk2Var" portType="txDeliveryFailure:restInterface" isMyRole="true" enableSharing="false" bpdm:label="txDeliveryFailure" bpdm:ID="_gW59kd5TEeKt5anVAap8bQ">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_input" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_kVn14N5TEeKt5anVAap8bQ"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_output" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_km3W4N5TEeKt5anVAap8bQ"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="delete" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk0Var" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_ywfTkP86EeKSdvx_in4xuw">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_zh5iYP86EeKSdvx_in4xuw"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:msgVarScopeId="_PVVBAGuWEeK7FdvgH5F2kQ" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_z8ho4P86EeKSdvx_in4xuw"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="txDeliveryFailure" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk2Var" portType="txDeliveryFailure:restInterface" isMyRole="true" enableSharing="false" bpdm:label="txDeliveryFailure" bpdm:ID="_d8Q9kd5HEeKlbMDJE2xwlg">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_input" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_eu3fMN5HEeKlbMDJE2xwlg"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_output" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_fJWbwN5HEeKlbMDJE2xwlg"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="move" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk1Var" portType="move:restInterface" isMyRole="true" enableSharing="false" bpdm:label="move" bpdm:ID="_jiM2QcFGEeK6DtOy-Yu5NA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="moveMoveRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_input" bpdm:binding="move:restBinding" bpdm:ID="_kx8m4MFGEeK6DtOy-Yu5NA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="moveMoveResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_output" bpdm:binding="move:restBinding" bpdm:ID="_lZHUkMFGEeK6DtOy-Yu5NA"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
@@ -111,21 +123,15 @@
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
-                <bpdm:messagingtask operation="txDeliveryFailure" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk2Var" portType="txDeliveryFailure:restInterface" isMyRole="true" enableSharing="false" bpdm:label="txDeliveryFailure" bpdm:ID="_d8Q9kd5HEeKlbMDJE2xwlg">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_input" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_eu3fMN5HEeKlbMDJE2xwlg"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_output" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_fJWbwN5HEeKlbMDJE2xwlg"></bpdm:linkset>
+                <bpdm:messagingtask operation="move" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk1Var" portType="move:restInterface" isMyRole="true" enableSharing="false" bpdm:label="move" bpdm:ID="_A8g7wN8uEeKfrvEqwVWOOA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="moveMoveRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_input" bpdm:binding="move:restBinding" bpdm:ID="_BrUigN8uEeKfrvEqwVWOOA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="moveMoveResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_output" bpdm:binding="move:restBinding" bpdm:ID="_CN_KsN8uEeKfrvEqwVWOOA"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
-                <bpdm:messagingtask operation="txDeliveryFailure" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk2Var" portType="txDeliveryFailure:restInterface" isMyRole="true" enableSharing="false" bpdm:label="txDeliveryFailure" bpdm:ID="_gW59kd5TEeKt5anVAap8bQ">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_input" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_kVn14N5TEeKt5anVAap8bQ"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_output" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_km3W4N5TEeKt5anVAap8bQ"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
-                <bpdm:messagingtask operation="delete" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk0Var" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_3Kh2UHHqEeKIgPAPmx2ukA">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_35hDQHHqEeKIgPAPmx2ukA"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_4US6wHHqEeKIgPAPmx2ukA"></bpdm:linkset>
+                <bpdm:messagingtask operation="move" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk1Var" portType="move:restInterface" isMyRole="true" enableSharing="false" bpdm:label="move" bpdm:ID="_ITxeMXFGEeKXOL1w3D1sTw">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="moveMoveRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_input" bpdm:binding="move:restBinding" bpdm:ID="_I_BaoHFGEeKXOL1w3D1sTw"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="moveMoveResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_output" bpdm:binding="move:restBinding" bpdm:ID="_JWKIQHFGEeKXOL1w3D1sTw"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
         </bpel:flow>
