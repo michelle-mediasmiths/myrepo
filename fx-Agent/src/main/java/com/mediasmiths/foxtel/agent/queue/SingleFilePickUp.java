@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -279,7 +278,7 @@ public class SingleFilePickUp implements IFilePickup
 
 		if (files != null && files.length > 0)
 		{
-			Arrays.sort(files,oldestFileComparator);
+			Arrays.sort(files,new OldestFileComparator());
 
 			return files;
 		}
@@ -305,6 +304,8 @@ public class SingleFilePickUp implements IFilePickup
 			return l1;
 
 		File[] res = new File[l1.length+l2.length];
+
+		final OldestFileComparator oldestFileComparator = new OldestFileComparator();
 
 		int i=0, j=0;
 		int k=0;
@@ -359,21 +360,6 @@ public class SingleFilePickUp implements IFilePickup
 
 		return (System.currentTimeMillis() - f.lastModified()) >= stabilityTime;
 	}
-
-
-	private Comparator<File> oldestFileComparator = new Comparator<File>()
-	{
-		@Override
-		public int compare(File o1, File o2)
-		{
-
-			final Long aT = o1.lastModified();
-			final long bT = o2.lastModified();
-
-			return aT.compareTo(bT);
-
-		}
-	};
 
 
 	private FilenameFilter filesWithValidExtensionOnly = new FilenameFilter()
