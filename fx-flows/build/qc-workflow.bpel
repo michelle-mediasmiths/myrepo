@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:AutoQC="http://ns.mediasmithsforge.com/foxtel/qc" xmlns:wfadapter="http://ns.mediasmithsforge.com/foxtel/qc/wfadapter" xmlns:qcadapter="http://ns.mediasmithsforge.com/foxtel/qc/qcadapter" xmlns:this="http://ns.mediasmithsforge.com/foxtel/qc/workflow" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:caller="http://ns.mediasmithsforge.com/foxtel/qc/caller" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="workflow" name="workflow" bpmn:id="_Aq5isHHSEeKzdrjGTgFYAA" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qc/workflow">
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:this="http://ns.mediasmithsforge.com/foxtel/qc/workflow" xmlns:qcadapter="http://ns.mediasmithsforge.com/foxtel/qc/qcadapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:fsadapter="http://ns.mediasmithsforge.com/foxtel/qc/fsadapter" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:qcJobCleanup="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCleanup.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:AutoQC="http://ns.mediasmithsforge.com/foxtel/qc" xmlns:wfadapter="http://ns.mediasmithsforge.com/foxtel/qc/wfadapter" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:caller="http://ns.mediasmithsforge.com/foxtel/qc/caller" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="workflow" name="workflow" bpmn:id="_Aq5isHHSEeKzdrjGTgFYAA" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qc/workflow">
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" location="qcAdapterRest/qcFinished.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" location="qcAdapterRest/qcJobCancel.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCleanup.rest" location="qcAdapterRest/qcJobCleanup.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" location="qcAdapterRest/qcResult.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" location="qcAdapterRest/qcStart.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" location="wfAdapter/assetTransferForQC.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -23,6 +24,7 @@
     <bpel:partnerLink name="qcadapterAndWorkflowForHttpPortPlk2Var" partnerLinkType="AutoQC:qcadapterAndWorkflowForHttpPortPlk2" initializePartnerRole="yes" partnerRole="qcadapter_for_workflow"/>
     <bpel:partnerLink name="wfadapterAndWorkflowForHttpPortPlk3Var" partnerLinkType="AutoQC:wfadapterAndWorkflowForHttpPortPlk3" initializePartnerRole="yes" partnerRole="wfadapter_for_workflow"/>
     <bpel:partnerLink name="wfadapterAndWorkflowForHttpPortPlk2Var" partnerLinkType="AutoQC:wfadapterAndWorkflowForHttpPortPlk2" initializePartnerRole="yes" partnerRole="wfadapter_for_workflow"/>
+    <bpel:partnerLink name="fsadapterAndWorkflowForHttpPortPlkVar" partnerLinkType="AutoQC:fsadapterAndWorkflowForHttpPortPlk" initializePartnerRole="yes" partnerRole="fsadapter_for_workflow"/>
     <bpel:partnerLink name="wfadapterAndWorkflowForHttpPortPlk1Var" partnerLinkType="AutoQC:wfadapterAndWorkflowForHttpPortPlk1" initializePartnerRole="yes" partnerRole="wfadapter_for_workflow"/>
   </bpel:partnerLinks>
   <bpel:correlationSets>
@@ -545,6 +547,40 @@
                       </bpel:sequence>
                     </bpel:else>
                   </bpel:if>
+                  <bpel:scope bpmn:label="SubProcess" name="SubProcess-9" bpmn:id="_yfzsAAAmEeOhC6E3Wqefng">
+                    <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                      <ext:faultOnFailure>true</ext:faultOnFailure>
+                      <ext:retryFor>10</ext:retryFor>
+                      <ext:retryDelay>60</ext:retryDelay>
+                    </ext:failureHandling>
+                    <bpel:variables>
+                      <bpel:variable name="qcJobCleanupQcCleanupJobRequestMsg" messageType="qcJobCleanup:qcCleanupJob_input"/>
+                      <bpel:variable name="qcJobCleanupQcCleanupJobResponseMsg" messageType="qcJobCleanup:qcCleanupJob_output"/>
+                    </bpel:variables>
+                    <bpel:faultHandlers>
+                      <bpel:catchAll>
+                        <bpel:empty bpmn:label="ignore cleanup errors" name="ignore_cleanup_errors" bpmn:id="_-8cy4AAmEeOhC6E3Wqefng"/>
+                      </bpel:catchAll>
+                    </bpel:faultHandlers>
+                    <bpel:sequence>
+                      <bpel:assign name="init-variables-SubProcess" bpmn:id="_yfzsAAAmEeOhC6E3Wqefng">
+                        <bpel:copy bpmn:label="$qcJobCleanupQcCleanupJobRequestMsg">
+                          <bpel:from>
+                            <bpel:literal>
+<qcJobCleanup:jobname_urlType></qcJobCleanup:jobname_urlType></bpel:literal>
+                          </bpel:from>
+                          <bpel:to>$qcJobCleanupQcCleanupJobRequestMsg.jobname</bpel:to>
+                        </bpel:copy>
+                      </bpel:assign>
+                      <bpel:assign bpmn:label="cleanup" name="cleanup" bpmn:id="_yf7n0AAmEeOhC6E3Wqefng">
+                        <bpel:copy>
+                          <bpel:from>$QCJobID</bpel:from>
+                          <bpel:to>$qcJobCleanupQcCleanupJobRequestMsg.jobname</bpel:to>
+                        </bpel:copy>
+                      </bpel:assign>
+                      <bpel:invoke partnerLink="fsadapterAndWorkflowForHttpPortPlkVar" portType="qcJobCleanup:restInterface" operation="qcCleanupJob" inputVariable="qcJobCleanupQcCleanupJobRequestMsg" outputVariable="qcJobCleanupQcCleanupJobResponseMsg" bpmn:label="cleanup" name="cleanup-1" bpmn:id="_yf7n0AAmEeOhC6E3Wqefng"></bpel:invoke>
+                    </bpel:sequence>
+                  </bpel:scope>
                 </bpel:sequence>
               </bpel:else>
             </bpel:if>
@@ -573,7 +609,7 @@
       <bpel:else>
         <bpel:sequence>
           <bpel:empty bpmn:label="error" name="error-1" bpmn:id="_SvN8YHHVEeKzdrjGTgFYAA"/>
-          <bpel:scope bpmn:label="SubProcess" name="SubProcess-9" bpmn:id="_2VtFILPrEeKiiatE-BLCBg">
+          <bpel:scope bpmn:label="SubProcess" name="SubProcess-10" bpmn:id="_2VtFILPrEeKiiatE-BLCBg">
             <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
               <ext:retryFor>10</ext:retryFor>
               <ext:retryDelay>60</ext:retryDelay>
