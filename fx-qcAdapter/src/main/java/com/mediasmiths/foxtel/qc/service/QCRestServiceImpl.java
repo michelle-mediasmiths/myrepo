@@ -1,14 +1,5 @@
 package com.mediasmiths.foxtel.qc.service;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.rmi.RemoteException;
-import java.util.List;
-
-import org.apache.axis.types.URI.MalformedURIException;
-import org.apache.log4j.Logger;
-import org.jboss.resteasy.spi.InternalServerErrorException;
-
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.cerify.CerifyClient;
 import com.mediasmiths.foxtel.cerify.medialocation.MediaLocation;
@@ -16,6 +7,7 @@ import com.mediasmiths.foxtel.cerify.medialocation.MediaLocationNotFoundExceptio
 import com.mediasmiths.foxtel.cerify.medialocation.MediaLocationService;
 import com.mediasmiths.foxtel.pathresolver.PathResolver;
 import com.mediasmiths.foxtel.qc.model.JobStatusType;
+import com.mediasmiths.foxtel.qc.model.QCCleanupResponse;
 import com.mediasmiths.foxtel.qc.model.QCJobIdentifier;
 import com.mediasmiths.foxtel.qc.model.QCJobResult;
 import com.mediasmiths.foxtel.qc.model.QCJobStatus;
@@ -30,6 +22,15 @@ import com.tektronix.www.cerify.soap.client.GetMediaFileResultsResponse;
 import com.tektronix.www.cerify.soap.client.JobDoesntExistFault;
 import com.tektronix.www.cerify.soap.client.JobIsArchivedFault;
 import com.tektronix.www.cerify.soap.client.MediaFileNotInJobFault;
+import org.apache.axis.types.URI.MalformedURIException;
+import org.apache.log4j.Logger;
+import org.jboss.resteasy.spi.InternalServerErrorException;
+
+import javax.ws.rs.PathParam;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.rmi.RemoteException;
+import java.util.List;
 
 public class QCRestServiceImpl implements QCRestService
 {
@@ -126,6 +127,26 @@ public class QCRestServiceImpl implements QCRestService
 		res.setQcIdentifier(jobIdent);
 		return res;
 	}
+
+
+	@Override
+	public QCCleanupResponse cleanup(@PathParam("jobname") final String jobName) throws QCAdapterException
+	{
+		log.debug(String.format("Cleanup requested for job %s", jobName));
+
+		try
+		{
+			cerifyClient.cleanupJobAndMediasets(jobName);
+			return new QCCleanupResponse(true);
+		}
+		catch (RemoteException e)
+		{
+			log.error("Error cleaning up job",e);
+			throw new QCAdapterException(e);
+		}
+
+	}
+
 
 	@Override
 	public QCJobResult jobResult(final QCJobIdentifier ident) throws QCAdapterException

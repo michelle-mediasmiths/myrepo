@@ -339,60 +339,7 @@ public class CerifyClient
 		
 		return response;
 	}
-	
-	/**
-	 * Cleanup jobs and mediasets retrieved based on parameters provided.
-	 * 
-	 * @param status
-	 * @param fromDate
-	 * @param toDate
-	 * @return
-	 * @throws InvalidRangeFault
-	 * @throws MediaSetDoesntExistFault
-	 * @throws JobDoesntExistFault
-	 * @throws JobIsArchivedFault
-	 * @throws BaseCeritalkFault
-	 * @throws RemoteException
-	 */
-	public int cleanupJobsAndMediasets(String status, Calendar fromDate, Calendar toDate) 
-			throws InvalidRangeFault, MediaSetDoesntExistFault, JobDoesntExistFault, JobIsArchivedFault, BaseCeritalkFault, RemoteException     
-	{
-			log.info("Start cleanup jobs and mediasets");
-		
-			GetJobsResponse response = getJobs(status, fromDate, toDate);
-			String[] listOfJobs = response.getListOfJobs();
-			
-			if (listOfJobs.length <= 0)
-			{
-				log.info("Retrieving jobs returns empty list of jobs");
-				
-			}
-			
-			int n = listOfJobs.length;
-			
-			log.info("There are jobs to be deleted " + n);
-				
-			// for each job delete the media set and the job.
-			for (String jobName: listOfJobs)
-			{
-				GetJobResultsResponse jobResult = getJobResult(jobName);
-				
-				String mediasetName = jobResult.getMediaset();
-				
-				ControlMediaSetResponse deleteMediaset = deleteMediaset(mediasetName);
-				
-				log.info(String.format("Mediaset %s is deleted", mediasetName ));
-				
-				ControlJobResponse deleteJob = deleteJob(jobName);
-				
-				log.info(String.format("Job name %s is deleted", jobName ));
-				
-			}
-			
-			return n;
-	}
-	
-	
+
 	private String jobName(final String profileName, final String mediaSetName)
 	{
 		return new StringBuilder(mediaSetName).append("_").append(profileName).toString();
@@ -476,5 +423,16 @@ public class CerifyClient
 		
 		log.debug(String.format("Returning resolvedMediaSetName of %s", mediaName));
 		return mediaName;
+	}
+
+
+	public void cleanupJobAndMediasets(final String jobName) throws RemoteException
+	{
+		GetJobResultsResponse jobResult = getJobResult(jobName);
+		String mediasetName = jobResult.getMediaset();
+		log.debug(String.format("Deleting job %s", jobName));
+		ControlJobResponse deleteJob = deleteJob(jobName);
+		log.debug(String.format("Deleting mediaset %s", mediasetName));
+		ControlMediaSetResponse deleteMediaset = deleteMediaset(mediasetName);
 	}
 }
