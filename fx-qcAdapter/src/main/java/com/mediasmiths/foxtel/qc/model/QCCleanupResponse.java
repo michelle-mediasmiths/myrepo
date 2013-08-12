@@ -8,6 +8,9 @@ public class QCCleanupResponse
 {
 	private Boolean success = Boolean.FALSE;
 
+	public QCCleanupResponse(){
+
+	}
 
 	public QCCleanupResponse(final boolean success)
 	{
