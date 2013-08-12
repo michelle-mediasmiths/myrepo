@@ -108,8 +108,8 @@ public class PreviewExportJobs
 //
 //		jobParams.ftpupload.folder = "exports/Exports/Lifestyle/Publicity";
 
-//		return svc.createPCPXML(jobParams);
-		return svc.createJob(jobParams);
+		return svc.createPCPXML(jobParams);
+//		return svc.createJob(jobParams);
 	}
 
 	private static String generateCaptionJob() throws Exception
@@ -135,8 +135,8 @@ public class PreviewExportJobs
 		jobParams.ftpupload.filename = jobParams.outputFileBasename + ".mpg";
 		jobParams.ftpupload.folder = "captions/CaptionFTP/Unassigned";
 
-//		return svc.createPCPXML(jobParams);
-		return svc.createJob(jobParams);
+		return svc.createPCPXML(jobParams);
+//		return svc.createJob(jobParams);
 
 	}
 
@@ -172,8 +172,8 @@ public class PreviewExportJobs
 		
 		jobParams.ftpupload.folder = "exports/Exports/Lifestyle/Compliance";
 
-//		return svc.createPCPXML(jobParams);
-		return svc.createJob(jobParams);
+		return svc.createPCPXML(jobParams);
+//		return svc.createJob(jobParams);
 
 	}
 
@@ -184,7 +184,7 @@ public class PreviewExportJobs
 //		ftpupload.server = "10.111.224.151";
 //		ftpupload.user = "mamexportftp";
 //		ftpupload.password = "ftp3xp0rt";
-		ftpupload.server = "192.168.2.30";
+		ftpupload.server = "192.168.2.33";
 		ftpupload.user = "targetuser";
 		ftpupload.password = "password";
 		
