@@ -1,8 +1,5 @@
 package com.mediasmiths.foxtel.mpa.validation;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
@@ -24,6 +21,8 @@ import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.Unmarshaller;
+import java.util.Arrays;
+import java.util.List;
 
 public class MaterialExchangeValidator extends MessageValidator<Material>
 {
@@ -80,16 +79,18 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 		return validateTitle(message.getTitle(), message.getDetails(), folderIsAO,withMedia);
 	}
 
-	private boolean isAggregatorAO(Material message)
-	{
-		List<String> locationNames = Arrays.asList(aoAggregatorName.split(","));
-		boolean isAO = false;
-		for (String location: locationNames)
+		private boolean isAggregatorAO(Material message)
 		{
-			isAO = location.toLowerCase().equals(message.getDetails().getSupplier().getSupplierID().toLowerCase());
+			List<String> locationNames = Arrays.asList(aoAggregatorName.split(","));
+			boolean isAO = false;
+			for (String location: locationNames)
+			{
+				System.out.println("Printing the location "+location);
+				isAO = location.equals(message.getDetails().getSupplier().getSupplierID());
+				//isAO = location.toLowerCase().equals(message.getDetails().getSupplier().getSupplierID().toLowerCase());
+			}
+			return isAO;
 		}
-		return isAO;
-	}
 
 	private boolean isMaterialAO(Material message)
 	{
