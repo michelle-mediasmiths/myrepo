@@ -69,9 +69,9 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 		boolean materialIsAO = isMaterialAO(message);
 		boolean isAggregatorAO = isAggregatorAO(message);
 		boolean withMedia = pp.isComplete();
-		logger.debug(folderIsAO + "Debug 1");
-		logger.debug(materialIsAO + "Debug 2");
-		logger.debug(isAggregatorAO + "Debug 3");
+		logger.debug("Is this AO folder : " + folderIsAO);
+		logger.debug("Is the AO material :  " + materialIsAO);
+		logger.debug("Is this AO aggregator : " + isAggregatorAO);
 		if((folderIsAO != materialIsAO) || (folderIsAO != isAggregatorAO)){
 				return MessageValidationResult.AO_MISMATCH; 
 		}
@@ -86,11 +86,20 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 			for (String location: locationNames)
 			{
 				logger.debug("Printing the location  :"  + location);
-				logger.debug("The aggregator ID passed from the XML  : " + message.getDetails().getSupplier().getSupplierID());
-				
+				logger.debug("The aggregator ID from the XML  : " + message.getDetails().getSupplier().getSupplierID());
+
 				isAO = location.equalsIgnoreCase(message.getDetails().getSupplier().getSupplierID());
 
-				logger.debug("Result of Aggregator ID  :  " + isAO);
+				if (isAO == true)
+				{
+					logger.debug("Aggregator is AO " + isAO);
+					break;
+				}
+				else
+				{
+					continue;
+				}
+
 				//isAO = location.toLowerCase().equals(message.getDetails().getSupplier().getSupplierID().toLowerCase());
 			}
 			return isAO;
