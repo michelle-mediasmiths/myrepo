@@ -85,8 +85,12 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 			boolean isAO = false;
 			for (String location: locationNames)
 			{
-				System.out.println("Printing the location "+location);
-				isAO = location.equals(message.getDetails().getSupplier().getSupplierID());
+				logger.debug("Printing the location  :"  + location);
+				logger.debug("The aggregator ID passed from the XML  : " + message.getDetails().getSupplier().getSupplierID());
+				
+				isAO = location.equalsIgnoreCase(message.getDetails().getSupplier().getSupplierID());
+
+				logger.debug("Result of Aggregator ID  :  " + isAO);
 				//isAO = location.toLowerCase().equals(message.getDetails().getSupplier().getSupplierID().toLowerCase());
 			}
 			return isAO;
