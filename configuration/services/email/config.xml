@@ -24,7 +24,7 @@
 			<emailaddresses> 
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
+				<emailaddress>GS-§@foxtel.com.au</emailaddress>
 				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -239,6 +239,7 @@
 			<body>Item remains on TX Delivery task list so has not transcoded and therefore has not been transferred to play out. Please resolve URGENTLY.</body>
 			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
