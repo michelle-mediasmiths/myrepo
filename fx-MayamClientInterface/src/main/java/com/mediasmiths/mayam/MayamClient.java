@@ -303,6 +303,13 @@ public interface MayamClient
 	 */
 	public int getLastDeliveryVersionForMaterial(String materialID);
 
+    /**
+     *
+     * @param materialID
+     * @return the next delivery version used to update an item, or -1 if it has not been updated by a material exchange message
+     */
+    public int getNextDeliveryVersionForMaterial(String materialID);
+
 	public boolean materialHasPassedPreview(String materialID);
 
 	public boolean attemptAutoMatch(String siteID, String fileName);

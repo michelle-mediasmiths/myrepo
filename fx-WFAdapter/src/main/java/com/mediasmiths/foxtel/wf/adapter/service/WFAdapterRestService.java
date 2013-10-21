@@ -239,6 +239,11 @@ public interface WFAdapterRestService
 	@Produces("text/plain")
 	public Integer deliveryVersionForMaterial(@PathParam("materialid") String materialID) throws MayamClientException;
 
+    @GET
+    @Path("/mex/{materialid}/nextDeliveryVersion")
+    @Produces("text/plain")
+    public Integer nextDeliveryVersionForMaterial(@PathParam("materialid") String materialID) throws MayamClientException;
+
 	/**
 	 * Lists items pending purge
 	 * @return

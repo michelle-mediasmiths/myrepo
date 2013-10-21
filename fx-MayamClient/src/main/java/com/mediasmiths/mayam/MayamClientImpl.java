@@ -657,6 +657,31 @@ public class MayamClientImpl implements MayamClient
 
 	}
 
+    @Override
+    public int getNextDeliveryVersionForMaterial(String materialID)
+    {
+        try
+        {
+            AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
+            Integer deliveryVersion = materialAttributes.getAttribute(Attribute.VERSION_NUMBER);
+
+            if (deliveryVersion == null)
+            {
+                return 1;
+            }
+            else
+            {
+                return deliveryVersion.intValue() + 1;
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("error determining next delivery version for material", e);
+            return -1;
+        }
+
+    }
+
 	@Override
 	public boolean materialHasPassedPreview(String materialID)
 	{

@@ -863,8 +863,19 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 
 		throw new IllegalArgumentException("specified material does not exist");
-
 	}
+
+    @Override
+    public Integer nextDeliveryVersionForMaterial(final String materialID) throws MayamClientException
+    {
+
+        if (mayamClient.materialExists(materialID))
+        {
+            return mayamClient.getNextDeliveryVersionForMaterial(materialID);
+        }
+
+        throw new IllegalArgumentException("specified material does not exist");
+    }
 
 	@Override
 	public String getPurgePendingList() throws MayamClientException
