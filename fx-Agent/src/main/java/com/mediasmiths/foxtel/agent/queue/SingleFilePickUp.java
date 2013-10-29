@@ -163,7 +163,7 @@ public class SingleFilePickUp implements IFilePickup
 
 				if (!shuttingDown)
 				{
-					PickupPackage candidate = getOldestCandidate();
+					PickupPackage candidate = selectCandidate();
 
 					if (candidate == null)
 					{
@@ -188,6 +188,10 @@ public class SingleFilePickUp implements IFilePickup
 		return null;
 	}
 
+
+    protected PickupPackage selectCandidate() {
+        return getOldestCandidate();
+    }
 
 	// Private methods
 
@@ -230,7 +234,7 @@ public class SingleFilePickUp implements IFilePickup
 	 * @param f a stable file within a pick up directory
 	 * @return the package of files that exist and are stable that are related to f that form the pickup collection
 	 */
-	private PickupPackage getPickUpPackageForFile(final File f)
+	protected PickupPackage getPickUpPackageForFile(final File f)
 	{
 		PickupPackage pickUp = new PickupPackage(discoveredTimes,validExtension);
 
@@ -247,7 +251,7 @@ public class SingleFilePickUp implements IFilePickup
 	 *
 	 * @return the oldest file list in the collection of watched directories
 	 */
-	private File[] getTimeOrderedPendingFiles()
+	protected File[] getTimeOrderedPendingFiles()
 	{
 		File[] candidates = null;
 
@@ -348,7 +352,7 @@ public class SingleFilePickUp implements IFilePickup
 	 * @param f candidate file
 	 * @return true if the candidate file has been stable (unchanged) for STABILITY_TIME
 	 */
-	private boolean isStableFile(File f)
+	protected boolean isStableFile(File f)
 	{
 
 		long now = System.currentTimeMillis();
